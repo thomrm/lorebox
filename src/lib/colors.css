@@ -1,0 +1,19 @@
+:root {
+    --White: #FFFFFF;
+    --Black: #000000;
+
+    --Background-Base: #E3CAA8;
+    --Background-Dark: #1C1C1A;
+    --Border: #C7AC84;
+    --Text-Base: #1C1C1A;
+    --Text-Sub: #76654A;
+
+    --Gold: #D3BA84;
+
+    --Ink-Amber: #F3B123;
+    --Ink-Amethyst: #7C4182;
+    --Ink-Emerald: #329044;
+    --Ink-Ruby: #D40037;
+    --Ink-Sapphire: #0093C8;
+    --Ink-Steel: #97A3AE;
+}
