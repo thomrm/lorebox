@@ -336,6 +336,11 @@
         display: flex;
         transition: transform 200ms;
         cursor: pointer;
+        position: relative;
+        padding-top: 140%;
+        border-radius: 4.5% / 3.5%;
+        background: var(--Border);
+        overflow: hidden;
 
         &:hover {
             transform: scale(1.05);
@@ -343,8 +348,11 @@
     }
 
     .card__image {
+        position: absolute;
         width: 100%;
-        border-radius: 4.5% / 3.5%;
+        height: 100%;
+        top: 0;
+        left: 0;
     }
 
     .button {
