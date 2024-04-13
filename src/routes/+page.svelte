@@ -14,8 +14,9 @@
             sapphire: false,
             steel: false,
         },
-        sortAsc: false,
-        pageSize: 30
+        sortType: "cost",
+        sortAsc: true,
+        pageSize: 60
     }
     let colorCount;
     
@@ -32,10 +33,20 @@
     });
 
     $: filterCards = async () => {
-        // Sort by Cost - TEMPORARY
-        filteredCards = cards.sort((a, b) => {
-            return (a.cost - b.cost) || (a.baseName.localeCompare(b.baseName));
-        });
+        // Sort Cards
+        if (filters.sortType === 'cost') {
+            filteredCards = cards.sort((a, b) => {
+                return (filters.sortAsc ? a.cost - b.cost : b.cost - a.cost) || (a.baseName.localeCompare(b.baseName));
+            });
+        }
+        if (filters.sortType === 'name') {
+            filteredCards = cards.sort((a, b) => {
+                return (filters.sortAsc ? 1 : -1) * (a.baseName.localeCompare(b.baseName));
+            });
+        }
+        if (filters.sortType === "rarity") {
+            filteredCards = cards.sort(rarityCompare);
+        }
 
         // Filter Colors
         filteredCards = filteredCards.filter(function(x) {
@@ -55,6 +66,30 @@
 
         console.log(filteredCards);
         console.log(colorCount);
+    }
+
+    // Rarity compare for sorting
+    const rarityCompare = (a, b) => {
+        let aVal = 
+            a.rarity === "Common" ? 1 : null || 
+            a.rarity === "Uncommon" ? 2 : null ||
+            a.rarity === "Rare" ? 3 : null ||
+            a.rarity === "Super" ? 4 : null ||
+            a.rarity === "Legendary" ? 5 : null;
+        let bVal = 
+            b.rarity === "Common" ? 1 : null || 
+            b.rarity === "Uncommon" ? 2 : null ||
+            b.rarity === "Rare" ? 3 : null ||
+            b.rarity === "Super" ? 4 : null ||
+            b.rarity === "Legendary" ? 5 : null;
+
+        if ( aVal < bVal ) {
+            return filters.sortAsc ? -1 : 1;
+        }
+        if ( aVal > bVal ) {
+            return filters.sortAsc ? 1 : -1;
+        }
+        return (a.baseName.localeCompare(b.baseName));
     }
 </script>
 
@@ -104,7 +139,7 @@
                 {#if !filteredCards}
                     <!--Loading-->
                 {:else}
-                    {#each filteredCards.slice(0,30) as card, i}
+                    {#each filteredCards.slice(0,filters.pageSize) as card, i}
                         <div class="card">
                             {#await preload(card.images.full)}
                                 <!--Loading-->
@@ -184,7 +219,7 @@
 
     .col__scroll--grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(16rem,1fr));
+        grid-template-columns: repeat(auto-fill,minmax(18rem,1fr));
         gap: 10px;
     }
 
@@ -341,9 +376,11 @@
         border-radius: 4.5% / 3.5%;
         background: var(--Border);
         overflow: hidden;
+        transform: translateZ(0);
 
         &:hover {
             transform: scale(1.05);
+
         }
     }
 
