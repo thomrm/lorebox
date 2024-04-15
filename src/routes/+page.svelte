@@ -14,10 +14,20 @@
             sapphire: false,
             steel: false,
         },
+        showType: {
+            action: true,
+            character: true,
+            item: true,
+            location: true
+        },
         sortType: "cost",
         sortAsc: true,
         pageSize: 60
     }
+    let searchTerm = null;
+    let currentPage = 0;
+    let totalCards;
+    let totalPages;
     let colorCount;
     
     onMount(async () => {
@@ -32,8 +42,12 @@
         filterCards();
     });
 
-    $: filterCards = async () => {
-        // Sort Cards
+    $: filterCards = async (reset) => {
+        // Force a page reset - used for clearing search term
+        currentPage = reset ? 0 : currentPage;
+        totalCards = reset ? null : totalCards;
+
+        // Sort cards
         if (filters.sortType === 'cost') {
             filteredCards = cards.sort((a, b) => {
                 return (filters.sortAsc ? a.cost - b.cost : b.cost - a.cost) || (a.baseName.localeCompare(b.baseName));
@@ -44,11 +58,20 @@
                 return (filters.sortAsc ? 1 : -1) * (a.baseName.localeCompare(b.baseName));
             });
         }
-        if (filters.sortType === "rarity") {
+        if (filters.sortType === 'rarity') {
             filteredCards = cards.sort(rarityCompare);
         }
 
-        // Filter Colors
+        // Filter type
+        filteredCards = filteredCards
+            .filter(x => 
+                !filters.showType.action ? !x.type.includes("Action") : x.type.includes("Action") ||
+                !filters.showType.character ? !x.type.includes("Character") : x.type.includes("Character") ||
+                !filters.showType.item ? !x.type.includes("Item") : x.type.includes("Item") ||
+                !filters.showType.location ? !x.type.includes("Location") : x.type.includes("Location")
+            );
+
+        // Filter color
         filteredCards = filteredCards.filter(function(x) {
             if (filters.color.amber || filters.color.amethyst || filters.color.emerald || filters.color.ruby || filters.color.sapphire || filters.color.steel) {
                 return  (filters.color.amber ? x.color.includes("Amber") : '') ||
@@ -62,10 +85,28 @@
             }
         });
 
+        // Filter displayed cards by search term
+        filteredCards = searchTerm ? filteredCards.filter(function(x) {
+            return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    x.fullName.toLowerCase().includes(searchTerm.toLowerCase());
+        }) : filteredCards;
+
+        // Update number of colors selected
         colorCount = Object.values(filters.color).filter(item => item === true).length;
 
+        // Set card and page totals
+        totalPages = Math.ceil(filteredCards.length / filters.pageSize);
+        totalCards = totalCards ? totalCards : filteredCards.length;
+
         console.log(filteredCards);
-        console.log(colorCount);
+    }
+
+    const clearSearch = () => {
+        // Clear search term
+        searchTerm = null;
+
+        // Reset displayed cards
+        filterCards(true);
     }
 
     // Rarity compare for sorting
@@ -124,38 +165,88 @@
                     </label>
                 </div>
                 <div class="filters__group">
-                    <button class="button button--dropdown"><span>Show All</span></button>
-                    <button class="button button--dropdown">Sorted by Name</button>
-                    <button class="button button--dropdown">Ascending</button>
+                    <button class="button">
+                        <img src="./images/icon-filter.svg" alt="Filters" />Filter
+                    </button>
+                    <select class="button button--dropdown" name="sort-type" id="sort-type" bind:value={filters.sortType} on:change={filterCards}>
+                        <option value="name">Sort by Name</option>
+                        <option value="cost">Sort by Cost</option>
+                        <option value="rarity">Sort by Rarity</option>
+                    </select>
+                    <input type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
+                    <label class="button" for="sort-direction">
+                        {#if filters.sortAsc}
+                            <img src="./images/icon-sortAsc.svg" alt="Ascending" />
+                            Asc
+                        {:else}
+                            <img src="./images/icon-sortDesc.svg" alt="Descending" />
+                            Desc
+                        {/if}
+                    </label>
                 </div>
                 <div class="filters__group filters__group--right">
-                    <input class="filters__search-bar" type="search" placeholder="Search..." />
+                    <form class="search-form" on:submit|preventDefault={filterCards} on:reset={clearSearch}>
+                        <input class="search-form__search-bar" type="text" placeholder="Search..."  bind:value={searchTerm} on:change={filterCards} />
+                        {#if searchTerm}
+                            <button type="reset" class="search-form__search-clear">
+                                <img src="./images/icon-clear.svg" alt="Clear Search" />
+                            </button>
+                        {/if}
+                    </form> 
                 </div>
             </div>
         </div>
         <div class="col__divider"></div>
         <div class="col__scroll-contain">
-            <div class="col__scroll col__scroll--grid">
-                {#if !filteredCards}
-                    <!--Loading-->
+            {#if !filteredCards}
+                <!--Loading-->
+            {:else}
+                {#if filteredCards.length === 0}
+                    <div class="grid-status">No Results</div>
                 {:else}
-                    {#each filteredCards.slice(0,filters.pageSize) as card, i}
-                        <div class="card">
-                            {#await preload(card.images.full)}
-                                <!--Loading-->
-                            {:then}
-                                <img class="card__image" src="{card.images.full}" alt="{card.fullName}" in:fade={{duration: 200}} />
-                            {/await}
+                    {#key filteredCards}
+                        <div class="col__scroll col__scroll--grid">
+                            {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card, i}
+                                <div class="card">
+                                    {#await preload(card.images.full)}
+                                        <!--Loading-->
+                                    {:then}
+                                        <img class="card__image" src="{card.images.full}" alt="{card.fullName}" in:fade={{duration: 200}} />
+                                    {/await}
+                                </div>
+                            {/each}
                         </div>
-                    {/each}
+                    {/key}
                 {/if}
-            </div>
+            {/if}
         </div>
         <div class="col__divider"></div>
         <div class="col__section">
-            <div class="pagination-contain">
-                <button class="button button--left"><img src="images/arrow-left.svg" alt="left arrow" />Previous Page</button>
-                <button class="button button--right">Next Page<img src="images/arrow-right.svg" alt="right arrow" /></button>
+            <div class="pagination">
+                <div class="pagination__buttons">
+                    <button class="button button--left" disabled={currentPage == 0 ? true : false} on:click={() => {currentPage--;}}>
+                        <img src="images/arrow-left.svg" alt="left arrow" />
+                        Previous Page
+                    </button>
+                </div>
+
+
+                {#if filteredCards}
+                    <div class="pagination__stats">
+                        <span>Page {currentPage + 1}</span>
+                        <span>
+                            {totalCards ? (currentPage * filters.pageSize + 1) + " - " + (Math.min((currentPage + 1) * filters.pageSize, totalCards)) + " of " : ""}
+                            {totalCards} {totalCards == 1 ? "Result" : "Results"}
+                        </span>
+                    </div>
+                {/if}
+
+                <div class="pagination__buttons pagination__buttons--right">
+                    <button class="button button--right" disabled={currentPage == totalPages - 1 || totalPages == 0 || !totalPages ? true : false} on:click={() => {currentPage++;}}>
+                        Next Page
+                        <img src="images/arrow-right.svg" alt="right arrow" />
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -220,6 +311,7 @@
     .col__scroll--grid {
         display: grid;
         grid-template-columns: repeat(auto-fill,minmax(18rem,1fr));
+        grid-auto-rows: min-content;
         gap: 10px;
     }
 
@@ -252,6 +344,16 @@
             background-position: left center, right center;
 
         }
+    }
+
+    .grid-status {
+        display: flex;
+        flex: 1 0 0;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        color: var(--Text-Sub);
     }
 
     .frame-full {
@@ -317,7 +419,12 @@
         justify-content: flex-end;
     }
 
-    .filters__search-bar {
+    .search-form {
+        position: relative;
+        display: flex;
+    }
+
+    .search-form__search-bar {
         border: 1px solid var(--Border);
         background: var(--Background-Base);
         background-image: url('/images/icon-search.svg');
@@ -325,6 +432,7 @@
         background-repeat: no-repeat;
         border-radius: 999px;
         font: inherit;
+        font-size: 14px;
         padding: 0 10px 0 30px;
         position: relative;
 
@@ -335,6 +443,19 @@
         &:active, &:focus-visible {
             outline: none;
         }
+    }
+
+    .search-form__search-clear {
+        position: absolute;
+        right: 0;
+        display: flex;
+        height: 30px;
+        width: 30px;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        background: none;
+        border: none;
     }
 
     .filter-ink {
@@ -373,6 +494,7 @@
         cursor: pointer;
         position: relative;
         padding-top: 140%;
+        height: 0;
         border-radius: 4.5% / 3.5%;
         background: var(--Border);
         overflow: hidden;
@@ -402,14 +524,14 @@
         height: 30px;
         font: inherit;
         font-weight: bold;
-        font-size: 13px;
-        line-height: 30px;
+        font-size: 14px;
         color: var(--Text-Base);
         align-items: center;
         text-transform: uppercase;
         cursor: pointer;
         position: relative;
         gap: 5px;
+        line-height: 30px;
 
         &::before {
             content: '';
@@ -420,6 +542,11 @@
             border-top: 1px solid var(--Border);
             border-bottom: 1px solid var(--Border);
             transition: left 200ms, right 200ms;
+        }
+
+        &:disabled {
+            color: var(--Border);
+            cursor: default;
         }
 
         &:hover {
@@ -439,16 +566,38 @@
     }
 
     .button--dropdown {
-        &::after {
-            content: '';
-            width: 12px;
-            height: 30px;
-            background-image: url('/images/dropdown-arrow.svg');
+        background-image: url('/images/dropdown-arrow.svg');
+        background-repeat: no-repeat;
+        background-position: center right 10px;
+        padding-right: 30px;
+        appearance: none;
+
+        &:focus-visible {
+            outline: none;
         }
     }
 
-    .pagination-contain {
+    .pagination {
         display: flex;
         justify-content: space-between;
+    }
+
+    .pagination__buttons {
+        display: flex;
+        flex: 1 0 0;
+        gap: 10px;
+    }
+
+    .pagination__buttons--right {
+        justify-content: flex-end;
+    }
+
+    .pagination__stats {
+        display: flex;
+        flex: 1 0 0;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        color: var(--Text-Sub);
     }
 </style>
