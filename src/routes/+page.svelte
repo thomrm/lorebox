@@ -164,7 +164,7 @@
     }
 </script>
 
-<Modal bind:showFilterModal close={() => showFilterModal}>
+<Modal bind:showFilterModal>
     <div class="col__section">
         <div class="filters filters--modal">
             <div class="filters__header">Card Types</div>
@@ -583,13 +583,14 @@
         padding-top: 140%;
         height: 0;
         border-radius: 4.5% / 3.5%;
-        background: var(--Border);
+        background-image: url('/images/cardback.svg');
+        background-repeat: no-repeat;
+        background-size: cover;
         overflow: hidden;
         transform: translateZ(0);
 
         &:hover {
             transform: scale(1.05);
-
         }
     }
 
