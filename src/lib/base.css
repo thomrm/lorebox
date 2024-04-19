@@ -52,27 +52,9 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     gap: 5px;
     line-height: 30px;
 
-    &::before {
-        content: '';
-        position: absolute;
-        left: 50%;
-        right: 50%;
-        height: 34px;
-        border-top: 1px solid var(--Border);
-        border-bottom: 1px solid var(--Border);
-        transition: left 200ms, right 200ms;
-    }
-
     &:disabled {
         color: var(--Border);
         cursor: default;
-    }
-
-    &:hover {
-        &::before {
-            left: 5px;
-            right: 5px;
-        }
     }
 }
 

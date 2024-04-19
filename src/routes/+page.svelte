@@ -201,7 +201,7 @@
     <div class="col frame-full">
         <div class="col__section">
             <div class="filters">
-                <div class="filters__group filters__group--ink">
+                <div class="filters__group">
                     <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
                     <label class="filter-ink ink-amber" for="filter-amber">
                         <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
@@ -472,12 +472,12 @@
 
     .filters--modal {
         flex-direction: column;
-        gap: 10px;
+        gap: 5px;
     }
 
     .filters__group {
         display: flex;
-        gap: 10px;
+        gap: 5px;
 
         & input[type='checkbox'] {
             display: none;
@@ -493,10 +493,6 @@
                 cursor: default;
             }
         }
-    }
-
-    .filters__group--ink {
-        gap: 5px;
     }
 
     .filters__group--right {
