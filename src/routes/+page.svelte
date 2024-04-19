@@ -3,6 +3,8 @@
     import { preload } from '../lib/preload.js';
     import { fade } from 'svelte/transition';
 
+    import Modal from './filter-modal.svelte';
+
     let cards = null;
     let filteredCards;
     let filters = {
@@ -15,10 +17,14 @@
             steel: false,
         },
         showType: {
-            action: true,
-            character: true,
-            item: true,
-            location: true
+            action: false,
+            character: false,
+            item: false,
+            location: false
+        },
+        showInk: {
+            ink: false,
+            unink: false
         },
         sortType: "cost",
         sortAsc: true,
@@ -29,6 +35,8 @@
     let totalCards;
     let totalPages;
     let colorCount;
+    let filterCount;
+    let showFilterModal = false;
     
     onMount(async () => {
         // Get data from Lorcast API
@@ -63,13 +71,20 @@
         }
 
         // Filter type
-        filteredCards = filteredCards
-            .filter(x => 
-                !filters.showType.action ? !x.type.includes("Action") : x.type.includes("Action") ||
-                !filters.showType.character ? !x.type.includes("Character") : x.type.includes("Character") ||
-                !filters.showType.item ? !x.type.includes("Item") : x.type.includes("Item") ||
-                !filters.showType.location ? !x.type.includes("Location") : x.type.includes("Location")
-            );
+        if (filters.showType.action == true || filters.showType.character == true || filters.showType.item == true || filters.showType.location == true) {
+            filteredCards = filteredCards
+                .filter(x => !filters.showType.action ? !x.type.includes("Action") : true)
+                .filter(x => !filters.showType.character ? !x.type.includes("Character") : true)
+                .filter(x => !filters.showType.item ? !x.type.includes("Item") : true)
+                .filter(x => !filters.showType.location ? !x.type.includes("Location") : true);
+        }
+
+        // Filter inkwell
+        if (filters.showInk.ink == true || filters.showInk.unink == true) {
+            filteredCards = filteredCards
+                .filter(x => !filters.showInk.ink ? !x.inkwell : true)
+                .filter(x => !filters.showInk.unink ? x.inkwell : true)
+        }
 
         // Filter color
         filteredCards = filteredCards.filter(function(x) {
@@ -94,6 +109,9 @@
         // Update number of colors selected
         colorCount = Object.values(filters.color).filter(item => item === true).length;
 
+        // Update number of filters selected
+        filterCount = Object.values(filters.showType).filter(item => item === true).length + Object.values(filters.showInk).filter(item => item === true).length;
+
         // Set card and page totals
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
@@ -104,6 +122,18 @@
     const clearSearch = () => {
         // Clear search term
         searchTerm = null;
+
+        // Reset displayed cards
+        filterCards(true);
+    }
+
+    const resetFilters = () => {
+        filters.showType.action = false;
+        filters.showType.character = false;
+        filters.showType.item = false;
+        filters.showType.location = false;
+        filters.showInk.ink = false;
+        filters.showInk.unink = false;
 
         // Reset displayed cards
         filterCards(true);
@@ -133,6 +163,39 @@
         return (a.baseName.localeCompare(b.baseName));
     }
 </script>
+
+<Modal bind:showFilterModal close={() => showFilterModal}>
+    <div class="col__section">
+        <div class="filters filters--modal">
+            <div class="filters__header">Card Types</div>
+            <div class="filters__group">
+                <input type="checkbox" class="checkbox" id="filter-actions" name="Actions" bind:checked={filters.showType.action} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-actions">Actions</label>
+                <input type="checkbox" class="checkbox" id="filter-characters" name="Characters" bind:checked={filters.showType.character} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-characters">Characters</label>
+                <input type="checkbox" class="checkbox" id="filter-items" name="Items" bind:checked={filters.showType.item} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-items">Items</label>
+                <input type="checkbox" class="checkbox" id="filter-locations" name="Locations" bind:checked={filters.showType.location} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-locations">Locations</label>
+            </div>
+        </div>
+    </div>
+    <div class="col__divider"></div>
+    <div class="col__section">
+        <div class="filters filters--modal">
+            <div class="filters__header">Inkwell</div>
+            <div class="filters__group">
+                <input type="checkbox" class="checkbox" id="filter-ink" name="Inkable" bind:checked={filters.showInk.ink} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-ink">Inkable</label>
+                <input type="checkbox" class="checkbox" id="filter-unink" name="Uninkable" bind:checked={filters.showInk.unink} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-unink">Uninkable</label>
+            </div>
+        </div>
+    </div>
+    <div class="col__divider"></div>
+
+    <button class="button" slot="action" on:click={resetFilters}>Reset All</button>
+</Modal>
 
 <div class="app-contain">
     <div class="col frame-full">
@@ -165,8 +228,8 @@
                     </label>
                 </div>
                 <div class="filters__group">
-                    <button class="button">
-                        <img src="./images/icon-filter.svg" alt="Filters" />Filter
+                    <button class="button" on:click={() => (showFilterModal = true)}>
+                        <img src="./images/icon-filter.svg" alt="Filters" />Filters {#if filterCount > 0}({filterCount}){/if}
                     </button>
                     <select class="button button--dropdown" name="sort-type" id="sort-type" bind:value={filters.sortType} on:change={filterCards}>
                         <option value="name">Sort by Name</option>
@@ -268,6 +331,52 @@
 </div>
 
 <style>
+    .checkbox {
+        display: none;
+
+        & + label {
+            display: flex;
+            height: 30px;
+            padding: 0 10px 0 8px;
+            gap: 10px;
+            border: 1px solid var(--Background-Dark);
+            background: var(--Background-Dark);
+            border-radius: 6px;
+            align-items: center;
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+            font-weight: bold;
+            line-height: 30px;
+            color: var(--Gold);
+
+            &::before {
+                content: '';
+                display: block;
+                background-image: url('./images/check.svg');
+                background-position: center;
+                background-repeat: no-repeat;
+                width: 14px;
+                height: 14px;
+                border-radius: 2px;
+                background-color: var(--Gold);
+                border: 1px solid var(--Gold);
+            }
+        }
+
+        &:not(:checked) + label {
+            background: var(--Background-Base);
+            border-color: var(--Border);
+            color: var(--Text-Base);
+
+            &::before {
+                background: var(--Background-Base);
+                background-image: none;
+                border: 1px solid var(--Border);
+            }
+        }
+    }
+
     .app-contain {
         height: 100%;
         box-sizing: border-box;
@@ -356,37 +465,14 @@
         color: var(--Text-Sub);
     }
 
-    .frame-full {
-        position: relative;
-        border-image: url('/images/frame-full.svg');
-        border-image-slice: 60 60 60 60;
-        border-image-width: 60px 60px 60px 60px;
-
-        &::before, &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 12px;
-            height: 24px;
-            margin-top: -12px;
-        }
-
-        &::before {
-            left: 0;
-            background-image: url('/images/frame-full-left.svg');
-
-        }
-
-        &::after {
-            right: 0;
-            background-image: url('/images/frame-full-right.svg');
-
-        }
-    }
-
     .filters {
         display: flex;
         gap: 15px;
+    }
+
+    .filters--modal {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .filters__group {
@@ -417,6 +503,11 @@
         display: flex;
         flex: 1 0 0;
         justify-content: flex-end;
+    }
+
+    .filters__header {
+        font-size: 16px;
+        color: var(--Text-Sub);
     }
 
     .search-form {
@@ -510,71 +601,9 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        border-radius: 4.5% / 3.5%;
         top: 0;
         left: 0;
-    }
-
-    .button {
-        border-image: url('/images/background-button.svg');
-        border-image-slice: 15;
-        border-image-width: 15px;
-        background: var(--Background-Base);
-        padding: 0 10px;
-        display: flex;
-        height: 30px;
-        font: inherit;
-        font-weight: bold;
-        font-size: 14px;
-        color: var(--Text-Base);
-        align-items: center;
-        text-transform: uppercase;
-        cursor: pointer;
-        position: relative;
-        gap: 5px;
-        line-height: 30px;
-
-        &::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            right: 50%;
-            height: 34px;
-            border-top: 1px solid var(--Border);
-            border-bottom: 1px solid var(--Border);
-            transition: left 200ms, right 200ms;
-        }
-
-        &:disabled {
-            color: var(--Border);
-            cursor: default;
-        }
-
-        &:hover {
-            &::before {
-                left: 5px;
-                right: 5px;
-            }
-        }
-    }
-
-    .button--left {
-        padding-left: 5px;
-    }
-
-    .button--right {
-        padding-right: 5px;
-    }
-
-    .button--dropdown {
-        background-image: url('/images/dropdown-arrow.svg');
-        background-repeat: no-repeat;
-        background-position: center right 10px;
-        padding-right: 30px;
-        appearance: none;
-
-        &:focus-visible {
-            outline: none;
-        }
     }
 
     .pagination {
