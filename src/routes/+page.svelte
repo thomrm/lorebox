@@ -28,8 +28,8 @@
             ink: false,
             unink: false
         },
-        sortType: "cost",
-        sortAsc: true,
+        sortType: "rarity",
+        sortAsc: false,
         pageSize: 60
     }
     let searchTerm = null;
@@ -588,6 +588,10 @@
         & input[type='checkbox'] {
             display: none;
 
+            & + label {
+                transition: transform 200ms;
+            }
+
             &:not(:checked) + label {
                 --Filter-Base: var(--Background-Dark);
                 --Filter-Icon: var(--Gold);
@@ -598,18 +602,15 @@
                 --Filter-Icon: var(--Background-Base);
                 cursor: default;
             }
+
+            &:not(:disabled):hover + label {
+                --Filter-Icon: currentColor;
+            }
+
+            &:active + label {
+                transform: scale(0.95);
+            }
         }
-    }
-
-    .filters__group--right {
-        display: flex;
-        flex: 1 0 0;
-        justify-content: flex-end;
-    }
-
-    .filters__header {
-        font-size: 16px;
-        color: var(--Text-Sub);
     }
 
     .filter-ink {
@@ -624,6 +625,17 @@
 
         --Filter-Base: var(--Black);
         --Filter-Icon: currentColor;
+    }
+
+    .filters__group--right {
+        display: flex;
+        flex: 1 0 0;
+        justify-content: flex-end;
+    }
+
+    .filters__header {
+        font-size: 16px;
+        color: var(--Text-Sub);
     }
 
     .search-form {
