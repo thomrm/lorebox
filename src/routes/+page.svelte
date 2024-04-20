@@ -180,7 +180,7 @@
             filters.color.sapphire = deck.colors.includes("Sapphire") ? true : false;
             filters.color.steel = deck.colors.includes("Steel") ? true : false;
             colorLock = true;
-            filterCards();
+            filterCards(true);
         }
 
         // Reset color filters if deck no longer contains 2 colors
@@ -193,7 +193,7 @@
             filters.color.steel = false;
             colorCount == 0;
             colorLock = false;
-            filterCards();
+            filterCards(true);
         }
 
         // Update total cards added to deck
