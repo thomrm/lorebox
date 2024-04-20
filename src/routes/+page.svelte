@@ -421,7 +421,68 @@
     </div>
     <div class="col col--right frame-full">
         <div class="col__section">
-            <div class="deck-total">{deck.cardsCount}/60</div>
+            <div class="deck-header">
+                <div class="deck-header__side">
+                    <div class="deck-identity">
+                        {#if deck.colors.length == 0}
+                            <div class="deck-identity__empty">?</div>
+                        {:else}
+                            {#if deck.colors[0] == "Amethyst"}
+                                <div class="deck-identity__half deck-identity__half--left ink-amethyst">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
+                                </div>
+                            {:else if deck.colors[0] == "Amber"}
+                                <div class="deck-identity__half deck-identity__half--left ink-amber">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
+                                </div>
+                            {:else if deck.colors[0] == "Emerald"}
+                                <div class="deck-identity__half deck-identity__half--left ink-emerald">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
+                                </div>
+                            {:else if deck.colors[0] == "Ruby"}
+                                <div class="deck-identity__half deck-identity__half--left ink-ruby">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
+                                </div>
+                            {:else if deck.colors[0] == "Sapphire"}
+                                <div class="deck-identity__half deck-identity__half--left ink-sapphire">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
+                                </div>
+                            {:else if deck.colors[0] == "Steel"}
+                                <div class="deck-identity__half deck-identity__half--left ink-steel">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
+                                </div>
+                            {/if}
+                            {#if deck.colors[1] == "Amethyst"}
+                                <div class="deck-identity__half deck-identity__half--right ink-amethyst">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
+                                </div>
+                            {:else if deck.colors[1] == "Amber"}
+                                <div class="deck-identity__half deck-identity__half--right ink-amber">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
+                                </div>
+                            {:else if deck.colors[1] == "Emerald"}
+                                <div class="deck-identity__half deck-identity__half--right ink-emerald">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
+                                </div>
+                            {:else if deck.colors[1] == "Ruby"}
+                                <div class="deck-identity__half deck-identity__half--right ink-ruby">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
+                                </div>
+                            {:else if deck.colors[1] == "Sapphire"}
+                                <div class="deck-identity__half deck-identity__half--right ink-sapphire">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
+                                </div>
+                            {:else if deck.colors[1] == "Steel"}
+                                <div class="deck-identity__half deck-identity__half--right ink-steel">
+                                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
+                                </div>
+                            {/if}
+                        {/if}
+                    </div>
+                </div>
+                <div class="deck-header__total">{deck.cardsCount}/60</div>
+                <div class="deck-header__side deck-header__side--right">asd</div>
+            </div>
         </div>
         <div class="col__divider"></div>
         <div class="col__section">
@@ -480,6 +541,87 @@
 
     .hover-view__card {
         width: 300px;
+    }
+
+    .deck-header {
+        display: flex;
+    }
+
+    .deck-header__side {
+        width: 50px;
+        display: flex;
+    }
+
+    .deck-header__side--right {
+        justify-content: flex-end;
+    }
+
+    .deck-header__total {
+        font-size: 20px;
+        font-weight: bold;
+        height: 30px;
+        display: flex;
+        flex: 1 0 0;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .deck-identity {
+        width: 30px;
+        height: 30px;
+        position: relative;
+
+        &::before {
+            content: '';
+            width: 30px;
+            height: 34px;
+            top: -2px;
+            position: absolute;
+            background-image: url('/images/filter-blank.svg');
+            background-repeat: no-repeat;
+        }
+    }
+
+    .deck-identity__half {
+        position: absolute;
+        top: -2px;
+        width: 14px;
+        height: 34px;
+        overflow: hidden;
+
+        --Filter-Base: var(--Black);
+        --Filter-Icon: currentColor;
+        
+        & svg {
+            position: absolute;
+        }
+    }
+
+    .deck-identity__half--left {
+        left: 0;
+        border-right: 1px solid var(--Black);
+    }
+
+    .deck-identity__half--right {
+        right: 0;
+        justify-content: flex-end;
+        border-left: 1px solid var(--Black);
+
+        & svg {
+            right: 0;
+        }
+    }
+
+    .deck-identity__empty {
+        color: var(--Background-Base);
+        font-weight: bold;
+        font-size: 14px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
     }
 
     .deck {
@@ -704,15 +846,6 @@
         cursor: pointer;
         background: none;
         border: none;
-    }
-
-    .deck-total {
-        font-size: 20px;
-        font-weight: bold;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
 
     .card {
