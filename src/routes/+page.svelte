@@ -37,9 +37,11 @@
     let totalCards;
     let totalPages;
     let colorCount;
+    let colorLock = false;
     let filterCount;
     let showFilterModal = false;
     let deck = {
+        colors: [],
         cardsCount: 0,
         cards: []
     };
@@ -140,10 +142,7 @@
             });
         }
 
-        // Update total cards added to deck
-        deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
-
-        console.log(deck);
+        updateDeck();
     }
 
     const removeCard = (cardID) => {
@@ -153,6 +152,44 @@
         } else {
             // Remove card
             deck.cards = deck.cards.filter(x => x.id !== cardID);
+        }
+
+        updateDeck();
+    }
+
+    const updateDeck = () => {
+        // Update deck colors
+        deck.colors = [];
+        if (deck.cards.some(x => x.data.color == "Amber")) { deck.colors.push("Amber"); }
+        if (deck.cards.some(x => x.data.color == "Amethyst")) { deck.colors.push("Amethyst"); }
+        if (deck.cards.some(x => x.data.color == "Emerald")) { deck.colors.push("Emerald"); }
+        if (deck.cards.some(x => x.data.color == "Ruby")) { deck.colors.push("Ruby"); }
+        if (deck.cards.some(x => x.data.color == "Sapphire")) { deck.colors.push("Sapphire"); }
+        if (deck.cards.some(x => x.data.color == "Steel")) { deck.colors.push("Steel"); }
+
+        // Force color filters if deck now contains 2 colors
+        if (deck.colors.length == 2 && !colorLock) {
+            filters.color.amber = deck.colors.includes("Amber") ? true : false;
+            filters.color.amethyst = deck.colors.includes("Amethyst") ? true : false;
+            filters.color.emerald = deck.colors.includes("Emerald") ? true : false;
+            filters.color.ruby = deck.colors.includes("Ruby") ? true : false;
+            filters.color.sapphire = deck.colors.includes("Sapphire") ? true : false;
+            filters.color.steel = deck.colors.includes("Steel") ? true : false;
+            colorLock = true;
+            filterCards();
+        }
+
+        // Reset color filters if deck no longer contains 2 colors
+        if (deck.colors.length < 2 && colorLock) {
+            filters.color.amber = false;
+            filters.color.amethyst = false;
+            filters.color.emerald = false;
+            filters.color.ruby = false;
+            filters.color.sapphire = false;
+            filters.color.steel = false;
+            colorCount == 0;
+            colorLock = false;
+            filterCards();
         }
 
         // Update total cards added to deck
@@ -244,7 +281,7 @@
     <div class="col frame-full">
         <div class="col__section">
             <div class="filters">
-                <div class="filters__group">
+                <fieldset class="filters__group" disabled={colorLock}>
                     <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
                     <label class="filter-ink ink-amber" for="filter-amber">
                         <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
@@ -269,7 +306,7 @@
                     <label class="filter-ink ink-steel" for="filter-steel">
                         <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
                     </label>
-                </div>
+                </fieldset>
                 <div class="filters__group">
                     <button class="button" on:click={() => (showFilterModal = true)}>
                         <img src="./images/icon-filter.svg" alt="Filters" />Filters {#if filterCount > 0}({filterCount}){/if}
@@ -575,6 +612,20 @@
         color: var(--Text-Sub);
     }
 
+    .filter-ink {
+        padding: 0;
+        border: none;
+        background: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        height: 30px;
+        width: 30px;
+
+        --Filter-Base: var(--Black);
+        --Filter-Icon: currentColor;
+    }
+
     .search-form {
         position: relative;
         display: flex;
@@ -612,20 +663,6 @@
         cursor: pointer;
         background: none;
         border: none;
-    }
-
-    .filter-ink {
-        padding: 0;
-        border: none;
-        background: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        height: 30px;
-        width: 30px;
-
-        --Filter-Base: var(--Black);
-        --Filter-Icon: currentColor;
     }
 
     .deck-total {
