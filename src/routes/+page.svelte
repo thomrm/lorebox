@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { preload } from '../lib/preload.js';
-    import { fade } from 'svelte/transition';
+    import { fade, slide } from 'svelte/transition';
 
     import Modal from './filter-modal.svelte';
 
@@ -205,6 +205,12 @@
     // Show hover image when specified
     const showHover = (image) => { hoverCard = image; }
     const hideHover = () => { hoverCard = null; }
+
+    // Sort cards in deck by type
+    $: characters = deck.cards.filter(x => x.data.type == 'Character').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
+    $: actions = deck.cards.filter(x => x.data.type == 'Action').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
+    $: items = deck.cards.filter(x => x.data.type == 'Item').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
+    $: locations = deck.cards.filter(x => x.data.type == 'Location').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
 
     const clearSearch = () => {
         // Clear search term
@@ -425,52 +431,35 @@
         <div class="col__scroll-contain">
             {#if deck.cards.length === 0}
                 <div class="grid-status grid-status--small">No Cards Added</div>
-            {:else}
-                {@const characters = deck.cards
-                    .filter(x => x.data.type == 'Character')
-                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
-                }
-                {@const actions = deck.cards
-                    .filter(x => x.data.type == 'Action')
-                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
-                }
-                {@const items = deck.cards
-                    .filter(x => x.data.type == 'Item')
-                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
-                }
-                {@const locations = deck.cards
-                    .filter(x => x.data.type == 'Location')
-                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
-                }
-                <div class="col__scroll">
-                    <div class="deck">
-                        {#if characters.length !== 0}
-                            <div class="deck__label">Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
-                            {#each characters as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
-                            {/each}
-                        {/if}
-                        {#if actions.length !== 0}
-                            <div class="deck__label">Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
-                            {#each actions as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
-                            {/each}
-                        {/if}
-                        {#if items.length !== 0}
-                            <div class="deck__label">Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
-                            {#each items as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
-                            {/each}
-                        {/if}
-                        {#if locations.length !== 0}
-                            <div class="deck__label">Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
-                            {#each locations as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
-                            {/each}
-                        {/if}
-                    </div>
-                </div>
             {/if}
+            <div class="col__scroll">
+                <div class="deck">
+                    {#if characters.length !== 0}
+                        <div class="deck__label" transition:slide={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
+                    {/if}
+                    {#each characters as card (card.id)}
+                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                    {/each}
+                    {#if actions.length !== 0}
+                        <div class="deck__label" transition:slide={{duration: 200}}>Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
+                    {/if}
+                    {#each actions as card (card.id)}
+                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                    {/each}
+                    {#if items.length !== 0}
+                        <div class="deck__label" transition:slide={{duration: 200}}>Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
+                    {/if}
+                    {#each items as card (card.id)}
+                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                    {/each}
+                    {#if locations.length !== 0}
+                        <div class="deck__label" transition:slide={{duration: 200}}>Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
+                    {/if}
+                    {#each locations as card (card.id)}
+                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                    {/each}
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -600,6 +589,11 @@
         justify-content: center;
         font-size: 30px;
         color: var(--Text-Sub);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
 
     .grid-status--small {

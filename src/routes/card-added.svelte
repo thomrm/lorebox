@@ -2,6 +2,8 @@
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
+    import { slide } from 'svelte/transition';
+
     const add = () => dispatch('add');
     const remove = () => dispatch('remove');
 
@@ -13,12 +15,11 @@
 
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events a11y-no-static-element-interactions -->
-<div class="card-added-contain" on:mouseover={hoverEnter} on:mouseleave={hoverLeave}>
+<div class="card-added-contain" on:mouseover={hoverEnter} on:mouseleave={hoverLeave} transition:slide={{duration: 200}}>
     <div class="card-added" id="card-{card.id}">
-        <div class="card-added__cost" 
-            class:card-added__cost--ink={card.data.inkwell}
-            class:card-added__cost--noink={!card.data.inkwell}
-        >{card.data.cost}</div>
+        <div class="card-added__cost" class:card-added__cost--ink={card.data.inkwell} class:card-added__cost--noink={!card.data.inkwell}>
+            {card.data.cost}
+        </div>
         <div class="card-added__name">
             <div class="card-added__base-name"
                 class:text-amber={card.data.color == "Amber"}
