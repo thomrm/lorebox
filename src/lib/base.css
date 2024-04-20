@@ -5,6 +5,20 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     vertical-align: baseline;
 }
 
+.ink-amber { color: var(--Ink-Amber); }
+.ink-amethyst { color: var(--Ink-Amethyst); }
+.ink-emerald { color: var(--Ink-Emerald); }
+.ink-ruby { color: var(--Ink-Ruby); }
+.ink-sapphire { color: var(--Ink-Sapphire); }
+.ink-steel { color: var(--Ink-Steel); }
+
+.text-amber { color: var(--Text-Amber); }
+.text-amethyst { color: var(--Text-Amethyst); }
+.text-emerald { color: var(--Text-Emerald); }
+.text-ruby { color: var(--Text-Ruby); }
+.text-sapphire { color: var(--Text-Sapphire); }
+.text-steel { color: var(--Text-Steel); }
+
 .frame-full {
     position: relative;
     border-image: url('/images/frame-full.svg');
@@ -76,5 +90,51 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 
     &:focus-visible {
         outline: none;
+    }
+}
+
+.checkbox {
+    display: none;
+
+    & + label {
+        display: flex;
+        height: 30px;
+        padding: 0 10px 0 8px;
+        gap: 10px;
+        border: 1px solid var(--Background-Dark);
+        background: var(--Background-Dark);
+        border-radius: 6px;
+        align-items: center;
+        cursor: pointer;
+        font-size: 13px;
+        text-transform: uppercase;
+        font-weight: bold;
+        line-height: 30px;
+        color: var(--Gold);
+
+        &::before {
+            content: '';
+            display: block;
+            background-image: url('./images/check.svg');
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 14px;
+            height: 14px;
+            border-radius: 2px;
+            background-color: var(--Gold);
+            border: 1px solid var(--Gold);
+        }
+    }
+
+    &:not(:checked) + label {
+        background: var(--Background-Base);
+        border-color: var(--Border);
+        color: var(--Text-Base);
+
+        &::before {
+            background: var(--Background-Base);
+            background-image: none;
+            border: 1px solid var(--Border);
+        }
     }
 }

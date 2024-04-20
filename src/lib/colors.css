@@ -7,6 +7,7 @@
     --Border: #C7AC84;
     --Text-Base: #1C1C1A;
     --Text-Sub: #76654A;
+    --Text-Grey: #8D8D8C;
 
     --Gold: #D3BA84;
 
@@ -16,4 +17,11 @@
     --Ink-Ruby: #D40037;
     --Ink-Sapphire: #0093C8;
     --Ink-Steel: #97A3AE;
+
+    --Text-Amber: #F3B123;
+    --Text-Amethyst: #CC93DA;
+    --Text-Emerald: #44BD5A;
+    --Text-Ruby: #FF8084;
+    --Text-Sapphire: #29B3E6;
+    --Text-Steel: #A1A8B0;
 }

@@ -5,6 +5,8 @@
 
     import Modal from './filter-modal.svelte';
 
+    import CardAdded from './card-added.svelte';
+
     let cards = null;
     let filteredCards;
     let filters = {
@@ -37,6 +39,10 @@
     let colorCount;
     let filterCount;
     let showFilterModal = false;
+    let deck = {
+        cardsCount: 0,
+        cards: []
+    };
     
     onMount(async () => {
         // Get data from Lorcast API
@@ -119,6 +125,42 @@
         console.log(filteredCards);
     }
 
+    const addCard = (cardID) => {
+        if (deck.cards.find(x => x.id === cardID)) {
+            // Increment card already added and less than 4
+            if (deck.cards.find(x => x.id === cardID).number < 4) {
+                deck.cards.find(x => x.id === cardID).number++;
+            }
+        } else {
+            // Add new card
+            deck.cards.push({
+                id: cardID,
+                data: cards.filter(x => x.id == cardID)[0],
+                number: 1
+            });
+        }
+
+        // Update total cards added to deck
+        deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
+
+        console.log(deck);
+    }
+
+    const removeCard = (cardID) => {
+        if (deck.cards.find(x => x.id === cardID).number > 1) {
+            // deincrement card already added and greater than 1
+            deck.cards.find(x => x.id === cardID).number--;
+        } else {
+            // Remove card
+            deck.cards = deck.cards.filter(x => x.id !== cardID);
+        }
+
+        // Update total cards added to deck
+        deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
+
+        console.log(deck);
+    }
+
     const clearSearch = () => {
         // Clear search term
         searchTerm = null;
@@ -128,6 +170,7 @@
     }
 
     const resetFilters = () => {
+        // Default filters
         filters.showType.action = false;
         filters.showType.character = false;
         filters.showType.item = false;
@@ -248,7 +291,7 @@
                     </label>
                 </div>
                 <div class="filters__group filters__group--right">
-                    <form class="search-form" on:submit|preventDefault={filterCards} on:reset={clearSearch}>
+                    <form id="search-form" class="search-form" on:submit|preventDefault={filterCards} on:reset={clearSearch}>
                         <input class="search-form__search-bar" type="text" placeholder="Search..."  bind:value={searchTerm} on:change={filterCards} />
                         {#if searchTerm}
                             <button type="reset" class="search-form__search-clear">
@@ -274,7 +317,8 @@
                                     {#await preload(card.images.full)}
                                         <!--Loading-->
                                     {:then}
-                                        <img class="card__image" src="{card.images.full}" alt="{card.fullName}" in:fade={{duration: 200}} />
+                                        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
+                                        <img class="card__image" src="{card.images.full}" alt="{card.fullName}" in:fade={{duration: 200}} on:click={addCard(card.id)} />
                                     {/await}
                                 </div>
                             {/each}
@@ -315,7 +359,7 @@
     </div>
     <div class="col col--right frame-full">
         <div class="col__section">
-            <div class="deck-total">0/60</div>
+            <div class="deck-total">{deck.cardsCount}/60</div>
         </div>
         <div class="col__divider"></div>
         <div class="col__section">
@@ -323,58 +367,79 @@
         </div>
         <div class="col__divider"></div>
         <div class="col__scroll-contain">
-            <div class="col__scroll">
-                Deck List
-            </div>
+            {#if deck.cards.length === 0}
+                <div class="grid-status grid-status--small">No Cards Added</div>
+            {:else}
+                {@const characters = deck.cards
+                    .filter(x => x.data.type == 'Character')
+                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
+                }
+                {@const actions = deck.cards
+                    .filter(x => x.data.type == 'Action')
+                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
+                }
+                {@const items = deck.cards
+                    .filter(x => x.data.type == 'Item')
+                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
+                }
+                {@const locations = deck.cards
+                    .filter(x => x.data.type == 'Location')
+                    .sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); })
+                }
+                <div class="col__scroll">
+                    <div class="deck">
+                        {#if characters.length !== 0}
+                            <div class="deck__label">Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
+                            {#each characters as card}
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                            {/each}
+                        {/if}
+                        {#if actions.length !== 0}
+                            <div class="deck__label">Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
+                            {#each actions as card}
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                            {/each}
+                        {/if}
+                        {#if items.length !== 0}
+                            <div class="deck__label">Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
+                            {#each items as card}
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                            {/each}
+                        {/if}
+                        {#if locations.length !== 0}
+                            <div class="deck__label">Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
+                            {#each locations as card}
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                            {/each}
+                        {/if}
+                    </div>
+                </div>
+            {/if}
         </div>
     </div>
 </div>
 
 <style>
-    .checkbox {
-        display: none;
+    .deck {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
 
-        & + label {
-            display: flex;
-            height: 30px;
-            padding: 0 10px 0 8px;
-            gap: 10px;
-            border: 1px solid var(--Background-Dark);
-            background: var(--Background-Dark);
-            border-radius: 6px;
-            align-items: center;
-            cursor: pointer;
-            font-size: 13px;
-            text-transform: uppercase;
-            font-weight: bold;
-            line-height: 30px;
-            color: var(--Gold);
+    .deck__label {
+        display: flex;
+        height: 40px;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        align-self: stretch;
+    }
 
-            &::before {
-                content: '';
-                display: block;
-                background-image: url('./images/check.svg');
-                background-position: center;
-                background-repeat: no-repeat;
-                width: 14px;
-                height: 14px;
-                border-radius: 2px;
-                background-color: var(--Gold);
-                border: 1px solid var(--Gold);
-            }
-        }
-
-        &:not(:checked) + label {
-            background: var(--Background-Base);
-            border-color: var(--Border);
-            color: var(--Text-Base);
-
-            &::before {
-                background: var(--Background-Base);
-                background-image: none;
-                border: 1px solid var(--Border);
-            }
-        }
+    .deck__label-sub {
+        font-weight: normal;
+        color: var(--Text-Sub);
     }
 
     .app-contain {
@@ -463,6 +528,10 @@
         justify-content: center;
         font-size: 30px;
         color: var(--Text-Sub);
+    }
+
+    .grid-status--small {
+        font-size: 20px;
     }
 
     .filters {
@@ -558,13 +627,6 @@
         --Filter-Base: var(--Black);
         --Filter-Icon: currentColor;
     }
-
-    .ink-amber { color: var(--Ink-Amber); }
-    .ink-amethyst { color: var(--Ink-Amethyst); }
-    .ink-emerald { color: var(--Ink-Emerald); }
-    .ink-ruby { color: var(--Ink-Ruby); }
-    .ink-sapphire { color: var(--Ink-Sapphire); }
-    .ink-steel { color: var(--Ink-Steel); }
 
     .deck-total {
         font-size: 20px;
