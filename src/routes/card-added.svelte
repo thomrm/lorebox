@@ -88,6 +88,7 @@
     .card-added__name {
         display: flex;
         flex: 1 0 0;
+        min-width: 100px;
         flex-direction: column;
         justify-content: center;
         line-height: 1;
@@ -98,10 +99,16 @@
         text-transform: uppercase;
         font-weight: bold;
         font-size: 14px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .card-added__subtitle {
         font-size: 10px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .card-added__count {
