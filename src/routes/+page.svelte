@@ -45,6 +45,7 @@
         cardsCount: 0,
         cards: []
     };
+    let hoverCard = null;
     
     onMount(async () => {
         // Get data from Lorcast API
@@ -124,7 +125,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        console.log(filteredCards);
+        //console.log(filteredCards);
     }
 
     const addCard = (cardID) => {
@@ -152,6 +153,9 @@
         } else {
             // Remove card
             deck.cards = deck.cards.filter(x => x.id !== cardID);
+
+            // Clear hover
+            hoverCard = null;
         }
 
         updateDeck();
@@ -195,8 +199,12 @@
         // Update total cards added to deck
         deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
 
-        console.log(deck);
+        //console.log(deck);
     }
+
+    // Show hover image when specified
+    const showHover = (image) => { hoverCard = image; }
+    const hideHover = () => { hoverCard = null; }
 
     const clearSearch = () => {
         // Clear search term
@@ -341,6 +349,17 @@
         </div>
         <div class="col__divider"></div>
         <div class="col__scroll-contain">
+            {#if hoverCard}
+                <div class="hover-view" transition:fade={{duration: 200}}>
+                    <div class="hover-view__card">
+                        <div class="card">
+                            {#key hoverCard}
+                                <img class="card__image" src="{hoverCard}" alt="Full View" />
+                            {/key}
+                        </div>
+                    </div>
+                </div>
+            {/if}
             {#if !filteredCards}
                 <!--Loading-->
             {:else}
@@ -428,25 +447,25 @@
                         {#if characters.length !== 0}
                             <div class="deck__label">Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
                             {#each characters as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                             {/each}
                         {/if}
                         {#if actions.length !== 0}
                             <div class="deck__label">Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
                             {#each actions as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                             {/each}
                         {/if}
                         {#if items.length !== 0}
                             <div class="deck__label">Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
                             {#each items as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                             {/each}
                         {/if}
                         {#if locations.length !== 0}
                             <div class="deck__label">Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
                             {#each locations as card}
-                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} />
+                                <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                             {/each}
                         {/if}
                     </div>
@@ -457,10 +476,26 @@
 </div>
 
 <style>
+    .hover-view {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+        background: rgba(227,202,168,0.8);
+    }
+
+    .hover-view__card {
+        width: 300px;
+    }
+
     .deck {
         display: flex;
         flex-direction: column;
-        gap: 1px;
     }
 
     .deck__label {

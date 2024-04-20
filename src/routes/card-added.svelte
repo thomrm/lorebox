@@ -5,44 +5,54 @@
     const add = () => dispatch('add');
     const remove = () => dispatch('remove');
 
+    const hoverEnter = () => dispatch('hoverEnter');
+    const hoverLeave = () => dispatch('hoverLeave');
+
     export let card;
 </script>
 
 
-<div class="card-added" id="card-{card.id}">
-    <div class="card-added__cost" 
-        class:card-added__cost--ink={card.data.inkwell}
-        class:card-added__cost--noink={!card.data.inkwell}
-    >{card.data.cost}</div>
-    <div class="card-added__name">
-        <div class="card-added__base-name"
-            class:text-amber={card.data.color == "Amber"}
-            class:text-amethyst={card.data.color == "Amethyst"}
-            class:text-emerald={card.data.color == "Emerald"}
-            class:text-ruby={card.data.color == "Ruby"}
-            class:text-sapphire={card.data.color == "Sapphire"}
-            class:text-steel={card.data.color == "Steel"}
-        >{card.data.baseName}</div>
-        {#if card.data.subtitle}
-            <div class="card-added__subtitle">{card.data.subtitle}</div>
-        {/if}
-    </div>
-    <div class="card-added__add-remove">
-        <button on:click={remove}>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 8H15L13 10H3L5 8Z" fill="currentColor"/>
-            </svg>
-        </button>
-        <div class="card-added__count">{card.number}<span class="card-added__x">X</span></div>
-        <button on:click={add} disabled={card.number == 4}>
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M10 8V4H8V8H5L3 10H8V14H10V10H13L15 8H10Z" fill="currentColor" />
-            </svg>
-        </button>
+<!-- svelte-ignore a11y-mouse-events-have-key-events a11y-no-static-element-interactions -->
+<div class="card-added-contain" on:mouseover={hoverEnter} on:mouseleave={hoverLeave}>
+    <div class="card-added" id="card-{card.id}">
+        <div class="card-added__cost" 
+            class:card-added__cost--ink={card.data.inkwell}
+            class:card-added__cost--noink={!card.data.inkwell}
+        >{card.data.cost}</div>
+        <div class="card-added__name">
+            <div class="card-added__base-name"
+                class:text-amber={card.data.color == "Amber"}
+                class:text-amethyst={card.data.color == "Amethyst"}
+                class:text-emerald={card.data.color == "Emerald"}
+                class:text-ruby={card.data.color == "Ruby"}
+                class:text-sapphire={card.data.color == "Sapphire"}
+                class:text-steel={card.data.color == "Steel"}
+            >{card.data.baseName}</div>
+            {#if card.data.subtitle}
+                <div class="card-added__subtitle">{card.data.subtitle}</div>
+            {/if}
+        </div>
+        <div class="card-added__add-remove">
+            <button on:click={remove}>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 8H15L13 10H3L5 8Z" fill="currentColor"/>
+                </svg>
+            </button>
+            <div class="card-added__count">{card.number}<span class="card-added__x">X</span></div>
+            <button on:click={add} disabled={card.number == 4}>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10 8V4H8V8H5L3 10H8V14H10V10H13L15 8H10Z" fill="currentColor" />
+                </svg>
+            </button>
+        </div>
     </div>
 </div>
 
 <style>
+    .card-added-contain {
+        padding-bottom: 1px;
+    }
+
     .card-added {
         display: flex;
         align-items: center;
