@@ -374,7 +374,7 @@
                 {:else}
                     {#key filteredCards}
                         <div class="col__scroll col__scroll--grid">
-                            {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card, i}
+                            {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card (card.id)}
                                 <div class="card">
                                     {#await preload(card.images.full)}
                                         <!--Loading-->
@@ -430,7 +430,7 @@
         <div class="col__divider"></div>
         <div class="col__scroll-contain">
             {#if deck.cards.length === 0}
-                <div class="grid-status grid-status--small">No Cards Added</div>
+                <div class="grid-status grid-status--small" transition:fade={{duration: 200}}>No Cards Added</div>
             {/if}
             <div class="col__scroll">
                 <div class="deck">
