@@ -125,8 +125,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        console.log(costs);
-        console.log(filteredCards);
+        //console.log(filteredCards);
     }
 
     const addCard = (cardID) => {
@@ -199,8 +198,6 @@
 
         // Update total cards added to deck
         deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
-
-        //console.log(deck);
     }
 
     // Show hover image when specified
@@ -548,6 +545,7 @@
                 <div class="deck-graph">
                     <div class="deck-graph__bars">
                         {#each costs as cost}
+                            {@const scale = costs.some(obj => obj.a > 40 || obj.b > 40) ? 1 : costs.some(obj => obj.a > 20 || obj.b > 20) ? 2 : 4}
                             <div class="bar">
                                 <div class="bar__left" 
                                     class:ink-amber={deck.colors[0] == "Amber"}
@@ -560,7 +558,7 @@
                                     <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 -0.00012207V5.00003H0V4.51752L8 -0.00012207Z" fill="currentColor"/>
                                     </svg>
-                                    <div class="bar__fill" style="height: {cost.a*4}px"></div>
+                                    <div class="bar__fill" style="height: {cost.a * scale}px"></div>
                                 </div>
                                 <div class="bar__right" 
                                     class:ink-amber={deck.colors[1] == "Amber"}
@@ -573,7 +571,7 @@
                                     <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 -0.00012207V5.00003H8V4.51752L0 -0.00012207Z" fill="currentColor"/>
                                     </svg>
-                                    <div class="bar__fill" style="height: {cost.b*4}px"></div>
+                                    <div class="bar__fill" style="height: {cost.b * scale}px"></div>
                                 </div>
                             </div>
                         {/each}
@@ -681,6 +679,7 @@
         gap: 1px;
         height: 85px;
         align-items: flex-end;
+        color: var(--Background-Dark);
     }
 
     .bar__left, .bar__right {
