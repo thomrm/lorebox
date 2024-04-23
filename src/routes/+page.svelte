@@ -28,8 +28,8 @@
             ink: false,
             unink: false
         },
-        sortType: "rarity",
-        sortAsc: false,
+        sortType: "cost",
+        sortAsc: true,
         pageSize: 60
     }
     let searchTerm = null;
@@ -125,7 +125,8 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        //console.log(filteredCards);
+        console.log(costs);
+        console.log(filteredCards);
     }
 
     const addCard = (cardID) => {
@@ -211,6 +212,59 @@
     $: actions = deck.cards.filter(x => x.data.type == 'Action').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
     $: items = deck.cards.filter(x => x.data.type == 'Item').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
     $: locations = deck.cards.filter(x => x.data.type == 'Location').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
+
+    // Sort cards in deck by color
+    $: amber = deck.cards.filter(x => x.data.color == 'Amber');
+    $: amethyst = deck.cards.filter(x => x.data.color == 'Amethyst');
+    $: emerald = deck.cards.filter(x => x.data.color == 'Emerald');
+    $: ruby = deck.cards.filter(x => x.data.color == 'Ruby');
+    $: sapphire = deck.cards.filter(x => x.data.color == 'Sapphire');
+    $: steel = deck.cards.filter(x => x.data.color == 'Steel');
+    $: unink = deck.cards.filter(x => !x.data.inkwell);
+
+    // Count costs for each color
+    $: costs = [
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '1').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '1').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '2').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '2').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '3').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '3').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '4').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '4').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '5').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '5').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '6').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '6').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '7').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '7').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '8').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '8').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '9').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '9').reduce((a,b) => a + b.number, 0)
+        },
+        {
+            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '10').reduce((a,b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '10').reduce((a,b) => a + b.number, 0)
+        }
+    ]
 
     const clearSearch = () => {
         // Clear search term
@@ -481,12 +535,86 @@
                     </div>
                 </div>
                 <div class="deck-header__total">{deck.cardsCount}/60</div>
-                <div class="deck-header__side deck-header__side--right">asd</div>
+                <div class="deck-header__side deck-header__side--right">
+                    <button class="button">
+                        <img src="/images/icon-more.svg" alt="More Options" />
+                    </button>
+                </div>
             </div>
         </div>
         <div class="col__divider"></div>
         <div class="col__section">
-            Deck Stats
+            <div class="deck-stats">
+                <div class="deck-graph">
+                    <div class="deck-graph__bars">
+                        {#each costs as cost}
+                            <div class="bar">
+                                <div class="bar__left" 
+                                    class:ink-amber={deck.colors[0] == "Amber"}
+                                    class:ink-amethyst={deck.colors[0] == "Amethyst"}
+                                    class:ink-emerald={deck.colors[0] == "Emerald"}
+                                    class:ink-ruby={deck.colors[0] == "Ruby"}
+                                    class:ink-sapphire={deck.colors[0] == "Sapphire"}
+                                    class:ink-steel={deck.colors[0] == "Steel"}
+                                >
+                                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 -0.00012207V5.00003H0V4.51752L8 -0.00012207Z" fill="currentColor"/>
+                                    </svg>
+                                    <div class="bar__fill" style="height: {cost.a*4}px"></div>
+                                </div>
+                                <div class="bar__right" 
+                                    class:ink-amber={deck.colors[1] == "Amber"}
+                                    class:ink-amethyst={deck.colors[1] == "Amethyst"}
+                                    class:ink-emerald={deck.colors[1] == "Emerald"}
+                                    class:ink-ruby={deck.colors[1] == "Ruby"}
+                                    class:ink-sapphire={deck.colors[1] == "Sapphire"}
+                                    class:ink-steel={deck.colors[1] == "Steel"}
+                                >
+                                    <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 -0.00012207V5.00003H8V4.51752L0 -0.00012207Z" fill="currentColor"/>
+                                    </svg>
+                                    <div class="bar__fill" style="height: {cost.b*4}px"></div>
+                                </div>
+                            </div>
+                        {/each}
+                    </div>
+                    <div class="deck-graph__labels">
+                        <div><span>1</span></div>
+                        <div><span>2</span></div>
+                        <div><span>3</span></div>
+                        <div><span>4</span></div>
+                        <div><span>5</span></div>
+                        <div><span>6</span></div>
+                        <div><span>7</span></div>
+                        <div><span>8</span></div>
+                        <div><span>9</span></div>
+                        <div><span>10</span></div>
+                    </div>
+                </div>
+                <div class="deck-stats__totals">
+                    {#if deck.cards.length === 0}
+                        <div class="deck-stats__counts">
+                            <span>--</span>
+                            <span>--</span>
+                        </div>
+                        <div class="deck-stats__counts">
+                            <span>--</span>
+                        </div>
+                    {:else}
+                        <div class="deck-stats__counts">
+                            {#if amber.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-amber"><span>{amber.reduce((a,b) => a + b.number, 0)}</span> Amber</div>{/if}
+                            {#if amethyst.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-amethyst"><span>{amethyst.reduce((a,b) => a + b.number, 0)}</span> Amethyst</div>{/if}
+                            {#if emerald.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-emerald"><span>{emerald.reduce((a,b) => a + b.number, 0)}</span> Emerald</div>{/if}
+                            {#if ruby.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-ruby"><span>{ruby.reduce((a,b) => a + b.number, 0)}</span> Ruby</div>{/if}
+                            {#if sapphire.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-sapphire"><span>{sapphire.reduce((a,b) => a + b.number, 0)}</span> Sapphire</div>{/if}
+                            {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
+                        </div>
+                        <div class="deck-stats__counts">
+                            <div class="deck-stats__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
+                        </div>
+                    {/if}
+                </div>
+            </div>
         </div>
         <div class="col__divider"></div>
         <div class="col__scroll-contain">
@@ -526,6 +654,95 @@
 </div>
 
 <style>
+    .deck-stats {
+        background: var(--Background-Dark);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+        color: var(--White);
+    }
+
+    .deck-graph {
+        background: url('/images/background-zebra.svg');
+        background-repeat: repeat-x;
+    }
+
+    .deck-graph__bars {
+        height: 82px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .bar {
+        width: 17px;
+        display: flex;
+        gap: 1px;
+        height: 85px;
+        align-items: flex-end;
+    }
+
+    .bar__left, .bar__right {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bar__fill {
+        background-color: currentColor;
+        transition: height 200ms;
+    }
+
+    .deck-graph__labels {
+        display: flex;
+        gap: 10px;
+
+        & > div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 17px;
+            height: 16px;
+            line-height: 1;
+            position: relative;
+
+            & span {
+                z-index: 1;
+                font-size: 11px;
+                line-height: 6px;
+                height: 8px;
+            }
+
+            &::after {
+                content: '';
+                background: url('/images/label-cost.svg');
+                width: 17px;
+                height: 21px;
+                position: absolute;
+                top: -4px;
+                left: 0;
+                z-index: 0;
+            }
+        }
+    }
+
+    .deck-stats__totals {
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        line-height: 1;
+    }
+
+    .deck-stats__counts {
+        display: flex;
+        gap: 10px;
+
+        & span {
+            color: var(--White);
+            font-weight: bold;
+        }
+    }
+
     .hover-view {
         position: absolute;
         top: 0;
@@ -658,6 +875,7 @@
         flex-direction: column;
         padding: 5px;
         position: relative;
+        box-sizing: border-box;
     }
 
     .col--right {

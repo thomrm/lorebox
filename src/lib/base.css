@@ -19,6 +19,8 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 .text-sapphire { color: var(--Text-Sapphire); }
 .text-steel { color: var(--Text-Steel); }
 
+.text-grey { color: var(--Text-Grey); }
+
 .frame-full {
     position: relative;
     border-image: url('/images/frame-full.svg');
