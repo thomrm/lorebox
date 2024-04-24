@@ -906,7 +906,6 @@
         overflow-y: scroll;
         overflow-x: clip;
         overscroll-behavior: contain;
-        scrollbar-width: thin;
     }
 
     .col__scroll--grid {
