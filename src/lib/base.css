@@ -5,6 +5,12 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     vertical-align: baseline;
 }
 
+body {
+    scrollbar-width: thin;
+    overflow-y: scroll;
+    overflow-x: clip;
+}
+
 .ink-amber { color: var(--Ink-Amber); }
 .ink-amethyst { color: var(--Ink-Amethyst); }
 .ink-emerald { color: var(--Ink-Emerald); }

@@ -126,6 +126,7 @@
         totalCards = totalCards ? totalCards : filteredCards.length;
 
         //console.log(filteredCards);
+        console.log(scrollWidth);
     }
 
     const addCard = (cardID) => {
@@ -307,6 +308,9 @@
         }
         return (a.baseName.localeCompare(b.baseName));
     }
+
+    // Get scrollbar width
+    $: scrollWidth = window.innerWidth - document.documentElement.clientWidth;
 </script>
 
 <Modal bind:showFilterModal>
@@ -424,7 +428,7 @@
                     <div class="grid-status">No Results</div>
                 {:else}
                     {#key filteredCards}
-                        <div class="col__scroll col__scroll--grid">
+                        <div class="col__scroll col__scroll--grid" style="padding-right: {15 - scrollWidth}px">
                             {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card (card.id)}
                                 <div class="card">
                                     {#await preload(card.images.full)}
@@ -619,7 +623,7 @@
             {#if deck.cards.length === 0}
                 <div class="grid-status grid-status--small" transition:fade={{duration: 200}}>No Cards Added</div>
             {/if}
-            <div class="col__scroll">
+            <div class="col__scroll" style="padding-right: {15 - scrollWidth}px">
                 <div class="deck">
                     {#if characters.length !== 0}
                         <div class="deck__label" transition:slide={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
@@ -900,6 +904,9 @@
         width: 100%;
         box-sizing: border-box;
         overflow-y: scroll;
+        overflow-x: clip;
+        scrollbar-width: thin;
+        overscroll-behavior: contain;
     }
 
     .col__scroll--grid {
