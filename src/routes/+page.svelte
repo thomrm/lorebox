@@ -126,7 +126,6 @@
         totalCards = totalCards ? totalCards : filteredCards.length;
 
         //console.log(filteredCards);
-        console.log(scrollWidth);
     }
 
     const addCard = (cardID) => {
@@ -1085,15 +1084,11 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
+        transition: transform 200ms;
+        transform: translateZ(0);
 
         &:hover {
-            & .card__image-contain {
-                transform: scale(1.05);
-            }
-
-            & .card__copies {
-                transform: translateY(7px);
-            }
+            transform: scale(1.05);
         }
     }
 
@@ -1112,7 +1107,7 @@
         transform: translateZ(0);
 
         &:active {
-            transform: scale(1.025) !important;
+            transform: scale(0.98);
         }
     }
 
