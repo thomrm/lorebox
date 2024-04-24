@@ -414,9 +414,11 @@
                 <div class="hover-view" transition:fade={{duration: 200}}>
                     <div class="hover-view__card">
                         <div class="card">
-                            {#key hoverCard}
-                                <img class="card__image" src="{hoverCard}" alt="Full View" />
-                            {/key}
+                            <div class="card__image-contain">
+                                {#key hoverCard}
+                                    <img class="card__image" src="{hoverCard}" alt="Full View" />
+                                {/key}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -430,13 +432,22 @@
                     {#key filteredCards}
                         <div class="col__scroll col__scroll--grid" style="padding-right: {20 - scrollWidth}px">
                             {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card (card.id)}
+                                {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
+                                <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
                                 <div class="card">
-                                    {#await preload(card.images.full)}
-                                        <!--Loading-->
-                                    {:then}
-                                        <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-                                        <img class="card__image" src="{card.images.full}" alt="{card.fullName}" in:fade={{duration: 200}} on:click={addCard(card.id)} />
-                                    {/await}
+                                    <div class="card__image-contain" on:click={addCard(card.id)}>
+                                        {#await preload(card.images.full)}
+                                            <!--Loading-->
+                                        {:then}
+                                            <img class="card__image" src="{card.images.full}" alt="{card.fullName}" in:fade={{duration: 200}} />
+                                        {/await}
+                                    </div>
+                                    <div class="card__copies">
+                                        {#if added < 1}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
+                                        {#if added < 2}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
+                                        {#if added < 3}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
+                                        {#if added < 4}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
+                                    </div>
                                 </div>
                             {/each}
                         </div>
@@ -453,7 +464,6 @@
                         Previous Page
                     </button>
                 </div>
-
 
                 {#if filteredCards}
                     <div class="pagination__stats">
@@ -1073,7 +1083,22 @@
 
     .card {
         display: flex;
-        transition: transform 200ms;
+        flex-direction: column;
+        gap: 2px;
+
+        &:hover {
+            & .card__image-contain {
+                transform: scale(1.05);
+            }
+
+            & .card__copies {
+                transform: translateY(7px);
+            }
+        }
+    }
+
+    .card__image-contain {
+        display: flex;
         cursor: pointer;
         position: relative;
         padding-top: 140%;
@@ -1083,10 +1108,11 @@
         background-repeat: no-repeat;
         background-size: cover;
         overflow: hidden;
+        transition: transform 200ms;
         transform: translateZ(0);
 
-        &:hover {
-            transform: scale(1.05);
+        &:active {
+            transform: scale(1.025) !important;
         }
     }
 
@@ -1097,6 +1123,18 @@
         border-radius: 4.5% / 3.5%;
         top: 0;
         left: 0;
+    }
+
+    .card__copies {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 3px;
+        background-image: url('/images/copy-background.svg');
+        background-repeat: no-repeat;
+        background-position: top center;
+        transition: transform 200ms;
     }
 
     .pagination {
