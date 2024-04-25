@@ -200,6 +200,26 @@
         deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
     }
 
+    const resetDeck = () => {
+        deck = {
+            colors: [],
+            cardsCount: 0,
+            cards: []
+        };
+        colorCount = 0;
+        colorLock = false;
+        filters.color = {
+            amber: false,
+            amethyst: false,
+            emerald: false,
+            ruby: false,
+            sapphire: false,
+            steel: false
+        }
+
+        filterCards();
+    }
+
     // Show hover image when specified
     const showHover = (image) => { hoverCard = image; }
     const hideHover = () => { hoverCard = null; }
@@ -546,8 +566,8 @@
                 </div>
                 <div class="deck-header__total">{deck.cardsCount}/60</div>
                 <div class="deck-header__side deck-header__side--right">
-                    <button class="button">
-                        <img src="/images/icon-more.svg" alt="More Options" />
+                    <button class="button" on:click={resetDeck}>
+                        <img src="/images/icon-reset.svg" alt="Reset" />
                     </button>
                 </div>
             </div>
@@ -1084,12 +1104,6 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
-        transition: transform 200ms;
-        transform: translateZ(0);
-
-        &:hover {
-            transform: scale(1.05);
-        }
     }
 
     .card__image-contain {
