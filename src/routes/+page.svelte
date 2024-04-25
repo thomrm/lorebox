@@ -111,8 +111,14 @@
 
         // Filter displayed cards by search term
         filteredCards = searchTerm ? filteredCards.filter(function(x) {
-            return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    x.fullName.toLowerCase().includes(searchTerm.toLowerCase());
+            if (x.subtypes) {
+                return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        x.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        x.subtypes.find((e) => e.toLowerCase().includes(searchTerm.toLowerCase()));
+            } else {
+                return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        x.fullName.toLowerCase().includes(searchTerm.toLowerCase());
+            }
         }) : filteredCards;
 
         // Update number of colors selected
@@ -125,7 +131,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        //console.log(filteredCards);
+        console.log(filteredCards);
     }
 
     const addCard = (cardID) => {
