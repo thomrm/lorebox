@@ -9,6 +9,31 @@
     import CardAdded from './card-added.svelte';
 
     let cards = null;
+
+    let showFilterModal = false;
+    
+    onMount(async () => {
+        // Data provided by LorcanaJSON.org
+        const response = await fetch('/data/allCards.json');
+        const data = await response.json();
+        cards = data.cards;
+
+        // Exclude Enchanted and Special (Promo) printings
+        cards = cards.filter(x => !x.rarity.includes("Enchanted") && !x.rarity.includes("Special"));
+
+        // Read URL and add cards to deck
+        const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
+        if (queryD) {
+            queryD.split(' ').forEach(function(x) {
+                addCard(parseInt(x.split('x')[0]), parseInt(x.split('x')[1]));
+            });
+        }
+
+        filterCards();
+    });
+
+    // FILTERING AND SORTING CARDS
+
     let filteredCards;
     let filters = {
         color: {
@@ -35,39 +60,10 @@
     }
     let searchTerm = null;
     let currentPage = 0;
+    let colorCount;
+    let filterCount;
     let totalCards;
     let totalPages;
-    let colorCount;
-    let colorLock = false;
-    let filterCount;
-    let showFilterModal = false;
-    let deck = {
-        colors: [],
-        cardsCount: 0,
-        cards: []
-    };
-    let hoverCard = null;
-    let dString = null;
-    
-    onMount(async () => {
-        // Data provided by LorcanaJSON.org
-        const response = await fetch('/data/allCards.json');
-        const data = await response.json();
-        cards = data.cards;
-
-        // Exclude Enchanted and Special (Promo) printings
-        cards = cards.filter(x => !x.rarity.includes("Enchanted") && !x.rarity.includes("Special"));
-
-        // Read URL and add cards to deck
-        const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
-        if (queryD) {
-            queryD.split(' ').forEach(function(x) {
-                addCard(parseInt(x.split('x')[0]), parseInt(x.split('x')[1]));
-            });
-        }
-
-        filterCards();
-    });
 
     $: filterCards = async (reset) => {
         // Force a page reset - used for clearing search term
@@ -144,15 +140,59 @@
         //console.log(filteredCards);
     }
 
-    // Update URL params with added/removed cards
-    const updateURLParams = async () => {
-        if (deck.cards.length > 0) {
-            dString = deck.cards.map(({id, number}) => `${id}x${number}` ).join('+');
-            goto('?d='+dString);
-        } else {
-            goto('?');
-        }
+    const clearSearch = () => {
+        // Clear search term
+        searchTerm = null;
+
+        // Reset displayed cards
+        filterCards(true);
     }
+
+    const resetFilters = () => {
+        // Default filters
+        filters.showType.action = false;
+        filters.showType.character = false;
+        filters.showType.item = false;
+        filters.showType.location = false;
+        filters.showInk.ink = false;
+        filters.showInk.unink = false;
+
+        // Reset displayed cards
+        filterCards(true);
+    }
+
+    // Rarity compare for sorting
+    const rarityCompare = (a, b) => {
+        let aVal = 
+            a.rarity === "Common" ? 1 : null || 
+            a.rarity === "Uncommon" ? 2 : null ||
+            a.rarity === "Rare" ? 3 : null ||
+            a.rarity === "Super" ? 4 : null ||
+            a.rarity === "Legendary" ? 5 : null;
+        let bVal = 
+            b.rarity === "Common" ? 1 : null || 
+            b.rarity === "Uncommon" ? 2 : null ||
+            b.rarity === "Rare" ? 3 : null ||
+            b.rarity === "Super" ? 4 : null ||
+            b.rarity === "Legendary" ? 5 : null;
+
+        if ( aVal < bVal ) {
+            return filters.sortAsc ? -1 : 1;
+        }
+        if ( aVal > bVal ) {
+            return filters.sortAsc ? 1 : -1;
+        }
+        return (a.baseName.localeCompare(b.baseName));
+    }
+
+    // DECK CREATION
+
+    let deck = {
+        colors: [],
+        cardsCount: 0,
+        cards: []
+    };
+    let colorLock = false;
 
     const addCard = (cardID, num) => {
         if (deck.cards.find(x => x.id === cardID)) {
@@ -236,6 +276,7 @@
         //console.log(deck);
     }
 
+    // Clear added cards and deck colors
     const resetDeck = () => {
         deck = {
             colors: [],
@@ -259,9 +300,14 @@
         filterCards();
     }
 
-    // Show hover image when specified
-    const showHover = (image) => { hoverCard = image; }
-    const hideHover = () => { hoverCard = null; }
+    // Update URL params with added/removed cards
+    const updateURLParams = async () => {
+        if (deck.cards.length > 0) {
+            goto('?d='+deck.cards.map(({id, number}) => `${id}x${number}` ).join('+'));
+        } else {
+            goto('?');
+        }
+    }
 
     // Sort cards in deck by type
     $: characters = deck.cards.filter(x => x.data.type == 'Character').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
@@ -322,50 +368,10 @@
         }
     ]
 
-    const clearSearch = () => {
-        // Clear search term
-        searchTerm = null;
-
-        // Reset displayed cards
-        filterCards(true);
-    }
-
-    const resetFilters = () => {
-        // Default filters
-        filters.showType.action = false;
-        filters.showType.character = false;
-        filters.showType.item = false;
-        filters.showType.location = false;
-        filters.showInk.ink = false;
-        filters.showInk.unink = false;
-
-        // Reset displayed cards
-        filterCards(true);
-    }
-
-    // Rarity compare for sorting
-    const rarityCompare = (a, b) => {
-        let aVal = 
-            a.rarity === "Common" ? 1 : null || 
-            a.rarity === "Uncommon" ? 2 : null ||
-            a.rarity === "Rare" ? 3 : null ||
-            a.rarity === "Super" ? 4 : null ||
-            a.rarity === "Legendary" ? 5 : null;
-        let bVal = 
-            b.rarity === "Common" ? 1 : null || 
-            b.rarity === "Uncommon" ? 2 : null ||
-            b.rarity === "Rare" ? 3 : null ||
-            b.rarity === "Super" ? 4 : null ||
-            b.rarity === "Legendary" ? 5 : null;
-
-        if ( aVal < bVal ) {
-            return filters.sortAsc ? -1 : 1;
-        }
-        if ( aVal > bVal ) {
-            return filters.sortAsc ? 1 : -1;
-        }
-        return (a.baseName.localeCompare(b.baseName));
-    }
+    // Show hover image when specified
+    let hoverCard = null;
+    const showHover = (image) => { hoverCard = image; }
+    const hideHover = () => { hoverCard = null; }
 
     // Get scrollbar width
     $: scrollWidth = window.innerWidth - document.documentElement.clientWidth;
