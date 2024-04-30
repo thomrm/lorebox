@@ -299,7 +299,7 @@
         // Update URL
         updateURLParams();
 
-        filterCards();
+        filterCards(true);
     }
 
     // Update URL params with added/removed cards
