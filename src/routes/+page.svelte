@@ -26,8 +26,8 @@
         // Read URL and add cards to deck
         const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
         if (queryD) {
-            queryD.split(' ').forEach(function(x) {
-                addCard(parseInt(x.split('x')[0]), parseInt(x.split('x')[1]));
+            queryD.match(/.{5}/g).forEach(function(x) {
+                addCard(parseInt(x.slice(1, 5)), parseInt(x[0]));
             });
         }
 
@@ -305,7 +305,10 @@
     // Update URL params with added/removed cards
     const updateURLParams = async () => {
         if (deck.cards.length > 0) {
-            goto('?d='+deck.cards.map(({id, number}) => `${id}x${number}` ).join('+'));
+            let string = deck.cards.map(function({id, number}) {
+                return String(number)+String(id).padStart(4,'0')
+            }).join('');
+            goto('?d='+string);
         } else {
             goto('?');
         }
