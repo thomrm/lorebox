@@ -10,6 +10,7 @@
     import CardAdded from './card-added.svelte';
 
     let cards = null;
+    let grid;
 
     let showFilterModal = false;
     
@@ -374,6 +375,11 @@
     const showHover = (image) => { hoverCard = image; }
     const hideHover = () => { hoverCard = null; }
 
+    // Scroll element to top
+    const scrollToTop = async (node) => {
+        node.scroll({ top: 0, behavior: 'instant' });
+    };
+
     // Get scrollbar width
     $: scrollWidth = window.innerWidth - document.documentElement.clientWidth;
 </script>
@@ -500,7 +506,7 @@
                     <div class="grid-status">No Results</div>
                 {:else}
                     {#key filteredCards}
-                        <div class="col__scroll col__scroll--grid" style="padding-right: {20 - scrollWidth}px">
+                        <div class="col__scroll col__scroll--grid" bind:this={grid} style="padding-right: {20 - scrollWidth}px">
                             {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card (card.id)}
                                 {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
                                 <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
@@ -529,7 +535,7 @@
         <div class="col__section">
             <div class="pagination">
                 <div class="pagination__buttons">
-                    <button class="button button--left" disabled={currentPage == 0 ? true : false} on:click={() => {currentPage--;}}>
+                    <button class="button button--left" disabled={currentPage == 0 ? true : false} on:click={() => {currentPage--; scrollToTop(grid);}}>
                         <img src="images/arrow-left.svg" alt="left arrow" />
                         Previous Page
                     </button>
@@ -546,7 +552,7 @@
                 {/if}
 
                 <div class="pagination__buttons pagination__buttons--right">
-                    <button class="button button--right" disabled={currentPage == totalPages - 1 || totalPages == 0 || !totalPages ? true : false} on:click={() => {currentPage++;}}>
+                    <button class="button button--right" disabled={currentPage == totalPages - 1 || totalPages == 0 || !totalPages ? true : false} on:click={() => {currentPage++; scrollToTop(grid);}}>
                         Next Page
                         <img src="images/arrow-right.svg" alt="right arrow" />
                     </button>
