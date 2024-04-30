@@ -2,10 +2,14 @@
     import { onMount } from 'svelte';
     import { preload } from '../lib/preload.js';
     import { fade, slide } from 'svelte/transition';
+    import { page } from '$app/stores';
+    import { goto } from '$app/navigation';
 
     import Modal from './filter-modal.svelte';
-
     import CardAdded from './card-added.svelte';
+
+    // URL params
+    const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
 
     let cards = null;
     let filteredCards;
@@ -46,15 +50,21 @@
         cards: []
     };
     let hoverCard = null;
+    let dString = null;
     
     onMount(async () => {
-        // Get data from Lorcast API
+        // Data provided by LorcanaJSON.org
         const response = await fetch('/data/allCards.json');
         const data = await response.json();
         cards = data.cards;
 
         // Exclude Enchanted and Special (Promo) printings
         cards = cards.filter(x => !x.rarity.includes("Enchanted") && !x.rarity.includes("Special"));
+
+        // Read URL and add cards to deck
+        queryD.split(' ').forEach(function(x) {
+            addCard(x.split('x')[0], x.split('x')[1]);
+        });
 
         filterCards();
     });
@@ -131,21 +141,35 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        console.log(filteredCards);
+        //console.log(filteredCards);
     }
 
-    const addCard = (cardID) => {
+    const updateURLParams = async () => {
+        if (deck.cards.length > 0) {
+            dString = deck.cards.map(({id, number}) => `${id}x${number}` ).join('+');
+            goto('?d='+dString);
+        } else {
+            goto('?');
+        }
+    }
+
+    const addCard = (cardID, num) => {
         if (deck.cards.find(x => x.id === cardID)) {
-            // Increment card already added and less than 4
-            if (deck.cards.find(x => x.id === cardID).number < 4) {
-                deck.cards.find(x => x.id === cardID).number++;
+            if (deck.cards.find(x => x.id === cardID).number + num > 4) {
+                // Set card total to 4 if current value + num is greater than that
+                deck.cards.find(x => x.id === cardID).number = 4;
+            } else {
+                // Increment card already added and less than 4
+                if (deck.cards.find(x => x.id === cardID).number < 4) {
+                    deck.cards.find(x => x.id === cardID).number++;
+                }
             }
         } else {
             // Add new card
             deck.cards.push({
                 id: cardID,
                 data: cards.filter(x => x.id == cardID)[0],
-                number: 1
+                number: Math.min(num, 4)
             });
         }
 
@@ -204,6 +228,11 @@
 
         // Update total cards added to deck
         deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
+
+        // Update URL
+        updateURLParams();
+
+        //console.log(deck);
     }
 
     const resetDeck = () => {
@@ -222,6 +251,9 @@
             sapphire: false,
             steel: false
         }
+
+        // Update URL
+        updateURLParams();
 
         filterCards();
     }
@@ -460,7 +492,7 @@
                                 {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
                                 <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
                                 <div class="card">
-                                    <div class="card__image-contain" on:click={addCard(card.id)}>
+                                    <div class="card__image-contain" on:click={addCard(card.id, 1)}>
                                         {#await preload(card.images.full)}
                                             <!--Loading-->
                                         {:then}
@@ -664,25 +696,25 @@
                         <div class="deck__label" transition:slide={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
                     {/if}
                     {#each characters as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                     {/each}
                     {#if actions.length !== 0}
                         <div class="deck__label" transition:slide={{duration: 200}}>Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
                     {/if}
                     {#each actions as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                     {/each}
                     {#if items.length !== 0}
                         <div class="deck__label" transition:slide={{duration: 200}}>Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
                     {/if}
                     {#each items as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                     {/each}
                     {#if locations.length !== 0}
                         <div class="deck__label" transition:slide={{duration: 200}}>Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
                     {/if}
                     {#each locations as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id)} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                     {/each}
                 </div>
             </div>
