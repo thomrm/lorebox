@@ -8,9 +8,6 @@
     import Modal from './filter-modal.svelte';
     import CardAdded from './card-added.svelte';
 
-    // URL params
-    const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
-
     let cards = null;
     let filteredCards;
     let filters = {
@@ -62,8 +59,9 @@
         cards = cards.filter(x => !x.rarity.includes("Enchanted") && !x.rarity.includes("Special"));
 
         // Read URL and add cards to deck
+        const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
         queryD.split(' ').forEach(function(x) {
-            addCard(x.split('x')[0], x.split('x')[1]);
+            if (x) { addCard(x.split('x')[0], x.split('x')[1]); }
         });
 
         filterCards();
@@ -124,7 +122,7 @@
             if (x.subtypes) {
                 return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         x.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        x.subtypes.find((e) => e.toLowerCase().includes(searchTerm.toLowerCase()));
+                        x.subtypes.find((y) => y.toLowerCase().includes(searchTerm.toLowerCase()));
             } else {
                 return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         x.fullName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -132,10 +130,10 @@
         }) : filteredCards;
 
         // Update number of colors selected
-        colorCount = Object.values(filters.color).filter(item => item === true).length;
+        colorCount = Object.values(filters.color).filter(x => x === true).length;
 
         // Update number of filters selected
-        filterCount = Object.values(filters.showType).filter(item => item === true).length + Object.values(filters.showInk).filter(item => item === true).length;
+        filterCount = Object.values(filters.showType).filter(x => x === true).length + Object.values(filters.showInk).filter(x => x === true).length;
 
         // Set card and page totals
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
@@ -144,6 +142,7 @@
         //console.log(filteredCards);
     }
 
+    // Update URL params with added/removed cards
     const updateURLParams = async () => {
         if (deck.cards.length > 0) {
             dString = deck.cards.map(({id, number}) => `${id}x${number}` ).join('+');
