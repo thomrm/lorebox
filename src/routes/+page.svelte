@@ -60,9 +60,11 @@
 
         // Read URL and add cards to deck
         const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
-        queryD.split(' ').forEach(function(x) {
-            if (x) { addCard(x.split('x')[0], x.split('x')[1]); }
-        });
+        if (queryD) {
+            queryD.split(' ').forEach(function(x) {
+                addCard(parseInt(x.split('x')[0]), parseInt(x.split('x')[1]));
+            });
+        }
 
         filterCards();
     });
