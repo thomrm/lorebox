@@ -377,6 +377,11 @@
     $: scrollWidth = window.innerWidth - document.documentElement.clientWidth;
 </script>
 
+<svelte:head>
+	<title>Lorebox</title>
+    <meta name="description" content="A Lorcana Deck Builder.">
+</svelte:head>
+
 <Modal bind:showFilterModal>
     <div class="col__section">
         <div class="filters filters--modal">
