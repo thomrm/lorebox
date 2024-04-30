@@ -505,10 +505,10 @@
                                 <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
                                 <div class="card">
                                     <div class="card__image-contain" on:click={addCard(card.id, 1)}>
-                                        {#await preload(card.images.full)}
+                                        {#await preload(card.images.thumbnail)}
                                             <!--Loading-->
                                         {:then}
-                                            <img class="card__image" src="{card.images.full}" alt="{card.fullName}" in:fade={{duration: 200}} />
+                                            <img class="card__image" src="{card.images.thumbnail}" alt="{card.fullName}" in:fade={{duration: 200}} />
                                         {/await}
                                     </div>
                                     <div class="card__copies">
