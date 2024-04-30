@@ -700,25 +700,33 @@
             <div class="col__scroll" style="padding-right: {20 - scrollWidth}px">
                 <div class="deck">
                     {#if characters.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
+                        <div class="deck__label" transition:slide={{duration: 200}}>
+                            <div transition:fade={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
+                        </div>
                     {/if}
                     {#each characters as card (card.id)}
                         <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                     {/each}
                     {#if actions.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
+                        <div class="deck__label" transition:slide={{duration: 200}}>
+                            <div transition:fade={{duration: 200}}>Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
+                        </div>
                     {/if}
                     {#each actions as card (card.id)}
                         <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                     {/each}
                     {#if items.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
+                        <div class="deck__label" transition:slide={{duration: 200}}>
+                            <div transition:fade={{duration: 200}}>Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
+                        </div>
                     {/if}
                     {#each items as card (card.id)}
                         <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
                     {/each}
                     {#if locations.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
+                        <div class="deck__label" transition:slide={{duration: 200}}>
+                            <div transition:fade={{duration: 200}}>Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
+                        </div>
                     {/if}
                     {#each locations as card (card.id)}
                         <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
