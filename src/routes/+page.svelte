@@ -1,9 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import { preload } from '../lib/preload.js';
     import { fade, slide } from 'svelte/transition';
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
+
+    import { preload } from '../lib/preload.js';
 
     import Modal from './filter-modal.svelte';
     import CardAdded from './card-added.svelte';
