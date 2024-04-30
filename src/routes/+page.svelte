@@ -447,9 +447,9 @@
                 </fieldset>
                 <div class="filters__group">
                     <button class="button" on:click={() => (showFilterModal = true)}>
-                        <img src="./images/icon-filter.svg" alt="Filters" />Filters {#if filterCount > 0}({filterCount}){/if}
+                        <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
                     </button>
-                    <select class="button button--dropdown" name="sort-type" id="sort-type" bind:value={filters.sortType} on:change={filterCards}>
+                    <select class="button button--dropdown" name="sort-type" id="sort-type" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
                         <option value="name">Sort by Name</option>
                         <option value="cost">Sort by Cost</option>
                         <option value="rarity">Sort by Rarity</option>
