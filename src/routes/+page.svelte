@@ -640,7 +640,9 @@
                 <div class="deck-graph">
                     <div class="deck-graph__bars">
                         {#each costs as cost}
-                            {@const scale = costs.some(obj => obj.a > 40 || obj.b > 40) ? 1 : costs.some(obj => obj.a > 20 || obj.b > 20) ? 2 : 4}
+                            {@const scale =     costs.some(obj => obj.a > 40 || obj.b > 40) ? 1 : 
+                                                costs.some(obj => obj.a > 20 || obj.b > 20) ? 2 : 
+                                                costs.some(obj => obj.a > 10 || obj.b > 10) ? 4 : 8}
                             <div class="bar">
                                 <div class="bar__left" 
                                     class:ink-amber={deck.colors[0] == "Amber"}
