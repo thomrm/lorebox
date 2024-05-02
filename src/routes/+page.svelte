@@ -512,9 +512,10 @@
                         <div class="col__scroll col__scroll--grid" bind:this={grid} style="padding-right: {20 - scrollWidth}px">
                             {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card (card.id)}
                                 {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
-                                <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events -->
+                                <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events a11y-mouse-events-have-key-events -->
                                 <div class="card">
                                     <div class="card__image-contain" on:click={addCard(card.id, 1)}>
+                                        <div class="card__view" on:mouseover={showHover(card.images.full)} on:mouseleave={hideHover}><img src="/images/icon-view.svg" alt="View Card" /></div>
                                         {#await preload(card.images.thumbnail)}
                                             <!--Loading-->
                                         {:then}
@@ -854,6 +855,7 @@
         align-items: center;
         z-index: 2;
         background: rgba(227,202,168,0.8);
+        pointer-events: none;
     }
 
     .hover-view__card {
@@ -1191,6 +1193,17 @@
         &:active {
             transform: scale(0.98);
         }
+    }
+
+    .card__view {
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        background: var(--Black);
+        border-radius: 0 0 0 18px;
+        z-index: 2;
     }
 
     .card__image {
