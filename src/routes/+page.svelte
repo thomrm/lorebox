@@ -375,7 +375,8 @@
 
     // Show hover image when specified
     let hoverCard = null;
-    const showHover = (image) => { hoverCard = image; }
+    let hoverRotate = false;
+    const showHover = (image, rotate) => { hoverCard = image; hoverRotate = rotate ? true : false }
     const hideHover = () => { hoverCard = null; }
 
     // Scroll element to top
@@ -492,7 +493,7 @@
             {#if hoverCard}
                 <div class="hover-view" transition:fade={{duration: 200}}>
                     <div class="hover-view__card">
-                        <div class="card">
+                        <div class="card" class:card--rotate={hoverRotate}>
                             <div class="card__image-contain">
                                 {#key hoverCard}
                                     <img class="card__image" src="{hoverCard}" alt="Full View" />
@@ -515,7 +516,7 @@
                                 <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events a11y-mouse-events-have-key-events -->
                                 <div class="card">
                                     <div class="card__image-contain" on:click={addCard(card.id, 1)}>
-                                        <div class="card__view" on:mouseover={showHover(card.images.full)} on:mouseleave={hideHover}><img src="/images/icon-view.svg" alt="View Card" /></div>
+                                        <div class="card__view" on:mouseover={showHover(card.images.full, (card.type == 'Location' ? true : false))} on:mouseleave={hideHover}><img src="/images/icon-view.svg" alt="View Card" /></div>
                                         {#await preload(card.images.thumbnail)}
                                             <!--Loading-->
                                         {:then}
@@ -721,7 +722,7 @@
                         </div>
                     {/if}
                     {#each characters as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                     {/each}
                     {#if actions.length !== 0}
                         <div class="deck__label" transition:slide={{duration: 200}}>
@@ -729,7 +730,7 @@
                         </div>
                     {/if}
                     {#each actions as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                     {/each}
                     {#if items.length !== 0}
                         <div class="deck__label" transition:slide={{duration: 200}}>
@@ -737,7 +738,7 @@
                         </div>
                     {/if}
                     {#each items as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                     {/each}
                     {#if locations.length !== 0}
                         <div class="deck__label" transition:slide={{duration: 200}}>
@@ -745,7 +746,7 @@
                         </div>
                     {/if}
                     {#each locations as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full)} on:hoverLeave={hideHover} />
+                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                     {/each}
                 </div>
             </div>
@@ -1174,6 +1175,10 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
+    }
+
+    .card--rotate {
+        transform: rotate(90deg);
     }
 
     .card__image-contain {
