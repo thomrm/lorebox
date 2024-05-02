@@ -859,7 +859,7 @@
     }
 
     .hover-view__card {
-        width: 300px;
+        width: var(--Hover-Width);
     }
 
     .deck-header {
@@ -1249,5 +1249,21 @@
         align-items: center;
         justify-content: center;
         color: var(--Text-Sub);
+    }
+
+    :root {
+        --Hover-Width: 350px;
+    }
+
+    @media screen and (max-width: 1100px) {
+        :root {
+            --Hover-Width: 320px;
+        }
+    }
+
+    @media screen and (max-width: 720px) {
+        :root {
+            --Hover-Width: 300px;
+        }
     }
 </style>
