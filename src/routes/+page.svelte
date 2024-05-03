@@ -394,10 +394,58 @@
 </svelte:head>
 
 <Modal bind:showFilterModal>
+    <div class="col__section small-show">
+        <div class="filters">
+            <fieldset class="filters__group xsmall-show" disabled={colorLock}>
+                <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
+                <label class="filter-ink ink-amber" for="filter-amber--modal">
+                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
+                </label>
+                <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(colorCount == 2 && !filters.color.amethyst) ? true : false} on:change={filterCards} />
+                <label class="filter-ink ink-amethyst" for="filter-amethyst--modal">
+                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
+                </label>
+                <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={(colorCount == 2 && !filters.color.emerald) ? true : false} on:change={filterCards} />
+                <label class="filter-ink ink-emerald" for="filter-emerald--modal">
+                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
+                </label>
+                <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={(colorCount == 2 && !filters.color.ruby) ? true : false} on:change={filterCards} />
+                <label class="filter-ink ink-ruby" for="filter-ruby--modal">
+                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
+                </label>
+                <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(colorCount == 2 && !filters.color.sapphire) ? true : false} on:change={filterCards} />
+                <label class="filter-ink ink-sapphire" for="filter-sapphire--modal">
+                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
+                </label>
+                <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={(colorCount == 2 && !filters.color.steel) ? true : false} on:change={filterCards} />
+                <label class="filter-ink ink-steel" for="filter-steel--modal">
+                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
+                </label>
+            </fieldset>
+            <div class="filters__group">
+                <select class="button button--dropdown" name="sort-type" id="sort-type--modal" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
+                    <option value="name">Sort by Name</option>
+                    <option value="cost">Sort by Cost</option>
+                    <option value="rarity">Sort by Rarity</option>
+                </select>
+                <input type="checkbox" id="sort-direction--modal" bind:checked={filters.sortAsc} on:change={filterCards} />
+                <label class="button" for="sort-direction--modal">
+                    {#if filters.sortAsc}
+                        <img src="./images/icon-sortAsc.svg" alt="Ascending" />
+                        Asc
+                    {:else}
+                        <img src="./images/icon-sortDesc.svg" alt="Descending" />
+                        Desc
+                    {/if}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col__divider small-show"></div>
     <div class="col__section">
         <div class="filters filters--modal">
             <div class="filters__header">Card Types</div>
-            <div class="filters__group">
+            <div class="filters__group filters__group--wrap">
                 <input type="checkbox" class="checkbox" id="filter-actions" name="Actions" bind:checked={filters.showType.action} on:change={filterCards} />
                 <label class="checkbox-item" for="filter-actions">Actions</label>
                 <input type="checkbox" class="checkbox" id="filter-characters" name="Characters" bind:checked={filters.showType.character} on:change={filterCards} />
@@ -413,7 +461,7 @@
     <div class="col__section">
         <div class="filters filters--modal">
             <div class="filters__header">Inkwell</div>
-            <div class="filters__group">
+            <div class="filters__group filters__group--wrap">
                 <input type="checkbox" class="checkbox" id="filter-ink" name="Inkable" bind:checked={filters.showInk.ink} on:change={filterCards} />
                 <label class="checkbox-item" for="filter-ink">Inkable</label>
                 <input type="checkbox" class="checkbox" id="filter-unink" name="Uninkable" bind:checked={filters.showInk.unink} on:change={filterCards} />
@@ -430,7 +478,7 @@
     <div class="col frame-full">
         <div class="col__section">
             <div class="filters">
-                <fieldset class="filters__group" disabled={colorLock}>
+                <fieldset class="filters__group xsmall-hide" disabled={colorLock}>
                     <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
                     <label class="filter-ink ink-amber" for="filter-amber">
                         <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
@@ -461,13 +509,13 @@
                         <button class="button" on:click={() => (showFilterModal = true)}>
                             <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
                         </button>
-                        <select class="button button--dropdown" name="sort-type" id="sort-type" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
+                        <select class="button button--dropdown small-hide" name="sort-type" id="sort-type" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
                             <option value="name">Sort by Name</option>
                             <option value="cost">Sort by Cost</option>
                             <option value="rarity">Sort by Rarity</option>
                         </select>
-                        <input type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
-                        <label class="button" for="sort-direction">
+                        <input class="small-hide" type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
+                        <label class="button small-hide" for="sort-direction">
                             {#if filters.sortAsc}
                                 <img src="./images/icon-sortAsc.svg" alt="Ascending" />
                                 Asc
@@ -544,23 +592,29 @@
                 <div class="pagination__buttons">
                     <button class="button button--left" disabled={currentPage == 0 ? true : false} on:click={() => {currentPage--; scrollToTop(grid);}}>
                         <img src="images/arrow-left.svg" alt="left arrow" />
-                        Previous Page
+                        <div class="button__label">Previous<span class="xsmall-hide">&nbsp;Page</span></div>
                     </button>
                 </div>
 
                 {#if filteredCards}
                     <div class="pagination__stats">
-                        <span>Page {currentPage + 1}</span>
+                        <span class="xsmall-hide">
+                            Page {currentPage + 1}
+                        </span>
+                        <span class="xsmall-hide bullet">&#10022;</span>
                         <span>
                             {totalCards ? (currentPage * filters.pageSize + 1) + " - " + (Math.min((currentPage + 1) * filters.pageSize, totalCards)) + " of " : ""}
-                            {totalCards} {totalCards == 1 ? "Result" : "Results"}
+                            {totalCards}
                         </span>
+                        <!-- <span class="xsmall-hide">
+                             {totalCards == 1 ? "Result" : "Results"}
+                        </span> -->
                     </div>
                 {/if}
 
                 <div class="pagination__buttons pagination__buttons--right">
                     <button class="button button--right" disabled={currentPage == totalPages - 1 || totalPages == 0 || !totalPages ? true : false} on:click={() => {currentPage++; scrollToTop(grid);}}>
-                        Next Page
+                        <div class="button__label">Next<span class="xsmall-hide">&nbsp;Page</span></div>
                         <img src="images/arrow-right.svg" alt="right arrow" />
                     </button>
                 </div>
@@ -1075,6 +1129,7 @@
         gap: 15px;
         flex-wrap: wrap;
         justify-content: center;
+        flex: 1;
     }
 
     .filters--modal {
@@ -1112,6 +1167,10 @@
                 transform: scale(0.95);
             }
         }
+    }
+
+    .filters__group--wrap {
+        flex-wrap: wrap;
     }
 
     .filter-ink {
@@ -1270,29 +1329,52 @@
         --Grid-Gutters: 10px;
     }
 
-    @media screen and (max-width: 1120px) {
+    .xsmall-hide { display: flex; }
+    .xsmall-show { display: none; }
+    .small-hide { display: flex; }
+    .small-show { display: none; }
+
+    @media screen and (max-width: 1160px) {
         :root {
             --Hover-Width: 320px;
         }
     }
 
-    @media screen and (max-width: 920px) {
+    @media screen and (max-width: 960px) {
         :root {
             --Hover-Width: 300px;
             --Page-Gutters: 10px;
             --Grid-Gutters: 5px;
         }
+
+        .col--right {
+            display: none;
+        }
     }
 
-    @media screen and (max-width: 720px) {
+    @media screen and (max-width: 760px) {
         :root {
             --Hover-Width: 280px;
         }
+
+        .col__scroll--grid {
+            grid-template-columns: repeat(auto-fill,minmax(16rem,1fr));
+        }
+
+        .small-hide { display: none; }
+        .small-show { display: flex; }
     }
 
-    @media screen and (max-width: 520px) {
+    @media screen and (max-width: 560px) {
         :root {
             --Hover-Width: 260px;
         }
+
+        .col__scroll--grid {
+            grid-template-columns: repeat(auto-fill,minmax(14rem,1fr));
+        }
+
+        .xsmall-hide { display: none; }
+        .xsmall-show { display: flex; }
     }
 </style>

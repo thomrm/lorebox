@@ -54,6 +54,14 @@ body {
     }
 }
 
+.bullet {
+    color: var(--Border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+}
+
 .button {
     border-image: url('/images/background-button.svg');
     border-image-slice: 15;
@@ -61,6 +69,7 @@ body {
     background: var(--Background-Base);
     padding: 0 10px;
     display: flex;
+    flex-shrink: 0;
     height: 30px;
     font: inherit;
     font-weight: bold;
@@ -82,6 +91,10 @@ body {
     &:active {
         transform: scale(0.95);
     }
+}
+
+.button__label {
+    display: flex;
 }
 
 .button--left {

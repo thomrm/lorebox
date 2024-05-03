@@ -28,6 +28,7 @@
 		border: none;
 		padding: 10px;
 		background: var(--Background-Base);
+		max-width: calc(100% - 2em - 10px);
 	}
 
 	dialog::backdrop {
