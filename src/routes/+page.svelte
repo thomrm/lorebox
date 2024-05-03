@@ -456,35 +456,37 @@
                         <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
                     </label>
                 </fieldset>
-                <div class="filters__group">
-                    <button class="button" on:click={() => (showFilterModal = true)}>
-                        <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
-                    </button>
-                    <select class="button button--dropdown" name="sort-type" id="sort-type" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
-                        <option value="name">Sort by Name</option>
-                        <option value="cost">Sort by Cost</option>
-                        <option value="rarity">Sort by Rarity</option>
-                    </select>
-                    <input type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
-                    <label class="button" for="sort-direction">
-                        {#if filters.sortAsc}
-                            <img src="./images/icon-sortAsc.svg" alt="Ascending" />
-                            Asc
-                        {:else}
-                            <img src="./images/icon-sortDesc.svg" alt="Descending" />
-                            Desc
-                        {/if}
-                    </label>
-                </div>
-                <div class="filters__group filters__group--right">
-                    <form id="search-form" class="search-form" on:submit|preventDefault={filterCards} on:reset={clearSearch}>
-                        <input class="search-form__search-bar" type="text" placeholder="Search..."  bind:value={searchTerm} on:change={filterCards} />
-                        {#if searchTerm}
-                            <button type="reset" class="search-form__search-clear">
-                                <img src="./images/icon-clear.svg" alt="Clear Search" />
-                            </button>
-                        {/if}
-                    </form> 
+                <div class="filters__group filters__group--fill">
+                    <div class="filters__group filters__group--fill">
+                        <button class="button" on:click={() => (showFilterModal = true)}>
+                            <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
+                        </button>
+                        <select class="button button--dropdown" name="sort-type" id="sort-type" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
+                            <option value="name">Sort by Name</option>
+                            <option value="cost">Sort by Cost</option>
+                            <option value="rarity">Sort by Rarity</option>
+                        </select>
+                        <input type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
+                        <label class="button" for="sort-direction">
+                            {#if filters.sortAsc}
+                                <img src="./images/icon-sortAsc.svg" alt="Ascending" />
+                                Asc
+                            {:else}
+                                <img src="./images/icon-sortDesc.svg" alt="Descending" />
+                                Desc
+                            {/if}
+                        </label>
+                    </div>
+                    <div class="filters__group">
+                        <form id="search-form" class="search-form" on:submit|preventDefault={filterCards} on:reset={clearSearch}>
+                            <input class="search-form__search-bar" type="text" placeholder="Search..."  bind:value={searchTerm} on:change={filterCards} />
+                            {#if searchTerm}
+                                <button type="reset" class="search-form__search-clear">
+                                    <img src="./images/icon-clear.svg" alt="Clear Search" />
+                                </button>
+                            {/if}
+                        </form> 
+                    </div>
                 </div>
             </div>
         </div>
@@ -1070,6 +1072,8 @@
     .filters {
         display: flex;
         gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .filters--modal {
@@ -1129,6 +1133,11 @@
         justify-content: flex-end;
     }
 
+    .filters__group--fill {
+        display: flex;
+        flex: 1 0 0;
+    }
+
     .filters__header {
         font-size: 16px;
         color: var(--Text-Sub);
@@ -1147,9 +1156,11 @@
         background-repeat: no-repeat;
         border-radius: 999px;
         font: inherit;
-        font-size: 14px;
+        font-size: 16px;
         padding: 0 10px 0 30px;
         position: relative;
+        height: 30px;
+        box-sizing: border-box;
 
         &::placeholder {
             color: var(--Text-Sub);
