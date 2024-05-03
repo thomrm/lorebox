@@ -29,7 +29,6 @@
         flex-direction: column;
         width: 100vw;
         height: 100dvh;
-        padding: 20px;
         box-sizing: border-box;
         font-size: 1.4rem;
     }

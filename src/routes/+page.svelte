@@ -973,7 +973,8 @@
         height: 100%;
         box-sizing: border-box;
         display: flex;
-        gap: 20px;
+        gap: var(--Page-Gutters);
+        padding: var(--Page-Gutters);
     }
 
     .col {
@@ -1016,7 +1017,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fill,minmax(18rem,1fr));
         grid-auto-rows: min-content;
-        gap: 10px;
+        gap: var(--Grid-Gutters);
     }
 
     .col__divider {
@@ -1125,12 +1126,6 @@
 
         --Filter-Base: var(--Black);
         --Filter-Icon: currentColor;
-    }
-
-    .filters__group--right {
-        display: flex;
-        flex: 1 0 0;
-        justify-content: flex-end;
     }
 
     .filters__group--fill {
@@ -1270,18 +1265,34 @@
     }
 
     :root {
-        --Hover-Width: 350px;
+        --Hover-Width: 340px;
+        --Page-Gutters: 20px;
+        --Grid-Gutters: 10px;
     }
 
-    @media screen and (max-width: 1100px) {
+    @media screen and (max-width: 1120px) {
         :root {
             --Hover-Width: 320px;
         }
     }
 
-    @media screen and (max-width: 720px) {
+    @media screen and (max-width: 920px) {
         :root {
             --Hover-Width: 300px;
+            --Page-Gutters: 10px;
+            --Grid-Gutters: 5px;
+        }
+    }
+
+    @media screen and (max-width: 720px) {
+        :root {
+            --Hover-Width: 280px;
+        }
+    }
+
+    @media screen and (max-width: 520px) {
+        :root {
+            --Hover-Width: 260px;
         }
     }
 </style>
