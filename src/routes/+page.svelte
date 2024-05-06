@@ -477,7 +477,7 @@
     <button class="button" slot="action" on:click={resetFilters}>Reset All</button>
 </Modal>
 
-<div class="app-contain" class:app-contain--show-deck={showDeck}>
+<div class="app-contain" class:app-contain--show-deck={showDeck} class:app-contain--hide-deck={!showDeck}>
     <div class="col frame-full">
         <button class="view-change view-change--right mid-show" on:click={() => (showDeck = true)}>
             <img src="/images/icon-deck.svg" alt="View Deck" />
@@ -1062,13 +1062,22 @@
         color: var(--Text-Sub);
     }
 
+    @keyframes -global-show-deck {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(-100vw + 10px)); }
+    }
+
+    @keyframes -global-hide-deck {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(-100vw + 10px)); }
+    }
+
     .app-contain {
         height: 100%;
         box-sizing: border-box;
         display: flex;
         gap: var(--Page-Gutters);
         padding: var(--Page-Gutters);
-        transition: transform 200ms;
     }
 
     .col {
@@ -1078,6 +1087,7 @@
         padding: 5px;
         position: relative;
         box-sizing: border-box;
+        transition: transform 200ms;
     }
 
     .col--right {
@@ -1369,7 +1379,6 @@
         --Grid-Gutters: 10px;
     }
 
-    .mid-hide { display: flex; }
     .mid-show { display: none; }
     .xsmall-hide { display: flex; }
     .xsmall-show { display: none; }
@@ -1393,15 +1402,30 @@
             --Grid-Gutters: 5px;
         }
 
-        .app-contain--show-deck {
-            transform: translateX(calc(-100vw + 10px));
-        }
-
         .col {
             min-width: calc(100vw - 20px);
         }
 
-        .mid-hide { display: none; }
+        .app-contain--show-deck .col {
+            animation-name: show-deck;
+            animation-duration: 200ms;
+            animation-fill-mode: forwards;
+            animation-direction: normal;
+            animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .app-contain--hide-deck .col {
+            animation-name: hide-deck;
+            animation-duration: 200ms;
+            animation-fill-mode: forwards;
+            animation-direction: reverse;
+            animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .deck {
+            grid-template-columns: repeat(auto-fill,minmax(30rem,1fr));
+        }
+
         .mid-show { display: flex; }
     }
 
