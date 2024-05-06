@@ -21,7 +21,7 @@
         font-size: 10px;
         font-family: 'Barlow Condensed', Sans-Serif;
         background-color: var(--Background-Base);
-        scrollbar-color: var(--Border) var(--Background-Base);
+        scrollbar-color: var(--Border) transparent;
     }
 
     .content-contain {

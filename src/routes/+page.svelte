@@ -381,6 +381,7 @@
 
     // Show deck for small screens
     let showDeck = false;
+    $: viewWidth = window.innerWidth;
 
     // Scroll element to top
     const scrollToTop = async (node) => {
@@ -1068,8 +1069,8 @@
     }
 
     @keyframes -global-hide-deck {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(calc(-100vw + 10px)); }
+        0% { transform: translateX(calc(-100vw + 10px)); }
+        100% { transform: translateX(0); }
     }
 
     .app-contain {
@@ -1408,17 +1409,15 @@
 
         .app-contain--show-deck .col {
             animation-name: show-deck;
-            animation-duration: 200ms;
+            animation-duration: 300ms;
             animation-fill-mode: forwards;
-            animation-direction: normal;
             animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
         }
 
         .app-contain--hide-deck .col {
             animation-name: hide-deck;
-            animation-duration: 200ms;
+            animation-duration: 300ms;
             animation-fill-mode: forwards;
-            animation-direction: reverse;
             animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
         }
 
