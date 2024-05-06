@@ -379,6 +379,9 @@
     const showHover = (image, rotate) => { hoverCard = image; hoverRotate = rotate ? true : false }
     const hideHover = () => { hoverCard = null; }
 
+    // Show deck for small screens
+    let showDeck = false;
+
     // Scroll element to top
     const scrollToTop = async (node) => {
         node.scroll({ top: 0, behavior: 'instant' });
@@ -474,8 +477,11 @@
     <button class="button" slot="action" on:click={resetFilters}>Reset All</button>
 </Modal>
 
-<div class="app-contain">
+<div class="app-contain" class:app-contain--show-deck={showDeck}>
     <div class="col frame-full">
+        <button class="view-change view-change--right mid-show" on:click={() => (showDeck = true)}>
+            <img src="/images/icon-deck.svg" alt="View Deck" />
+        </button>
         <div class="col__section">
             <div class="filters">
                 <fieldset class="filters__group xsmall-hide" disabled={colorLock}>
@@ -622,6 +628,9 @@
         </div>
     </div>
     <div class="col col--right frame-full">
+        <button class="view-change view-change--left mid-show" on:click={() => (showDeck = false)}>
+            <img src="/images/icon-catalog.svg" alt="View Deck" />
+        </button>
         <div class="col__section">
             <div class="deck-header">
                 <div class="deck-header__side">
@@ -774,38 +783,42 @@
             {/if}
             <div class="col__scroll" style="padding-right: {20 - scrollWidth}px">
                 <div class="deck">
-                    {#if characters.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>
-                            <div transition:fade={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
-                        </div>
-                    {/if}
-                    {#each characters as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
-                    {/each}
-                    {#if actions.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>
-                            <div transition:fade={{duration: 200}}>Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
-                        </div>
-                    {/if}
-                    {#each actions as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
-                    {/each}
-                    {#if items.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>
-                            <div transition:fade={{duration: 200}}>Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
-                        </div>
-                    {/if}
-                    {#each items as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
-                    {/each}
-                    {#if locations.length !== 0}
-                        <div class="deck__label" transition:slide={{duration: 200}}>
-                            <div transition:fade={{duration: 200}}>Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
-                        </div>
-                    {/if}
-                    {#each locations as card (card.id)}
-                        <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
-                    {/each}
+                    <div>
+                        {#if characters.length !== 0}
+                            <div class="deck__label" transition:slide={{duration: 200}}>
+                                <div transition:fade={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
+                            </div>
+                        {/if}
+                        {#each characters as card (card.id)}
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                        {/each}
+                        {#if actions.length !== 0}
+                            <div class="deck__label" transition:slide={{duration: 200}}>
+                                <div transition:fade={{duration: 200}}>Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
+                            </div>
+                        {/if}
+                        {#each actions as card (card.id)}
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                        {/each}
+                    </div>
+                    <div>
+                        {#if items.length !== 0}
+                            <div class="deck__label" transition:slide={{duration: 200}}>
+                                <div transition:fade={{duration: 200}}>Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
+                            </div>
+                        {/if}
+                        {#each items as card (card.id)}
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                        {/each}
+                        {#if locations.length !== 0}
+                            <div class="deck__label" transition:slide={{duration: 200}}>
+                                <div transition:fade={{duration: 200}}>Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
+                            </div>
+                        {/if}
+                        {#each locations as card (card.id)}
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                        {/each}
+                    </div>
                 </div>
             </div>
         </div>
@@ -813,6 +826,31 @@
 </div>
 
 <style>
+    .view-change {
+        width: 50px;
+        height: 100px;
+        position: absolute;
+        top: 50%;
+        margin-top: -50px;
+        z-index: 3;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .view-change--right {
+        background: url('/images/view-change--right.svg');
+        right: 0;
+    }
+
+    .view-change--left {
+        background: url('/images/view-change--left.svg');
+        left: 0;
+    }
+
     .deck-stats {
         background: var(--Background-Dark);
         border-radius: 8px;
@@ -831,7 +869,7 @@
     .deck-graph__bars {
         height: 82px;
         display: flex;
-        gap: 10px;
+        justify-content: space-between;
     }
 
     .bar {
@@ -855,7 +893,7 @@
 
     .deck-graph__labels {
         display: flex;
-        gap: 10px;
+        justify-content: space-between;
 
         & > div {
             display: flex;
@@ -1003,8 +1041,9 @@
     }
 
     .deck {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(auto-fill,minmax(28rem,1fr));
+        gap: 20px;
     }
 
     .deck__label {
@@ -1029,6 +1068,7 @@
         display: flex;
         gap: var(--Page-Gutters);
         padding: var(--Page-Gutters);
+        transition: transform 200ms;
     }
 
     .col {
@@ -1069,7 +1109,7 @@
 
     .col__scroll--grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(18rem,1fr));
+        grid-template-columns: repeat(auto-fill,minmax(17rem,1fr));
         grid-auto-rows: min-content;
         gap: var(--Grid-Gutters);
     }
@@ -1329,6 +1369,8 @@
         --Grid-Gutters: 10px;
     }
 
+    .mid-hide { display: flex; }
+    .mid-show { display: none; }
     .xsmall-hide { display: flex; }
     .xsmall-show { display: none; }
     .small-hide { display: flex; }
@@ -1337,6 +1379,10 @@
     @media screen and (max-width: 1160px) {
         :root {
             --Hover-Width: 320px;
+        }
+
+        .col__scroll--grid {
+            grid-template-columns: repeat(auto-fill,minmax(16.5rem,1fr));
         }
     }
 
@@ -1347,9 +1393,16 @@
             --Grid-Gutters: 5px;
         }
 
-        .col--right {
-            display: none;
+        .app-contain--show-deck {
+            transform: translateX(calc(-100vw + 10px));
         }
+
+        .col {
+            min-width: calc(100vw - 20px);
+        }
+
+        .mid-hide { display: none; }
+        .mid-show { display: flex; }
     }
 
     @media screen and (max-width: 760px) {
@@ -1358,7 +1411,7 @@
         }
 
         .col__scroll--grid {
-            grid-template-columns: repeat(auto-fill,minmax(16rem,1fr));
+            grid-template-columns: repeat(auto-fill,minmax(15rem,1fr));
         }
 
         .small-hide { display: none; }
@@ -1371,7 +1424,7 @@
         }
 
         .col__scroll--grid {
-            grid-template-columns: repeat(auto-fill,minmax(14rem,1fr));
+            grid-template-columns: repeat(auto-fill,minmax(13rem,1fr));
         }
 
         .xsmall-hide { display: none; }
