@@ -1079,6 +1079,7 @@
         display: flex;
         gap: var(--Page-Gutters);
         padding: var(--Page-Gutters);
+        overflow-x: clip;
     }
 
     .col {
