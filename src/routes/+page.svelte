@@ -583,10 +583,18 @@
                                         {/await}
                                     </div>
                                     <div class="card__copies">
-                                        {#if added < 1}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
-                                        {#if added < 2}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
-                                        {#if added < 3}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
-                                        {#if added < 4}<img src="/images/copy-added--no.svg" alt="Copy" />{:else}<img src="/images/copy-added--yes.svg" alt="Copy" />{/if}
+                                        <div class="card__copy" class:card__copy--added={added > 0}>
+                                            <img src="/images/copy-added--yes.svg" alt="Copy" />
+                                        </div>
+                                        <div class="card__copy" class:card__copy--added={added > 1}>
+                                            <img src="/images/copy-added--yes.svg" alt="Copy" />
+                                        </div>
+                                        <div class="card__copy" class:card__copy--added={added > 2}>
+                                            <img src="/images/copy-added--yes.svg" alt="Copy" />
+                                        </div>
+                                        <div class="card__copy" class:card__copy--added={added > 3}>
+                                            <img src="/images/copy-added--yes.svg" alt="Copy" />
+                                        </div>
                                     </div>
                                 </div>
                             {/each}
@@ -1361,6 +1369,23 @@
         background-repeat: no-repeat;
         background-position: top center;
         transition: transform 200ms;
+    }
+
+    .card__copy {
+        background-image: url('/images/copy-added--no.svg');
+        background-repeat: no-repeat;
+        background-position: center center;
+
+        & img {
+            transition: opacity 200ms;
+            opacity: 0;
+        }
+    }
+
+    .card__copy--added {
+        & img {
+            opacity: 1;
+        }
     }
 
     .pagination {
