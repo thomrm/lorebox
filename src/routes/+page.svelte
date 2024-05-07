@@ -536,7 +536,7 @@
                     </div>
                     <div class="filters__group">
                         <form id="search-form" class="search-form" on:submit|preventDefault={filterCards} on:reset={clearSearch}>
-                            <input class="search-form__search-bar" type="text" placeholder="Search..."  bind:value={searchTerm} on:change={filterCards} />
+                            <input class="search-form__search-bar" id="card-search" type="text" placeholder="Search..."  bind:value={searchTerm} on:change={filterCards} />
                             {#if searchTerm}
                                 <button type="reset" class="search-form__search-clear">
                                     <img src="./images/icon-clear.svg" alt="Clear Search" />
@@ -786,7 +786,7 @@
             {/if}
             <div class="col__scroll" bind:offsetWidth={scrollOffset} bind:clientWidth={scrollClient} style="padding-right: {20 - scrollWidth}px">
                 <div class="deck">
-                    <div>
+                    <div class="deck__section">
                         {#if characters.length !== 0}
                             <div class="deck__label" transition:slide={{duration: 200}}>
                                 <div transition:fade={{duration: 200}}>Characters <span class="deck__label-sub">({characters.reduce((a,b) => a + b.number, 0)})</span></div>
@@ -795,6 +795,8 @@
                         {#each characters as card (card.id)}
                             <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
+                    </div>
+                    <div class="deck__section">
                         {#if actions.length !== 0}
                             <div class="deck__label" transition:slide={{duration: 200}}>
                                 <div transition:fade={{duration: 200}}>Actions <span class="deck__label-sub">({actions.reduce((a,b) => a + b.number, 0)})</span></div>
@@ -804,7 +806,7 @@
                             <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
-                    <div>
+                    <div class="deck__section">
                         {#if items.length !== 0}
                             <div class="deck__label" transition:slide={{duration: 200}}>
                                 <div transition:fade={{duration: 200}}>Items <span class="deck__label-sub">({items.reduce((a,b) => a + b.number, 0)})</span></div>
@@ -813,6 +815,8 @@
                         {#each items as card (card.id)}
                             <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
+                    </div>
+                    <div class="deck__section">
                         {#if locations.length !== 0}
                             <div class="deck__label" transition:slide={{duration: 200}}>
                                 <div transition:fade={{duration: 200}}>Locations <span class="deck__label-sub">({locations.reduce((a,b) => a + b.number, 0)})</span></div>
@@ -1044,9 +1048,14 @@
     }
 
     .deck {
-        display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(28rem,1fr));
-        gap: 20px;
+        column-count: 1;
+        column-gap: 20px;
+    }
+
+    .deck__section {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 0;
     }
 
     .deck__label {
@@ -1425,7 +1434,7 @@
         }
 
         .deck {
-            grid-template-columns: repeat(auto-fill,minmax(30rem,1fr));
+            column-count: 2;
         }
 
         .mid-show { display: flex; }
@@ -1447,6 +1456,10 @@
     @media screen and (max-width: 560px) {
         :root {
             --Hover-Width: 260px;
+        }
+
+        .deck {
+            column-count: 1;
         }
 
         .col__scroll--grid {
