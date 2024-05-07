@@ -1055,7 +1055,8 @@
     .deck__section {
         display: flex;
         flex-direction: column;
-        flex: 1 0 0;
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
 
     .deck__label {
