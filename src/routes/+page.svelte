@@ -389,7 +389,9 @@
     };
 
     // Get scrollbar width
-    $: scrollWidth = window.innerWidth - document.documentElement.clientWidth;
+    let scrollOffset;
+    let scrollClient;
+    $: scrollWidth = scrollOffset - scrollClient;
 </script>
 
 <svelte:head>
@@ -782,7 +784,7 @@
             {#if deck.cards.length === 0}
                 <div class="grid-status grid-status--small" transition:fade={{duration: 200}}>No Cards Added</div>
             {/if}
-            <div class="col__scroll" style="padding-right: {20 - scrollWidth}px">
+            <div class="col__scroll" bind:offsetWidth={scrollOffset} bind:clientWidth={scrollClient} style="padding-right: {20 - scrollWidth}px">
                 <div class="deck">
                     <div>
                         {#if characters.length !== 0}

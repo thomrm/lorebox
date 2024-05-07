@@ -6,8 +6,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 
 body {
-    overflow-y: scroll;
-    overflow-x: clip;
+    overflow: clip;
 }
 
 .ink-amber { color: var(--Ink-Amber); }
