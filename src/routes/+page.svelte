@@ -376,8 +376,21 @@
     // Show hover image when specified
     let hoverCard = null;
     let hoverRotate = false;
-    const showHover = (image, rotate) => { hoverCard = image; hoverRotate = rotate ? true : false }
-    const hideHover = () => { hoverCard = null; }
+    let hoverTimer;
+    const showHover = (image, rotate, timer) => {
+        if (timer) {
+            if (hoverTimer) clearTimeout(hoverTimer);
+
+            hoverTimer = setTimeout(() => {
+                hoverCard = image;
+                hoverRotate = rotate ? true : false;
+            }, 200);
+        } else {
+            hoverCard = image;
+            hoverRotate = rotate ? true : false;
+        }
+    }
+    const hideHover = () => { hoverCard = null; clearTimeout(hoverTimer); }
 
     // Show deck for small screens
     let showDeck = false;
@@ -575,7 +588,7 @@
                                 <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events a11y-mouse-events-have-key-events -->
                                 <div class="card">
                                     <div class="card__image-contain" on:click={addCard(card.id, 1)}>
-                                        <div class="card__view" on:mouseover={showHover(card.images.full, (card.type == 'Location' ? true : false))} on:mouseleave={hideHover}><img src="/images/icon-view.svg" alt="View Card" /></div>
+                                        <div class="card__view" on:mouseover={showHover(card.images.full, (card.type == 'Location' ? true : false), true)} on:mouseleave={hideHover}><img src="/images/icon-view.svg" alt="View Card" /></div>
                                         {#await preload(card.images.thumbnail)}
                                             <!--Loading-->
                                         {:then}
@@ -1348,6 +1361,7 @@
         background: var(--Black);
         border-radius: 0 0 0 18px;
         z-index: 2;
+        cursor: zoom-in;
     }
 
     .card__image {
