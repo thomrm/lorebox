@@ -140,7 +140,7 @@ button {
     border-radius: 8px;
     list-style-type: none;
     padding: 10px 0;
-    min-width: 120px;
+    min-width: 160px;
 
     & li button {
         display: flex;

@@ -6,13 +6,11 @@
 
     import { preload } from '../lib/preload.js';
 
-    import Modal from './filter-modal.svelte';
+    import Modal from './modal-view.svelte';
     import CardAdded from './card-added.svelte';
 
     let cards = null;
     let grid;
-
-    let showFilterModal = false;
     
     onMount(async () => {
         // Data provided by LorcanaJSON.org
@@ -417,6 +415,11 @@
         showFilterDropdown = false;
         showMoreDropdown = false;
     }
+
+    // Modals
+
+    let showFilterModal = false;
+    let showAboutModal = false;
 </script>
 
 <svelte:head>
@@ -425,6 +428,23 @@
 </svelte:head>
 
 <svelte:window bind:innerWidth />
+
+<Modal bind:showAboutModal>
+    <div class="about-contain">
+        <div class="col__section">
+            <h1>About Lorebox</h1>
+        </div>
+        <div class="col__divider"></div>
+        <div class="col__section">
+            <p>Lorebox uses trademarks and/or copyrights associated with Disney Lorcana TCG, used under <a href="https://cdn.ravensburger.com/lorcana/community-code-en">Ravensburger's Community Code Policy</a>. We are expressly prohibited from charging you to use or access this content. Lorebox is not published, endorsed, or specifically approved by Disney or Ravensburger. For more information about Disney Lorcana TCG, visit <a href="https://www.disneylorcana.com/en-US/">https://www.disneylorcana.com/en-US/</a>.</p>
+        </div>
+        <div class="col__divider"></div>
+        <div class="col__section">
+            <p>Lorebox is built and maintained by <a href="http://thomasrm.com">ThomRM</a>.<br /> Data is provided by <a href="https://lorcanajson.org/">LorcanaJSON</a>.</p>
+        </div>
+        <div class="col__divider"></div>
+    </div>
+</Modal>
 
 <Modal bind:showFilterModal>
     {#if innerWidth <= 760}
@@ -767,6 +787,7 @@
                         {#if showMoreDropdown}
                             <ul class="dropdown-menu dropdown-menu--right" transition:fly={{duration: 200, y: -5}}>
                                 <li><button on:click={resetDeck}>Clear Deck</button></li>
+                                <li><button on:click={() => (showAboutModal = true)}>About Lorebox</button></li>
                             </ul>
                         {/if}
                     </div>
@@ -904,6 +925,26 @@
 </div>
 
 <style>
+    .about-contain {
+        & h1 {
+            font-size: 30px;
+            font-family: inherit;
+            padding: 10px 0;
+            text-align: center;
+            color: var(--Black);
+        }
+
+        & p {
+            line-height: 1.5;
+            padding: 10px 0;
+        }
+
+        & a {
+            color: var(--Text-Link);
+            white-space: nowrap;
+        }
+    }
+
     .view-change {
         width: 50px;
         height: 100px;

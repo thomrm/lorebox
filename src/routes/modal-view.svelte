@@ -1,21 +1,22 @@
 <script>
 	export let showFilterModal;
+	export let showAboutModal;
 
 	let dialog;
 
-	$: if (dialog && showFilterModal) dialog.showModal();
+	$: if (dialog && showFilterModal || dialog && showAboutModal) dialog.showModal();
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={dialog} on:close={() => (showFilterModal = false)} on:click|self={() => dialog.close()}>
+<dialog bind:this={dialog} on:close={() => {showFilterModal = false; showAboutModal = false}} on:click|self={() => dialog.close()}>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div class="modal-content frame-full" on:click|stopPropagation>
 		<slot />
 
 		<div class="col__section">
 			<div class="actions-split">
-				<slot name="action" />
 				<button class="button" on:click={() => dialog.close()}>Close</button>
+				<slot name="action" />
 			</div>
 		</div>
 	</div>
@@ -59,7 +60,7 @@
 
 	.actions-split {
 		display: flex;
-		flex-direction: row;
+		flex-direction: row-reverse;
 		justify-content: space-between;
 	}
 </style>
