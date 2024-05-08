@@ -396,12 +396,12 @@
 
     // Show deck for small screens
     let showDeck = false;
-    $: viewWidth = window.innerWidth;
+    $: innerWidth = 0;
 
     // Scroll element to top
     const scrollToTop = async (node) => {
         node.scroll({ top: 0, behavior: 'instant' });
-    };
+    }
 
     // Get scrollbar width
     let scrollOffset;
@@ -422,62 +422,68 @@
     <meta name="description" content="A Lorcana Deck Builder.">
 </svelte:head>
 
+<svelte:window bind:innerWidth />
+
 <Modal bind:showFilterModal>
-    <div class="col__section small-show">
-        <div class="filters">
-            <fieldset class="filters__group xsmall-show" disabled={colorLock}>
-                <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
-                <label class="filter-ink ink-amber" for="filter-amber--modal">
-                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
-                </label>
-                <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(colorCount == 2 && !filters.color.amethyst) ? true : false} on:change={filterCards} />
-                <label class="filter-ink ink-amethyst" for="filter-amethyst--modal">
-                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
-                </label>
-                <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={(colorCount == 2 && !filters.color.emerald) ? true : false} on:change={filterCards} />
-                <label class="filter-ink ink-emerald" for="filter-emerald--modal">
-                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
-                </label>
-                <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={(colorCount == 2 && !filters.color.ruby) ? true : false} on:change={filterCards} />
-                <label class="filter-ink ink-ruby" for="filter-ruby--modal">
-                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
-                </label>
-                <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(colorCount == 2 && !filters.color.sapphire) ? true : false} on:change={filterCards} />
-                <label class="filter-ink ink-sapphire" for="filter-sapphire--modal">
-                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
-                </label>
-                <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={(colorCount == 2 && !filters.color.steel) ? true : false} on:change={filterCards} />
-                <label class="filter-ink ink-steel" for="filter-steel--modal">
-                    <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
-                </label>
-            </fieldset>
-            <div class="filters__group">
-                <div class="dropdown-contain" on:focusout={dropdownFocusLoss}>
-                    <button class="button button--dropdown" aria-label="Sort" on:click={() => showFilterDropdown = !showFilterDropdown}>
-                        Sort By {filters.sortType}
-                    </button>
-                    {#if showFilterDropdown}
-                        <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
-                            <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
-                            <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
-                            <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
-                        </ul>
-                    {/if}
+    {#if innerWidth <= 760}
+        <div class="col__section">
+            <div class="filters">
+                {#if innerWidth <= 560}
+                    <fieldset class="filters__group" disabled={colorLock}>
+                        <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-amber" for="filter-amber--modal">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(colorCount == 2 && !filters.color.amethyst) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-amethyst" for="filter-amethyst--modal">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={(colorCount == 2 && !filters.color.emerald) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-emerald" for="filter-emerald--modal">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={(colorCount == 2 && !filters.color.ruby) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-ruby" for="filter-ruby--modal">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(colorCount == 2 && !filters.color.sapphire) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-sapphire" for="filter-sapphire--modal">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={(colorCount == 2 && !filters.color.steel) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-steel" for="filter-steel--modal">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
+                        </label>
+                    </fieldset>
+                {/if}
+                <div class="filters__group">
+                    <div class="dropdown-contain" on:focusout={dropdownFocusLoss}>
+                        <button class="button button--dropdown" aria-label="Sort" on:click={() => showFilterDropdown = !showFilterDropdown}>
+                            Sort By {filters.sortType}
+                        </button>
+                        {#if showFilterDropdown}
+                            <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
+                                <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
+                                <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                                <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                            </ul>
+                        {/if}
+                    </div>
+                    <input type="checkbox" id="sort-direction--modal" bind:checked={filters.sortAsc} on:change={filterCards} />
+                    <label class="button" for="sort-direction--modal">
+                        {#if filters.sortAsc}
+                            <img src="./images/icon-sortAsc.svg" alt="Ascending" />
+                            Asc
+                        {:else}
+                            <img src="./images/icon-sortDesc.svg" alt="Descending" />
+                            Desc
+                        {/if}
+                    </label>
                 </div>
-                <input type="checkbox" id="sort-direction--modal" bind:checked={filters.sortAsc} on:change={filterCards} />
-                <label class="button" for="sort-direction--modal">
-                    {#if filters.sortAsc}
-                        <img src="./images/icon-sortAsc.svg" alt="Ascending" />
-                        Asc
-                    {:else}
-                        <img src="./images/icon-sortDesc.svg" alt="Descending" />
-                        Desc
-                    {/if}
-                </label>
             </div>
         </div>
-    </div>
-    <div class="col__divider small-show"></div>
+        <div class="col__divider"></div>
+    {/if}
     <div class="col__section">
         <div class="filters filters--modal">
             <div class="filters__header">Card Types</div>
@@ -512,64 +518,70 @@
 
 <div class="app-contain" class:app-contain--show-deck={showDeck} class:app-contain--hide-deck={!showDeck}>
     <div class="col frame-full">
-        <button class="view-change view-change--right mid-show" on:click={() => (showDeck = true)}>
-            <img src="/images/icon-deck.svg" alt="View Deck" />
-        </button>
+        {#if innerWidth <= 960}
+            <button class="view-change view-change--right" on:click={() => (showDeck = true)}>
+                <img src="/images/icon-deck.svg" alt="View Deck" />
+            </button>
+        {/if}
         <div class="col__section">
             <div class="filters">
-                <fieldset class="filters__group xsmall-hide" disabled={colorLock}>
-                    <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
-                    <label class="filter-ink ink-amber" for="filter-amber">
-                        <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
-                    </label>
-                    <input type="checkbox" id="filter-amethyst" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(colorCount == 2 && !filters.color.amethyst) ? true : false} on:change={filterCards} />
-                    <label class="filter-ink ink-amethyst" for="filter-amethyst">
-                        <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
-                    </label>
-                    <input type="checkbox" id="filter-emerald" name="Emerald" bind:checked={filters.color.emerald} disabled={(colorCount == 2 && !filters.color.emerald) ? true : false} on:change={filterCards} />
-                    <label class="filter-ink ink-emerald" for="filter-emerald">
-                        <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
-                    </label>
-                    <input type="checkbox" id="filter-ruby" name="Ruby" bind:checked={filters.color.ruby} disabled={(colorCount == 2 && !filters.color.ruby) ? true : false} on:change={filterCards} />
-                    <label class="filter-ink ink-ruby" for="filter-ruby">
-                        <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
-                    </label>
-                    <input type="checkbox" id="filter-sapphire" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(colorCount == 2 && !filters.color.sapphire) ? true : false} on:change={filterCards} />
-                    <label class="filter-ink ink-sapphire" for="filter-sapphire">
-                        <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
-                    </label>
-                    <input type="checkbox" id="filter-steel" name="Steel" bind:checked={filters.color.steel} disabled={(colorCount == 2 && !filters.color.steel) ? true : false} on:change={filterCards} />
-                    <label class="filter-ink ink-steel" for="filter-steel">
-                        <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
-                    </label>
-                </fieldset>
+                {#if innerWidth > 560}
+                    <fieldset class="filters__group" disabled={colorLock}>
+                        <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-amber" for="filter-amber">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-amethyst" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(colorCount == 2 && !filters.color.amethyst) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-amethyst" for="filter-amethyst">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-emerald" name="Emerald" bind:checked={filters.color.emerald} disabled={(colorCount == 2 && !filters.color.emerald) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-emerald" for="filter-emerald">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-ruby" name="Ruby" bind:checked={filters.color.ruby} disabled={(colorCount == 2 && !filters.color.ruby) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-ruby" for="filter-ruby">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-sapphire" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(colorCount == 2 && !filters.color.sapphire) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-sapphire" for="filter-sapphire">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
+                        </label>
+                        <input type="checkbox" id="filter-steel" name="Steel" bind:checked={filters.color.steel} disabled={(colorCount == 2 && !filters.color.steel) ? true : false} on:change={filterCards} />
+                        <label class="filter-ink ink-steel" for="filter-steel">
+                            <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
+                        </label>
+                    </fieldset>
+                {/if}
                 <div class="filters__group filters__group--fill">
                     <div class="filters__group filters__group--fill">
                         <button class="button" on:click={() => (showFilterModal = true)}>
                             <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
                         </button>
-                        <div class="dropdown-contain small-hide" on:focusout={dropdownFocusLoss}>
-                            <button class="button button--dropdown" aria-label="Sort" on:click={() => showFilterDropdown = !showFilterDropdown}>
-                                Sort By {filters.sortType}
-                            </button>
-                            {#if showFilterDropdown}
-                                <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
-                                    <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
-                                    <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
-                                    <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
-                                </ul>
-                            {/if}
-                        </div>
-                        <input class="small-hide" type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
-                        <label class="button small-hide" for="sort-direction">
-                            {#if filters.sortAsc}
-                                <img src="./images/icon-sortAsc.svg" alt="Ascending" />
-                                Asc
-                            {:else}
-                                <img src="./images/icon-sortDesc.svg" alt="Descending" />
-                                Desc
-                            {/if}
-                        </label>
+                        {#if innerWidth > 760}
+                            <div class="dropdown-contain" on:focusout={dropdownFocusLoss}>
+                                <button class="button button--dropdown" aria-label="Sort" on:click={() => showFilterDropdown = !showFilterDropdown}>
+                                    Sort By {filters.sortType}
+                                </button>
+                                {#if showFilterDropdown}
+                                    <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
+                                        <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
+                                        <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                                        <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                                    </ul>
+                                {/if}
+                            </div>
+                            <input type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
+                            <label class="button" for="sort-direction">
+                                {#if filters.sortAsc}
+                                    <img src="./images/icon-sortAsc.svg" alt="Ascending" />
+                                    Asc
+                                {:else}
+                                    <img src="./images/icon-sortDesc.svg" alt="Descending" />
+                                    Desc
+                                {/if}
+                            </label>
+                        {/if}
                     </div>
                     <div class="filters__group">
                         <form id="search-form" class="search-form" on:submit|preventDefault={filterCards} on:reset={clearSearch}>
@@ -679,9 +691,11 @@
         </div>
     </div>
     <div class="col col--right frame-full">
-        <button class="view-change view-change--left mid-show" on:click={() => (showDeck = false)}>
-            <img src="/images/icon-catalog.svg" alt="View Deck" />
-        </button>
+        {#if innerWidth <= 960}
+            <button class="view-change view-change--left" on:click={() => (showDeck = false)}>
+                <img src="/images/icon-catalog.svg" alt="View Deck" />
+            </button>
+        {/if}
         <div class="col__section">
             <div class="deck-header">
                 <div class="deck-header__side">
@@ -1459,11 +1473,7 @@
         --Grid-Gutters: 10px;
     }
 
-    .mid-show { display: none; }
     .xsmall-hide { display: flex; }
-    .xsmall-show { display: none; }
-    .small-hide { display: flex; }
-    .small-show { display: none; }
 
     @media screen and (max-width: 1160px) {
         :root {
@@ -1503,8 +1513,6 @@
         .deck {
             column-count: 2;
         }
-
-        .mid-show { display: flex; }
     }
 
     @media screen and (max-width: 760px) {
@@ -1515,9 +1523,6 @@
         .col__scroll--grid {
             grid-template-columns: repeat(auto-fill,minmax(15rem,1fr));
         }
-
-        .small-hide { display: none; }
-        .small-show { display: flex; }
     }
 
     @media screen and (max-width: 560px) {
@@ -1534,6 +1539,5 @@
         }
 
         .xsmall-hide { display: none; }
-        .xsmall-show { display: flex; }
     }
 </style>
