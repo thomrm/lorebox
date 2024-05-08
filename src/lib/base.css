@@ -9,6 +9,15 @@ body {
     overflow: clip;
 }
 
+button {
+    border: none;
+    padding: 0;
+    background: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+}
+
 .ink-amber { color: var(--Ink-Amber); }
 .ink-amethyst { color: var(--Ink-Amethyst); }
 .ink-emerald { color: var(--Ink-Emerald); }

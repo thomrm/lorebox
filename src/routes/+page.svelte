@@ -373,6 +373,8 @@
         }
     ]
 
+    // OTHER THINGS
+
     // Show hover image when specified
     let hoverCard = null;
     let hoverRotate = false;
@@ -585,7 +587,7 @@
         <div class="col__divider"></div>
         <div class="col__scroll-contain">
             {#if hoverCard}
-                <div class="hover-view" transition:fade={{duration: 200}}>
+                <button class="hover-view" transition:fade={{duration: 200}} on:click={hideHover} on:mouseleave={hideHover}>
                     <div class="hover-view__card">
                         <div class="card" class:card--rotate={hoverRotate}>
                             <div class="card__image-contain">
@@ -595,7 +597,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </button>
             {/if}
             {#if !filteredCards}
                 <!--Loading-->
@@ -607,14 +609,17 @@
                         <div class="col__scroll col__scroll--grid" bind:this={grid} style="padding-right: {20 - scrollWidth}px">
                             {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card (card.id)}
                                 {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
-                                <!-- svelte-ignore a11y-no-static-element-interactions a11y-click-events-have-key-events a11y-mouse-events-have-key-events -->
                                 <div class="card">
-                                    <div class="card__image-contain" on:click={addCard(card.id, 1)}>
-                                        <div class="card__view" on:mouseover={showHover(card.images.full, (card.type == 'Location' ? true : false), true)} on:mouseleave={hideHover}><img src="/images/icon-view.svg" alt="View Card" /></div>
+                                    <div class="card__image-contain">
+                                        <button class="card__view" on:click={showHover(card.images.full, (card.type == 'Location' ? true : false))}>
+                                            <img src="/images/icon-view.svg" alt="View Card" />
+                                        </button>
                                         {#await preload(card.images.thumbnail)}
                                             <!--Loading-->
                                         {:then}
-                                            <img class="card__image" src="{card.images.thumbnail}" alt="{card.fullName}" in:fade={{duration: 200}} />
+                                            <button class="card__image" on:click={addCard(card.id, 1)} in:fade={{duration: 200}}>
+                                                <img src="{card.images.thumbnail}" alt="{card.fullName}" />
+                                            </button>
                                         {/await}
                                     </div>
                                     <div class="card__copies">
@@ -1002,11 +1007,13 @@
         align-items: center;
         z-index: 2;
         background: rgba(227,202,168,0.8);
-        pointer-events: none;
+        cursor: zoom-out;
+        /* pointer-events: none; */
     }
 
     .hover-view__card {
         width: var(--Hover-Width);
+        pointer-events: none;
     }
 
     .deck-header {
@@ -1281,10 +1288,6 @@
     }
 
     .filter-ink {
-        padding: 0;
-        border: none;
-        background: none;
-        cursor: pointer;
         display: flex;
         align-items: center;
         height: 30px;
@@ -1340,15 +1343,13 @@
         width: 30px;
         justify-content: center;
         align-items: center;
-        cursor: pointer;
-        background: none;
-        border: none;
     }
 
     .card {
         display: flex;
         flex-direction: column;
         gap: 2px;
+        position: relative;
     }
 
     .card--rotate {
@@ -1381,7 +1382,7 @@
         right: 0;
         padding: 10px;
         background: var(--Black);
-        border-radius: 0 0 0 18px;
+        border-bottom-left-radius: 18px;
         z-index: 2;
         cursor: zoom-in;
     }
@@ -1393,6 +1394,10 @@
         border-radius: 4.5% / 3.5%;
         top: 0;
         left: 0;
+
+        & img {
+            width: 100%;
+        }
     }
 
     .card__copies {
