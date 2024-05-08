@@ -554,7 +554,7 @@
                     </fieldset>
                 {/if}
                 <div class="filters__group filters__group--fill">
-                    <div class="filters__group">
+                    <div class="filters__group" style:width="300px">
                         <button class="button" on:click={() => (showFilterModal = true)}>
                             <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
                         </button>
