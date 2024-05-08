@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { fade, slide } from 'svelte/transition';
+    import { fade, slide, fly } from 'svelte/transition';
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
 
@@ -405,6 +405,14 @@
     let scrollOffset;
     let scrollClient;
     $: scrollWidth = scrollOffset - scrollClient;
+
+    // Dropdowns
+    let showFilterDropdown = false;
+
+    const dropdownFocusLoss = ({ relatedTarget, currentTarget }) => {
+        if (relatedTarget instanceof HTMLElement && currentTarget.contains(relatedTarget)) return;
+        showFilterDropdown = false;
+    }
 </script>
 
 <svelte:head>
@@ -442,11 +450,18 @@
                 </label>
             </fieldset>
             <div class="filters__group">
-                <select class="button button--dropdown" name="sort-type" id="sort-type--modal" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
-                    <option value="name">Sort by Name</option>
-                    <option value="cost">Sort by Cost</option>
-                    <option value="rarity">Sort by Rarity</option>
-                </select>
+                <div class="dropdown-contain" on:focusout={dropdownFocusLoss}>
+                    <button class="button button--dropdown" aria-label="Sort" on:click={() => showFilterDropdown = !showFilterDropdown}>
+                        Sort By {filters.sortType}
+                    </button>
+                    {#if showFilterDropdown}
+                        <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
+                            <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
+                            <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                            <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                        </ul>
+                    {/if}
+                </div>
                 <input type="checkbox" id="sort-direction--modal" bind:checked={filters.sortAsc} on:change={filterCards} />
                 <label class="button" for="sort-direction--modal">
                     {#if filters.sortAsc}
@@ -531,11 +546,18 @@
                         <button class="button" on:click={() => (showFilterModal = true)}>
                             <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
                         </button>
-                        <select class="button button--dropdown small-hide" name="sort-type" id="sort-type" aria-label="Sort" bind:value={filters.sortType} on:change={filterCards}>
-                            <option value="name">Sort by Name</option>
-                            <option value="cost">Sort by Cost</option>
-                            <option value="rarity">Sort by Rarity</option>
-                        </select>
+                        <div class="dropdown-contain small-hide" on:focusout={dropdownFocusLoss}>
+                            <button class="button button--dropdown" aria-label="Sort" on:click={() => showFilterDropdown = !showFilterDropdown}>
+                                Sort By {filters.sortType}
+                            </button>
+                            {#if showFilterDropdown}
+                                <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
+                                    <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
+                                    <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                                    <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                                </ul>
+                            {/if}
+                        </div>
                         <input class="small-hide" type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
                         <label class="button small-hide" for="sort-direction">
                             {#if filters.sortAsc}

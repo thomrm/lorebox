@@ -117,6 +117,39 @@ body {
     }
 }
 
+.dropdown-contain {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 5px;
+    background: var(--Background-Dark);
+    z-index: 4;
+    border-radius: 8px;
+    list-style-type: none;
+    padding: 10px 0;
+    min-width: 120px;
+
+    & li button {
+        display: flex;
+        align-items: center;
+        padding: 5px 15px;
+        height: 30px;
+        color: var(--Gold);
+        background: var(--Background-Dark);
+        border: none;
+        width: 100%;
+        cursor: pointer;
+
+        &:hover {
+            background: var(--Black);
+        }
+    }
+}
+
 .checkbox {
     display: none;
 
