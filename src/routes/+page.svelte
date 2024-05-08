@@ -645,15 +645,17 @@
                                 {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
                                 <div class="card">
                                     <div class="card__image-contain">
-                                        <button class="card__view" on:click={showHover(card.images.full, (card.type == 'Location' ? true : false))}>
-                                            <img src="/images/icon-view.svg" alt="View Card" />
-                                        </button>
                                         {#await preload(card.images.thumbnail)}
                                             <!--Loading-->
                                         {:then}
-                                            <button class="card__image" on:click={addCard(card.id, 1)} in:fade={{duration: 200}}>
-                                                <img src="{card.images.thumbnail}" alt="{card.fullName}" />
-                                            </button>
+                                            <div in:fade={{duration: 200}}>
+                                                <button class="card__view" on:click={showHover(card.images.full, (card.type == 'Location' ? true : false))}>
+                                                    <img src="/images/icon-view.svg" alt="View Card" />
+                                                </button>
+                                                <button class="card__image" on:click={addCard(card.id, 1)}>
+                                                    <img src="{card.images.thumbnail}" alt="{card.fullName}" />
+                                                </button>
+                                            </div>
                                         {/await}
                                     </div>
                                     <div class="card__copies">
