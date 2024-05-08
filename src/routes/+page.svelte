@@ -554,7 +554,7 @@
                     </fieldset>
                 {/if}
                 <div class="filters__group filters__group--fill">
-                    <div class="filters__group filters__group--fill">
+                    <div class="filters__group">
                         <button class="button" on:click={() => (showFilterModal = true)}>
                             <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
                         </button>
@@ -1268,6 +1268,7 @@
     .filters__group {
         display: flex;
         gap: 5px;
+        flex-shrink: 0;
 
         & input[type='checkbox'] {
             display: none;
@@ -1313,7 +1314,9 @@
 
     .filters__group--fill {
         display: flex;
-        flex: 1 0 0;
+        flex-shrink: 0;
+        flex-grow: 1;
+        justify-content: space-between;
     }
 
     .filters__header {
