@@ -134,7 +134,6 @@ button {
 .dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 0;
     margin-top: 5px;
     background: var(--Background-Dark);
     z-index: 4;
@@ -162,6 +161,14 @@ button {
             background: var(--Black);
         }
     }
+}
+
+.dropdown-menu--left {
+    left: 0;
+}
+
+.dropdown-menu--right {
+    right: 0
 }
 
 .checkbox {

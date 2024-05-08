@@ -410,10 +410,12 @@
 
     // Dropdowns
     let showFilterDropdown = false;
+    let showMoreDropdown = false;
 
     const dropdownFocusLoss = ({ relatedTarget, currentTarget }) => {
         if (relatedTarget instanceof HTMLElement && currentTarget.contains(relatedTarget)) return;
         showFilterDropdown = false;
+        showMoreDropdown = false;
     }
 </script>
 
@@ -462,7 +464,7 @@
                             Sort By {filters.sortType}
                         </button>
                         {#if showFilterDropdown}
-                            <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
+                            <ul class="dropdown-menu dropdown-menu--left" transition:fly={{duration: 200, y: -5}}>
                                 <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
                                 <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
                                 <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
@@ -564,7 +566,7 @@
                                     Sort By {filters.sortType}
                                 </button>
                                 {#if showFilterDropdown}
-                                    <ul class="dropdown-menu" transition:fly={{duration: 200, y: -5}}>
+                                    <ul class="dropdown-menu dropdown-menu--left" transition:fly={{duration: 200, y: -5}}>
                                         <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
                                         <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
                                         <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
@@ -758,9 +760,16 @@
                 </div>
                 <div class="deck-header__total">{deck.cardsCount}/60</div>
                 <div class="deck-header__side deck-header__side--right">
-                    <button class="button" on:click={resetDeck}>
-                        <img src="/images/icon-reset.svg" alt="Reset" />
-                    </button>
+                    <div class="dropdown-contain" on:focusout={dropdownFocusLoss}>
+                        <button class="button" aria-label="Sort" on:click={() => showMoreDropdown = !showMoreDropdown}>
+                            <img src="/images/icon-more.svg" alt="Options Menu" />
+                        </button>
+                        {#if showMoreDropdown}
+                            <ul class="dropdown-menu dropdown-menu--right" transition:fly={{duration: 200, y: -5}}>
+                                <li><button on:click={resetDeck}>Clear Deck</button></li>
+                            </ul>
+                        {/if}
+                    </div>
                 </div>
             </div>
         </div>
