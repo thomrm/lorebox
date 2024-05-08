@@ -119,6 +119,7 @@ body {
 
 .dropdown-contain {
     position: relative;
+    flex-shrink: 0;
 }
 
 .dropdown-menu {
@@ -143,6 +144,10 @@ body {
         border: none;
         width: 100%;
         cursor: pointer;
+        text-transform: uppercase;
+        font-family: inherit;
+        font-weight: bold;
+        font-size: 13px;
 
         &:hover {
             background: var(--Black);
