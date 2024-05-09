@@ -37,15 +37,30 @@
 	}
 
 	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+		animation: animate-modal 200ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	@keyframes zoom {
+	dialog[open]::backdrop {
+		animation: animate-backdrop 200ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	@keyframes animate-modal {
 		from {
-			transform: scale(0.95);
+			transform: scale(0.90);
+			opacity: 0;
 		}
 		to {
 			transform: scale(1);
+			opacity: 1;
+		}
+	}
+
+	@keyframes animate-backdrop {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
 		}
 	}
 
