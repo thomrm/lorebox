@@ -2,6 +2,7 @@
     import '../lib/base.css';
     import '../lib/colors.css';
     import { onMount } from 'svelte';
+    import { inject } from '@vercel/analytics';
  
     let ready = false;
 
