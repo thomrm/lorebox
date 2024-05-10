@@ -586,9 +586,9 @@
                                 </button>
                                 {#if showFilterDropdown}
                                     <ul class="dropdown-menu dropdown-menu--left" transition:fly={{duration: 200, y: -5}}>
-                                        <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
-                                        <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
-                                        <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                                        <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
+                                        <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                                        <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
                                     </ul>
                                 {/if}
                             </div>
@@ -787,8 +787,9 @@
                         </button>
                         {#if showMoreDropdown}
                             <ul class="dropdown-menu dropdown-menu--right" transition:fly={{duration: 200, y: -5}}>
-                                <li><button on:click={resetDeck}>Clear Deck</button></li>
-                                <li><button on:click={() => (showAboutModal = true)}>About Lorebox</button></li>
+                                <li><a href="/view/{$page.url.searchParams.get('d')}" class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0} target="_blank">View Deck</a></li>
+                                <li><button class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0} on:click={resetDeck}>Clear Deck</button></li>
+                                <li><button class="dropdown-menu__item" on:click={() => (showAboutModal = true)}>About Lorebox</button></li>
                             </ul>
                         {/if}
                     </div>

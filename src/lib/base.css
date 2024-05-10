@@ -136,31 +136,40 @@ button {
     top: 100%;
     margin-top: 5px;
     background: var(--Background-Dark);
+    border: 1px solid var(--Black);
     z-index: 4;
     border-radius: 8px;
     list-style-type: none;
     padding: 10px 0;
     min-width: 160px;
+}
 
-    & li button {
-        display: flex;
-        align-items: center;
-        padding: 5px 15px;
-        height: 30px;
-        color: var(--Gold);
-        background: var(--Background-Dark);
-        border: none;
-        width: 100%;
-        cursor: pointer;
-        text-transform: uppercase;
-        font-family: inherit;
-        font-weight: bold;
-        font-size: 13px;
+.dropdown-menu__item {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 5px 15px;
+    height: 30px;
+    color: var(--Gold);
+    background: var(--Background-Dark);
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 13px;
+    text-decoration: none;
 
-        &:hover {
-            background: var(--Black);
-        }
+    &:hover {
+        background: var(--Black);
     }
+}
+
+.dropdown-menu__item--disabled {
+    opacity: 0.25;
+    pointer-events: none;
+    cursor: default;
 }
 
 .dropdown-menu--left {
