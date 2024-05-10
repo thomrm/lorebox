@@ -4,7 +4,7 @@
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
 
-    import { preload } from '../lib/preload.js';
+    import { preload } from '$lib/preload.js';
 
     import Modal from './modal-view.svelte';
     import CardAdded from './card-added.svelte';
