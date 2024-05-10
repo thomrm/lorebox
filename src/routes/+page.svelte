@@ -484,9 +484,9 @@
                         </button>
                         {#if showFilterDropdown}
                             <ul class="dropdown-menu dropdown-menu--left" transition:fly={{duration: 200, y: -5}}>
-                                <li><button on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
-                                <li><button on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
-                                <li><button on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                                <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
+                                <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                                <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
                             </ul>
                         {/if}
                     </div>
