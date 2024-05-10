@@ -82,6 +82,10 @@
     $: scrollWidth = scrollOffset - scrollClient;
 </script>
 
+<svelte:head>
+	<title>Lorebox - {deck.colors[0]} {deck.colors[1]} Deck</title>
+    <meta name="description" content="View Deck.">
+</svelte:head>
 
 <div class="view-contain">
     <div class="col frame-full">
