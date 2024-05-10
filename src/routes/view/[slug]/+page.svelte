@@ -122,7 +122,8 @@
                                             <img src="/images/icon-view.svg" alt="View Card" />
                                         </div>
                                         <div class="card__count">
-                                            {card.number}<span class="card__x">X</span>
+                                            <span class="card__num">{card.number}</span>
+                                            <span class="card__x">X</span>
                                         </div>
                                         <div class="card__image">
                                             <img src="{card.data.images.thumbnail}" alt="{card.data.fullName}" />
@@ -152,5 +153,52 @@
         gap: var(--Page-Gutters);
         padding: var(--Page-Gutters);
         overflow-x: clip;
+    }
+
+    .col__scroll--grid {
+        grid-template-columns: repeat(auto-fill,minmax(16rem,1fr));
+    }
+
+    @media screen and (max-width: 1160px) {
+        :root {
+            --Hover-Width: 320px;
+        }
+
+        .col__scroll--grid {
+            grid-template-columns: repeat(auto-fill,minmax(15rem,1fr));
+        }
+    }
+
+    @media screen and (max-width: 960px) {
+        :root {
+            --Hover-Width: 300px;
+            --Page-Gutters: 10px;
+            --Grid-Gutters: 5px;
+        }
+    }
+
+    @media screen and (max-width: 760px) {
+        :root {
+            --Hover-Width: 280px;
+        }
+
+        .col__scroll--grid {
+            grid-template-columns: repeat(auto-fill,minmax(13.5rem,1fr));
+        }
+    }
+
+    @media screen and (max-width: 560px) {
+        :root {
+            --Hover-Width: 260px;
+            --Page-Gutters: 5px;
+        }
+
+        .card__count {
+            font-size: 8px;
+        }
+
+        .col__scroll--grid {
+            grid-template-columns: repeat(3,1fr);
+        }
     }
 </style>

@@ -76,22 +76,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 4em;
+    height: 4em;
     bottom: 0;
     right: 0;
     background: var(--Black);
-    border-top-left-radius: 18px;
+    border-top-left-radius: 1.8em;
     z-index: 2;
-    color: var(--White);
-    font-size: 18px;
-    font-weight: bold;
     gap: 2px;
+    font-size: 10px;
+}
+
+.card__num {
+    color: var(--White);
+    font-size: 1.8em;
+    font-weight: bold;
 }
 
 .card__x {
     color: var(--Text-Grey);
-    font-size: 10px;
+    font-size: 1em;
 }
 
 .card__image {
