@@ -55,6 +55,9 @@
             {#if deckCards}
                 {#each deckCards as card (card.id)}
                     <div class="card card--view">
+                        {#if card.number > 1}<div class="card__copy-card"></div>{/if}
+                        {#if card.number > 2}<div class="card__copy-card"></div>{/if}
+                        {#if card.number > 3}<div class="card__copy-card"></div>{/if}
                         <div class="card__image-contain">
                             <div>
                                 <div class="card__view">
@@ -68,9 +71,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card__copy-card" class:card__copy-card--added={card.number > 3}></div>
-                        <div class="card__copy-card" class:card__copy-card--added={card.number > 2}></div>
-                        <div class="card__copy-card" class:card__copy-card--added={card.number > 1}></div>
                     </div>
                 {/each}
             {/if}
