@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
+    import { fade } from 'svelte/transition';
 
     let deckString = $page.params.slug;
     let cards;
@@ -44,36 +45,85 @@
         }
     });
 
+    // Card colors
+    $: amber = deck.cards.filter(x => x.data.color == 'Amber');
+    $: amethyst = deck.cards.filter(x => x.data.color == 'Amethyst');
+    $: emerald = deck.cards.filter(x => x.data.color == 'Emerald');
+    $: ruby = deck.cards.filter(x => x.data.color == 'Ruby');
+    $: sapphire = deck.cards.filter(x => x.data.color == 'Sapphire');
+    $: steel = deck.cards.filter(x => x.data.color == 'Steel');
+    $: unink = deck.cards.filter(x => !x.data.inkwell);
+
     // Sort cards in deck
     $: deckCards = deck.cards.sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
+
+    // Show hover image when specified
+    let hoverCard = null;
+    let hoverRotate = false;
+    let hoverTimer;
+    const showHover = (image, rotate, timer) => {
+        if (timer) {
+            if (hoverTimer) clearTimeout(hoverTimer);
+
+            hoverTimer = setTimeout(() => {
+                hoverCard = image;
+                hoverRotate = rotate ? true : false;
+            }, 200);
+        } else {
+            hoverCard = image;
+            hoverRotate = rotate ? true : false;
+        }
+    }
+    const hideHover = () => { hoverCard = null; clearTimeout(hoverTimer); }
+
+    // Get scrollbar width
+    let scrollOffset;
+    let scrollClient;
+    $: scrollWidth = scrollOffset - scrollClient;
 </script>
 
 
 <div class="view-contain">
     <div class="col frame-full">
-        <div class="col__scroll col__scroll--grid">
-            {#if deckCards}
-                {#each deckCards as card (card.id)}
-                    <div class="card card--view">
-                        {#if card.number > 1}<div class="card__copy-card"></div>{/if}
-                        {#if card.number > 2}<div class="card__copy-card"></div>{/if}
-                        {#if card.number > 3}<div class="card__copy-card"></div>{/if}
-                        <div class="card__image-contain">
-                            <div>
-                                <div class="card__view">
-                                    <img src="/images/icon-view.svg" alt="View Card" />
-                                </div>
-                                <div class="card__count">
-                                    {card.number}<span class="card__x">X</span>
-                                </div>
-                                <div class="card__image">
-                                    <img src="{card.data.images.thumbnail}" alt="{card.data.fullName}" />
-                                </div>
+        <div class="col__scroll-contain">
+            {#if hoverCard}
+                <button class="hover-view hover-view--no-interact" transition:fade={{duration: 200}} on:click={hideHover} on:mouseleave={hideHover}>
+                    <div class="hover-view__card">
+                        <div class="card" class:card--rotate={hoverRotate}>
+                            <div class="card__image-contain">
+                                {#key hoverCard}
+                                    <img class="card__image" src="{hoverCard}" alt="Full View" />
+                                {/key}
                             </div>
                         </div>
                     </div>
-                {/each}
+                </button>
             {/if}
+            <div class="col__scroll col__scroll--grid" bind:offsetWidth={scrollOffset} bind:clientWidth={scrollClient} style="padding-right: {20 - scrollWidth}px">
+                {#if deckCards}
+                    {#each deckCards as card (card.id)}
+                        <div class="card card--view">
+                            {#if card.number > 1}<div class="card__copy-card"></div>{/if}
+                            {#if card.number > 2}<div class="card__copy-card"></div>{/if}
+                            {#if card.number > 3}<div class="card__copy-card"></div>{/if}
+                            <div class="card__image-contain">
+                                <div>
+                                    <!-- svelte-ignore a11y-mouse-events-have-key-events a11y-no-static-element-interactions -->
+                                    <div class="card__view" on:mouseover={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:mouseleave={hideHover}>
+                                        <img src="/images/icon-view.svg" alt="View Card" />
+                                    </div>
+                                    <div class="card__count">
+                                        {card.number}<span class="card__x">X</span>
+                                    </div>
+                                    <div class="card__image">
+                                        <img src="{card.data.images.thumbnail}" alt="{card.data.fullName}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {/each}
+                {/if}
+            </div>
         </div>
     </div>
 </div>

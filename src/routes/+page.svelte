@@ -417,7 +417,6 @@
     }
 
     // Modals
-
     let showFilterModal = false;
     let showAboutModal = false;
 </script>
@@ -1060,26 +1059,6 @@
             color: var(--White);
             font-weight: bold;
         }
-    }
-
-    .hover-view {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2;
-        background: rgba(227,202,168,0.8);
-        cursor: zoom-out;
-        /* pointer-events: none; */
-    }
-
-    .hover-view__card {
-        width: var(--Hover-Width);
-        pointer-events: none;
     }
 
     .deck-header {
