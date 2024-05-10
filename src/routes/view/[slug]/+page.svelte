@@ -3,6 +3,8 @@
     import { page } from '$app/stores';
     import { fade } from 'svelte/transition';
 
+    import { preload } from '$lib/preload.js';
+
     let deckString = $page.params.slug;
     let cards;
     let deck = {
@@ -111,18 +113,22 @@
                             {#if card.number > 2}<div class="card__copy-card"></div>{/if}
                             {#if card.number > 3}<div class="card__copy-card"></div>{/if}
                             <div class="card__image-contain">
-                                <div>
-                                    <!-- svelte-ignore a11y-mouse-events-have-key-events a11y-no-static-element-interactions -->
-                                    <div class="card__view" on:mouseover={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:mouseleave={hideHover}>
-                                        <img src="/images/icon-view.svg" alt="View Card" />
+                                {#await preload(card.data.images.thumbnail)}
+                                    <!--Loading-->
+                                {:then}
+                                    <div in:fade={{duration: 200}}>
+                                        <!-- svelte-ignore a11y-mouse-events-have-key-events a11y-no-static-element-interactions -->
+                                        <div class="card__view" on:mouseover={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:mouseleave={hideHover}>
+                                            <img src="/images/icon-view.svg" alt="View Card" />
+                                        </div>
+                                        <div class="card__count">
+                                            {card.number}<span class="card__x">X</span>
+                                        </div>
+                                        <div class="card__image">
+                                            <img src="{card.data.images.thumbnail}" alt="{card.data.fullName}" />
+                                        </div>
                                     </div>
-                                    <div class="card__count">
-                                        {card.number}<span class="card__x">X</span>
-                                    </div>
-                                    <div class="card__image">
-                                        <img src="{card.data.images.thumbnail}" alt="{card.data.fullName}" />
-                                    </div>
-                                </div>
+                                {/await}
                             </div>
                         </div>
                     {/each}
