@@ -1336,7 +1336,7 @@
     :root {
         --Hover-Width: 340px;
         --Page-Gutters: 20px;
-        --Grid-Gutters: 10px;
+        --Grid-Gutters: 5px;
     }
 
     .xsmall-hide { display: flex; }
@@ -1365,7 +1365,6 @@
         :root {
             --Hover-Width: 300px;
             --Page-Gutters: 10px;
-            --Grid-Gutters: 5px;
         }
 
         .col {
