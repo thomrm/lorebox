@@ -54,17 +54,23 @@
         <div class="col__scroll col__scroll--grid">
             {#if deckCards}
                 {#each deckCards as card (card.id)}
-                    <div class="card">
+                    <div class="card card--view">
                         <div class="card__image-contain">
                             <div>
-                                <button class="card__view">
+                                <div class="card__view">
                                     <img src="/images/icon-view.svg" alt="View Card" />
-                                </button>
+                                </div>
+                                <div class="card__count">
+                                    {card.number}<span class="card__x">X</span>
+                                </div>
                                 <div class="card__image">
                                     <img src="{card.data.images.thumbnail}" alt="{card.data.fullName}" />
                                 </div>
                             </div>
                         </div>
+                        <div class="card__copy-card" class:card__copy-card--added={card.number > 3}></div>
+                        <div class="card__copy-card" class:card__copy-card--added={card.number > 2}></div>
+                        <div class="card__copy-card" class:card__copy-card--added={card.number > 1}></div>
                     </div>
                 {/each}
             {/if}
@@ -86,54 +92,5 @@
         gap: var(--Page-Gutters);
         padding: var(--Page-Gutters);
         overflow-x: clip;
-    }
-
-    .card {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        position: relative;
-    }
-
-    /* .card--rotate {
-        transform: rotate(90deg);
-    } */
-
-    .card__image-contain {
-        display: flex;
-        position: relative;
-        padding-top: 140%;
-        height: 0;
-        border-radius: 4.5% / 3.5%;
-        background-image: url('/images/cardback.svg');
-        background-repeat: no-repeat;
-        background-size: cover;
-        overflow: hidden;
-    }
-
-    .card__view {
-        display: flex;
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 10px;
-        background: var(--Black);
-        border-bottom-left-radius: 18px;
-        z-index: 2;
-        cursor: zoom-in;
-    }
-
-    .card__image {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border-radius: 4.5% / 3.5%;
-        top: 0;
-        left: 0;
-
-        & img {
-            width: 100%;
-            height: 100%;
-        }
     }
 </style>

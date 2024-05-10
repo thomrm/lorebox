@@ -644,7 +644,7 @@
                             {#each filteredCards.slice(currentPage * filters.pageSize, currentPage * filters.pageSize + filters.pageSize) as card (card.id)}
                                 {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
                                 <div class="card">
-                                    <div class="card__image-contain">
+                                    <div class="card__image-contain card__image-contain--interactive">
                                         {#await preload(card.images.thumbnail)}
                                             <!--Loading-->
                                         {:then}
@@ -1337,91 +1337,6 @@
         width: 30px;
         justify-content: center;
         align-items: center;
-    }
-
-    .card {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        position: relative;
-    }
-
-    .card--rotate {
-        transform: rotate(90deg);
-    }
-
-    .card__image-contain {
-        display: flex;
-        cursor: pointer;
-        position: relative;
-        padding-top: 140%;
-        height: 0;
-        border-radius: 4.5% / 3.5%;
-        background-image: url('/images/cardback.svg');
-        background-repeat: no-repeat;
-        background-size: cover;
-        overflow: hidden;
-        transition: transform 200ms;
-        transform: translateZ(0);
-
-        &:active {
-            transform: scale(0.98);
-        }
-    }
-
-    .card__view {
-        display: flex;
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 10px;
-        background: var(--Black);
-        border-bottom-left-radius: 18px;
-        z-index: 2;
-        cursor: zoom-in;
-    }
-
-    .card__image {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border-radius: 4.5% / 3.5%;
-        top: 0;
-        left: 0;
-
-        & img {
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    .card__copies {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        padding: 3px;
-        background-image: url('/images/copy-background.svg');
-        background-repeat: no-repeat;
-        background-position: top center;
-        transition: transform 200ms;
-    }
-
-    .card__copy {
-        background-image: url('/images/copy-added--no.svg');
-        background-repeat: no-repeat;
-        background-position: center center;
-
-        & img {
-            transition: opacity 200ms;
-            opacity: 0;
-        }
-    }
-
-    .card__copy--added {
-        & img {
-            opacity: 1;
-        }
     }
 
     .pagination {

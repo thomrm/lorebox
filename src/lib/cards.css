@@ -1,0 +1,148 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+}
+
+.card--view {
+    & .card__image-contain {
+        box-shadow: 0 0 0 1px var(--Background-Base);
+        margin-bottom: 15px;
+    }
+}
+
+.card--rotate {
+    transform: rotate(90deg);
+}
+
+.card__copy-card {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    padding-top: 140%;
+    height: 0;
+    border-radius: 4.5% / 3.5%;
+    background: var(--Black);
+    z-index: -1;
+    box-shadow: 0 0 0 1px var(--Background-Base);
+    opacity: 0;
+
+    &:nth-child(4) {
+        top: 5px;
+    }
+
+    &:nth-child(3) {
+        top: 10px;
+    }
+
+    &:nth-child(2) {
+        top: 15px;
+    }
+}
+
+.card__copy-card--added {
+    opacity: 1;
+}
+
+.card__image-contain {
+    display: flex;
+    position: relative;
+    padding-top: 140%;
+    height: 0;
+    border-radius: 4.5% / 3.5%;
+    background-image: url('/images/cardback.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    transition: transform 200ms;
+    transform: translateZ(0);
+}
+
+.card__image-contain--interactive {
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+.card__view {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: var(--Black);
+    border-bottom-left-radius: 18px;
+    z-index: 2;
+    cursor: zoom-in;
+}
+
+.card__count {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    bottom: 0;
+    right: 0;
+    background: var(--Black);
+    border-top-left-radius: 18px;
+    z-index: 2;
+    color: var(--White);
+    font-size: 18px;
+    font-weight: bold;
+    gap: 2px;
+}
+
+.card__x {
+    color: var(--Text-Grey);
+    font-size: 10px;
+}
+
+.card__image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 4.5% / 3.5%;
+    top: 0;
+    left: 0;
+
+    & img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.card__copies {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 3px;
+    background-image: url('/images/copy-background.svg');
+    background-repeat: no-repeat;
+    background-position: top center;
+    transition: transform 200ms;
+}
+
+.card__copy {
+    background-image: url('/images/copy-added--no.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    & img {
+        transition: opacity 200ms;
+        opacity: 0;
+    }
+}
+
+.card__copy--added {
+    & img {
+        opacity: 1;
+    }
+}
