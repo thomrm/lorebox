@@ -20,7 +20,7 @@ jobs:
       - name: Fetch API Data
         uses: JamesIves/fetch-api-data-action@v2
         with:
-          endpoint: https://api.lorcast.com/v0
+          endpoint: https://api.lorcast.com/v0/cards/search?q=r%3C=legendary
           configuration: '{ "method": "GET" }'
           save-location: assets
           save-name: allCards
