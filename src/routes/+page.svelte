@@ -195,22 +195,16 @@
     let colorLock = false;
 
     const addCard = (cardID, num) => {
+        let addNum = num ? num : 1;
+
         if (deck.cards.find(x => x.id === cardID)) {
-            if (deck.cards.find(x => x.id === cardID).number + num > 4) {
-                // Set card total to 4 if current value + num is greater than that
-                deck.cards.find(x => x.id === cardID).number = 4;
-            } else {
-                // Increment card already added and less than 4
-                if (deck.cards.find(x => x.id === cardID).number < 4) {
-                    deck.cards.find(x => x.id === cardID).number++;
-                }
-            }
+            deck.cards.find(x => x.id === cardID).number = Math.min(deck.cards.find(x => x.id === cardID).number + addNum, 4);
         } else {
             // Add new card
             deck.cards.push({
                 id: cardID,
                 data: cards.filter(x => x.id == cardID)[0],
-                number: Math.min(num, 4)
+                number: Math.min(addNum, 4)
             });
         }
 
@@ -227,6 +221,36 @@
 
             // Clear hover
             hoverCard = null;
+        }
+
+        updateDeck();
+    }
+
+    const setCard = (cardID, num) => {
+        let setNum = num ? Math.min(Math.max(parseInt(num), 0), 4) : 0;
+
+        if (deck.cards.find(x => x.id === cardID)) {
+            if (setNum > 0) {
+                // Set card number
+                deck.cards.find(x => x.id === cardID).number = setNum;
+            } else {
+                // Remove card
+                deck.cards = deck.cards.filter(x => x.id !== cardID);
+
+                // Clear hover
+                hoverCard = null;
+            }
+        } else {
+            if (setNum > 0) {
+                // Add new card
+                deck.cards.push({
+                    id: cardID,
+                    data: cards.filter(x => x.id == cardID)[0],
+                    number: setNum
+                });
+            } else {
+                // Do nothing
+            }
         }
 
         updateDeck();
@@ -658,18 +682,18 @@
                                         {/await}
                                     </div>
                                     <div class="card__copies">
-                                        <div class="card__copy" class:card__copy--added={added > 0}>
+                                        <button class="card__copy" class:card__copy--added={added > 0} on:click={setCard(card.id, 1)}>
                                             <img src="/images/copy-added--yes.svg" alt="Copy" />
-                                        </div>
-                                        <div class="card__copy" class:card__copy--added={added > 1}>
+                                        </button>
+                                        <button class="card__copy" class:card__copy--added={added > 1} on:click={setCard(card.id, 2)}>
                                             <img src="/images/copy-added--yes.svg" alt="Copy" />
-                                        </div>
-                                        <div class="card__copy" class:card__copy--added={added > 2}>
+                                        </button>
+                                        <button class="card__copy" class:card__copy--added={added > 2} on:click={setCard(card.id, 3)}>
                                             <img src="/images/copy-added--yes.svg" alt="Copy" />
-                                        </div>
-                                        <div class="card__copy" class:card__copy--added={added > 3}>
+                                        </button>
+                                        <button class="card__copy" class:card__copy--added={added > 3} on:click={setCard(card.id, 4)}>
                                             <img src="/images/copy-added--yes.svg" alt="Copy" />
-                                        </div>
+                                        </button>
                                     </div>
                                 </div>
                             {/each}

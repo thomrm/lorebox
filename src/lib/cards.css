@@ -116,8 +116,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 3px;
     background-image: url('/images/copy-background.svg');
     background-repeat: no-repeat;
     background-position: top center;
@@ -125,14 +123,33 @@
 }
 
 .card__copy {
+    display: flex;
     background-image: url('/images/copy-added--no.svg');
     background-repeat: no-repeat;
     background-position: center center;
+    padding: 3px 2px;
 
     & img {
         transition: opacity 200ms;
         opacity: 0;
     }
+
+    &:hover {
+        & img {
+            opacity: 1;
+        }
+
+        & ~ .card__copy img {
+            opacity: 0;
+        }
+    }
+}
+
+.card__copy:has(~ .card__copy:hover) {
+    & img {
+        opacity: 1;
+    }
+
 }
 
 .card__copy--added {
