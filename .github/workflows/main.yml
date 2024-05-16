@@ -20,10 +20,10 @@ jobs:
       - name: Fetch API Data
         uses: JamesIves/fetch-api-data-action@v2
         with:
-          endpoint: https://api.lorcast.com/v0/cards/search?q=set:1
+          endpoint: https://api.lorcast.com/v0
           configuration: '{ "method": "GET" }'
           save-location: assets
-          save-name: test
+          save-name: allCards
           set-output: false
           
       - name: Build and Deploy
