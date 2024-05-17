@@ -89,6 +89,7 @@ button {
     position: relative;
     gap: 5px;
     line-height: 30px;
+    text-decoration: none;
     transition: transform 200ms;
 
     &:disabled {
@@ -299,4 +300,62 @@ button {
         background-position: left center, right center;
 
     }
+}
+
+.deck-identity {
+    width: 30px;
+    height: 30px;
+    position: relative;
+
+    &::before {
+        content: '';
+        width: 30px;
+        height: 34px;
+        top: -2px;
+        position: absolute;
+        background-image: url('/images/filter-blank.svg');
+        background-repeat: no-repeat;
+    }
+}
+
+.deck-identity__half {
+    position: absolute;
+    top: -2px;
+    width: 14px;
+    height: 34px;
+    overflow: hidden;
+
+    --Filter-Base: var(--Black);
+    --Filter-Icon: currentColor;
+    
+    & svg {
+        position: absolute;
+    }
+}
+
+.deck-identity__half--left {
+    left: 0;
+    border-right: 1px solid var(--Black);
+}
+
+.deck-identity__half--right {
+    right: 0;
+    justify-content: flex-end;
+    border-left: 1px solid var(--Black);
+
+    & svg {
+        right: 0;
+    }
+}
+
+.deck-identity__empty {
+    color: var(--Background-Base);
+    font-weight: bold;
+    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
 }

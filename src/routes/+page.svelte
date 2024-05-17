@@ -159,7 +159,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        console.log(filteredCards);
+        //console.log(filteredCards);
     }
 
     const clearSearch = () => {
@@ -517,10 +517,10 @@
                     <input type="checkbox" id="sort-direction--modal" bind:checked={filters.sortAsc} on:change={filterCards} />
                     <label class="button" for="sort-direction--modal">
                         {#if filters.sortAsc}
-                            <img src="./images/icon-sortAsc.svg" alt="Ascending" />
+                            <img src="/images/icon-sortAsc.svg" alt="Ascending" />
                             Asc
                         {:else}
-                            <img src="./images/icon-sortDesc.svg" alt="Descending" />
+                            <img src="/images/icon-sortDesc.svg" alt="Descending" />
                             Desc
                         {/if}
                     </label>
@@ -617,7 +617,7 @@
                 <div class="filters__group filters__group--fill">
                     <div class="filters__group" style:width={innerWidth > 760 ? '290px' : 'auto'}>
                         <button class="button" on:click={() => (showFilterModal = true)}>
-                            <img src="./images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
+                            <img src="/images/icon-filter.svg" alt="Filters for cards" />Filters {#if filterCount > 0}({filterCount}){/if}
                         </button>
                         {#if innerWidth > 760}
                             <div class="dropdown-contain" on:focusout={dropdownFocusLoss}>
@@ -635,10 +635,10 @@
                             <input type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
                             <label class="button" for="sort-direction">
                                 {#if filters.sortAsc}
-                                    <img src="./images/icon-sortAsc.svg" alt="Ascending" />
+                                    <img src="/images/icon-sortAsc.svg" alt="Ascending" />
                                     Asc
                                 {:else}
-                                    <img src="./images/icon-sortDesc.svg" alt="Descending" />
+                                    <img src="/images/icon-sortDesc.svg" alt="Descending" />
                                     Desc
                                 {/if}
                             </label>
@@ -649,7 +649,7 @@
                             <input class="search-form__search-bar" id="card-search" type="text" placeholder="Search..."  bind:value={searchTerm} on:change={filterCards} />
                             {#if searchTerm}
                                 <button type="reset" class="search-form__search-clear">
-                                    <img src="./images/icon-clear.svg" alt="Clear Search" />
+                                    <img src="/images/icon-clear.svg" alt="Clear Search" />
                                 </button>
                             {/if}
                         </form> 
@@ -833,7 +833,7 @@
                         </button>
                         {#if showMoreDropdown}
                             <ul class="dropdown-menu dropdown-menu--right" transition:fly={{duration: 200, y: -5}}>
-                                <li><a href="/view/{$page.url.searchParams.get('d')}" class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0} target="_blank">View Deck</a></li>
+                                <li><a href="/view/{$page.url.searchParams.get('d')}" class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0}>View Deck</a></li>
                                 <li><button class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0} on:click={resetDeck}>Clear Deck</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => (showAboutModal = true)}>About Lorebox</button></li>
                             </ul>
@@ -1142,64 +1142,6 @@
         flex: 1 0 0;
         align-items: center;
         justify-content: center;
-    }
-
-    .deck-identity {
-        width: 30px;
-        height: 30px;
-        position: relative;
-
-        &::before {
-            content: '';
-            width: 30px;
-            height: 34px;
-            top: -2px;
-            position: absolute;
-            background-image: url('/images/filter-blank.svg');
-            background-repeat: no-repeat;
-        }
-    }
-
-    .deck-identity__half {
-        position: absolute;
-        top: -2px;
-        width: 14px;
-        height: 34px;
-        overflow: hidden;
-
-        --Filter-Base: var(--Black);
-        --Filter-Icon: currentColor;
-        
-        & svg {
-            position: absolute;
-        }
-    }
-
-    .deck-identity__half--left {
-        left: 0;
-        border-right: 1px solid var(--Black);
-    }
-
-    .deck-identity__half--right {
-        right: 0;
-        justify-content: flex-end;
-        border-left: 1px solid var(--Black);
-
-        & svg {
-            right: 0;
-        }
-    }
-
-    .deck-identity__empty {
-        color: var(--Background-Base);
-        font-weight: bold;
-        font-size: 14px;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
     }
 
     .deck {
