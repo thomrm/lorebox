@@ -136,7 +136,7 @@
                                 {:then}
                                     <div in:fade={{duration: 200}}>
                                         <!-- svelte-ignore a11y-mouse-events-have-key-events a11y-no-static-element-interactions -->
-                                        <div class="card__view" on:mouseover={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:mouseleave={hideHover}>
+                                        <div class="card__view" on:mouseover={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:mouseleave={hideHover}>
                                             <img src="/images/icon-view.svg" alt="View Card" />
                                         </div>
                                         <div class="card__count">

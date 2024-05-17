@@ -659,7 +659,7 @@
                                             <!--Loading-->
                                         {:then}
                                             <div in:fade={{duration: 200}}>
-                                                <button class="card__view" on:click={showHover(card.image_uris.digital.large, (card.type == 'Location' ? true : false))}>
+                                                <button class="card__view" on:click={showHover(card.image_uris.digital.large, (card.layout == 'landscape' ? true : false))}>
                                                     <img src="/images/icon-view.svg" alt="View Card" />
                                                 </button>
                                                 <button class="card__image" on:click={addCard(card.id, 1)}>
@@ -898,7 +898,7 @@
                             </div>
                         {/if}
                         {#each characters as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -908,7 +908,7 @@
                             </div>
                         {/if}
                         {#each actions as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -918,7 +918,7 @@
                             </div>
                         {/if}
                         {#each items as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -928,7 +928,7 @@
                             </div>
                         {/if}
                         {#each locations as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                 </div>
