@@ -110,7 +110,13 @@
                         <div class="card" class:card--rotate={hoverRotate}>
                             <div class="card__image-contain">
                                 {#key hoverCard}
-                                    <img class="card__image" src="{hoverCard}" alt="Full View" />
+                                    {#await preload(hoverCard)}
+                                        <!--Loading-->
+                                    {:then}
+                                        <div in:fade={{duration: 200}}>
+                                            <img class="card__image" src="{hoverCard}" alt="Full View" />
+                                        </div>
+                                    {/await}
                                 {/key}
                             </div>
                         </div>
