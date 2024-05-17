@@ -14,15 +14,15 @@
     };
     
     onMount(async () => {
-        // Data provided by LorcanaJSON.org
+        // Data provided by Lorcast API
         const response = await fetch('/data/allCards.json');
         const data = await response.json();
-        cards = data.cards;
+        cards = data.results;
 
         if (deckString) {
             // Parse deck string and add cards to deck
-            deckString.match(/.{5}/g).forEach(function(x) {
-                let cardID = parseInt(x.slice(1, 5));
+            deckString.match(/.{6}/g).forEach(function(x) {
+                let cardID = bigID(x.slice(1, 6));
                 let num = parseInt(x[0])
 
                 deck.cards.push({
@@ -33,12 +33,12 @@
             });
 
             // Set deck colors
-            if (deck.cards.some(x => x.data.color == "Amber")) { deck.colors.push("Amber"); }
-            if (deck.cards.some(x => x.data.color == "Amethyst")) { deck.colors.push("Amethyst"); }
-            if (deck.cards.some(x => x.data.color == "Emerald")) { deck.colors.push("Emerald"); }
-            if (deck.cards.some(x => x.data.color == "Ruby")) { deck.colors.push("Ruby"); }
-            if (deck.cards.some(x => x.data.color == "Sapphire")) { deck.colors.push("Sapphire"); }
-            if (deck.cards.some(x => x.data.color == "Steel")) { deck.colors.push("Steel"); }
+            if (deck.cards.some(x => x.data.ink == "Amber")) { deck.colors.push("Amber"); }
+            if (deck.cards.some(x => x.data.ink == "Amethyst")) { deck.colors.push("Amethyst"); }
+            if (deck.cards.some(x => x.data.ink == "Emerald")) { deck.colors.push("Emerald"); }
+            if (deck.cards.some(x => x.data.ink == "Ruby")) { deck.colors.push("Ruby"); }
+            if (deck.cards.some(x => x.data.ink == "Sapphire")) { deck.colors.push("Sapphire"); }
+            if (deck.cards.some(x => x.data.ink == "Steel")) { deck.colors.push("Steel"); }
 
             // Set total cards in deck
             deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
@@ -47,17 +47,29 @@
         }
     });
 
+    // Convert small ID to big ID
+    const bigID = (cardID) => {
+        let set = String(cardID).slice(0, 2);
+        let id = String(cardID).slice(2, 5);
+        
+        let card = cards.filter(function(x) {
+            return x.collector_number == String(parseInt(id)) && x.set.code == String(parseInt(set));
+        });
+
+        return card[0].id;
+    }
+
     // Card colors
-    $: amber = deck.cards.filter(x => x.data.color == 'Amber');
-    $: amethyst = deck.cards.filter(x => x.data.color == 'Amethyst');
-    $: emerald = deck.cards.filter(x => x.data.color == 'Emerald');
-    $: ruby = deck.cards.filter(x => x.data.color == 'Ruby');
-    $: sapphire = deck.cards.filter(x => x.data.color == 'Sapphire');
-    $: steel = deck.cards.filter(x => x.data.color == 'Steel');
-    $: unink = deck.cards.filter(x => !x.data.inkwell);
+    // $: amber = deck.cards.filter(x => x.data.ink == 'Amber');
+    // $: amethyst = deck.cards.filter(x => x.data.ink == 'Amethyst');
+    // $: emerald = deck.cards.filter(x => x.data.ink == 'Emerald');
+    // $: ruby = deck.cards.filter(x => x.data.ink == 'Ruby');
+    // $: sapphire = deck.cards.filter(x => x.data.ink == 'Sapphire');
+    // $: steel = deck.cards.filter(x => x.data.ink == 'Steel');
+    // $: unink = deck.cards.filter(x => !x.data.inkwell);
 
     // Sort cards in deck
-    $: deckCards = deck.cards.sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
+    $: deckCards = deck.cards.sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.name.localeCompare(b.data.name)); });
 
     // Show hover image when specified
     let hoverCard = null;
@@ -113,12 +125,12 @@
                             {#if card.number > 2}<div class="card__copy-card"></div>{/if}
                             {#if card.number > 3}<div class="card__copy-card"></div>{/if}
                             <div class="card__image-contain">
-                                {#await preload(card.data.images.thumbnail)}
+                                {#await preload(card.data.image_uris.digital.normal ? card.data.image_uris.digital.normal : card.data.image_uris.digital.large)}
                                     <!--Loading-->
                                 {:then}
                                     <div in:fade={{duration: 200}}>
                                         <!-- svelte-ignore a11y-mouse-events-have-key-events a11y-no-static-element-interactions -->
-                                        <div class="card__view" on:mouseover={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:mouseleave={hideHover}>
+                                        <div class="card__view" on:mouseover={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:mouseleave={hideHover}>
                                             <img src="/images/icon-view.svg" alt="View Card" />
                                         </div>
                                         <div class="card__count">
@@ -126,7 +138,7 @@
                                             <span class="card__x">X</span>
                                         </div>
                                         <div class="card__image">
-                                            <img src="{card.data.images.thumbnail}" alt="{card.data.fullName}" />
+                                            <img src="{card.data.image_uris.digital.normal ? card.data.image_uris.digital.normal : card.data.image_uris.digital.large}" alt="{card.data.name}" />
                                         </div>
                                     </div>
                                 {/await}

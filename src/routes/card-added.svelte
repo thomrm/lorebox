@@ -22,15 +22,15 @@
         </div>
         <div class="card-added__name">
             <div class="card-added__base-name"
-                class:text-amber={card.data.color == "Amber"}
-                class:text-amethyst={card.data.color == "Amethyst"}
-                class:text-emerald={card.data.color == "Emerald"}
-                class:text-ruby={card.data.color == "Ruby"}
-                class:text-sapphire={card.data.color == "Sapphire"}
-                class:text-steel={card.data.color == "Steel"}
-            >{card.data.baseName}</div>
-            {#if card.data.subtitle}
-                <div class="card-added__subtitle">{card.data.subtitle}</div>
+                class:text-amber={card.data.ink == "Amber"}
+                class:text-amethyst={card.data.ink == "Amethyst"}
+                class:text-emerald={card.data.ink == "Emerald"}
+                class:text-ruby={card.data.ink == "Ruby"}
+                class:text-sapphire={card.data.ink == "Sapphire"}
+                class:text-steel={card.data.ink == "Steel"}
+            >{card.data.name}</div>
+            {#if card.data.version}
+                <div class="card-added__subtitle">{card.data.version}</div>
             {/if}
         </div>
         <div class="card-added__add-remove">

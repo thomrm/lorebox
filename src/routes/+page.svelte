@@ -13,24 +13,33 @@
     let grid;
     
     onMount(async () => {
-        // Data provided by LorcanaJSON.org
+        // Data provided by Lorcast API
         const response = await fetch('/data/allCards.json');
         const data = await response.json();
-        cards = data.cards;
-
-        // Exclude Enchanted and Special (Promo) printings
-        cards = cards.filter(x => !x.rarity.includes("Enchanted") && !x.rarity.includes("Special"));
+        cards = data.results;
 
         // Read URL and add cards to deck
         const queryD = $page.url.searchParams.get('d') ? $page.url.searchParams.get('d') : "";
         if (queryD) {
-            queryD.match(/.{5}/g).forEach(function(x) {
-                addCard(parseInt(x.slice(1, 5)), parseInt(x[0]));
+            queryD.match(/.{6}/g).forEach(function(x) {
+                addCard(bigID(x.slice(1, 6)), parseInt(x[0]));
             });
         }
 
         filterCards();
     });
+
+    // Convert small ID to big ID
+    const bigID = (cardID) => {
+        let set = String(cardID).slice(0, 2);
+        let id = String(cardID).slice(2, 5);
+        
+        let card = cards.filter(function(x) {
+            return x.collector_number == String(parseInt(id)) && x.set.code == String(parseInt(set));
+        });
+
+        return card[0].id;
+    }
 
     // FILTERING AND SORTING CARDS
 
@@ -73,12 +82,12 @@
         // Sort cards
         if (filters.sortType === 'cost') {
             filteredCards = cards.sort((a, b) => {
-                return (filters.sortAsc ? a.cost - b.cost : b.cost - a.cost) || (a.baseName.localeCompare(b.baseName));
+                return (filters.sortAsc ? a.cost - b.cost : b.cost - a.cost) || (a.name.localeCompare(b.name));
             });
         }
         if (filters.sortType === 'name') {
             filteredCards = cards.sort((a, b) => {
-                return (filters.sortAsc ? 1 : -1) * (a.baseName.localeCompare(b.baseName));
+                return (filters.sortAsc ? 1 : -1) * (a.name.localeCompare(b.name));
             });
         }
         if (filters.sortType === 'rarity') {
@@ -104,12 +113,12 @@
         // Filter color
         filteredCards = filteredCards.filter(function(x) {
             if (filters.color.amber || filters.color.amethyst || filters.color.emerald || filters.color.ruby || filters.color.sapphire || filters.color.steel) {
-                return  (filters.color.amber ? x.color.includes("Amber") : '') ||
-                    (filters.color.amethyst ? x.color.includes("Amethyst") : '') ||
-                    (filters.color.emerald ? x.color.includes("Emerald") : '') ||
-                    (filters.color.ruby ? x.color.includes("Ruby") : '') ||
-                    (filters.color.sapphire ? x.color.includes("Sapphire") : '') ||
-                    (filters.color.steel ? x.color.includes("Steel") : '');
+                return  (filters.color.amber ? x.ink.includes("Amber") : '') ||
+                    (filters.color.amethyst ? x.ink.includes("Amethyst") : '') ||
+                    (filters.color.emerald ? x.ink.includes("Emerald") : '') ||
+                    (filters.color.ruby ? x.ink.includes("Ruby") : '') ||
+                    (filters.color.sapphire ? x.ink.includes("Sapphire") : '') ||
+                    (filters.color.steel ? x.ink.includes("Steel") : '');
             } else {
                 return x;
             }
@@ -117,14 +126,12 @@
 
         // Filter displayed cards by search term
         filteredCards = searchTerm ? filteredCards.filter(function(x) {
-            if (x.subtypes) {
-                return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        x.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        x.subtypes.find((y) => y.toLowerCase().includes(searchTerm.toLowerCase()));
-            } else {
-                return  x.fullText.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        x.fullName.toLowerCase().includes(searchTerm.toLowerCase());
-            }
+            let name = x.name ? x.name.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+            let version = x.version ? x.version.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+            let text = x.text ? x.text.toLowerCase().includes(searchTerm.toLowerCase()) : false;
+            let classifications = x.classifications ? x.classifications.find((y) => y.toLowerCase().includes(searchTerm.toLowerCase())) : false;
+
+            return  name || version || text || classifications;
         }) : filteredCards;
 
         // Update number of colors selected
@@ -137,7 +144,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        //console.log(filteredCards);
+        console.log(filteredCards);
     }
 
     const clearSearch = () => {
@@ -167,13 +174,13 @@
             a.rarity === "Common" ? 1 : null || 
             a.rarity === "Uncommon" ? 2 : null ||
             a.rarity === "Rare" ? 3 : null ||
-            a.rarity === "Super" ? 4 : null ||
+            a.rarity === "Super_rare" ? 4 : null ||
             a.rarity === "Legendary" ? 5 : null;
         let bVal = 
             b.rarity === "Common" ? 1 : null || 
             b.rarity === "Uncommon" ? 2 : null ||
             b.rarity === "Rare" ? 3 : null ||
-            b.rarity === "Super" ? 4 : null ||
+            b.rarity === "Super_rare" ? 4 : null ||
             b.rarity === "Legendary" ? 5 : null;
 
         if ( aVal < bVal ) {
@@ -182,7 +189,7 @@
         if ( aVal > bVal ) {
             return filters.sortAsc ? 1 : -1;
         }
-        return (a.baseName.localeCompare(b.baseName));
+        return (a.name.localeCompare(b.name));
     }
 
     // DECK CREATION
@@ -259,12 +266,12 @@
     const updateDeck = () => {
         // Update deck colors
         deck.colors = [];
-        if (deck.cards.some(x => x.data.color == "Amber")) { deck.colors.push("Amber"); }
-        if (deck.cards.some(x => x.data.color == "Amethyst")) { deck.colors.push("Amethyst"); }
-        if (deck.cards.some(x => x.data.color == "Emerald")) { deck.colors.push("Emerald"); }
-        if (deck.cards.some(x => x.data.color == "Ruby")) { deck.colors.push("Ruby"); }
-        if (deck.cards.some(x => x.data.color == "Sapphire")) { deck.colors.push("Sapphire"); }
-        if (deck.cards.some(x => x.data.color == "Steel")) { deck.colors.push("Steel"); }
+        if (deck.cards.some(x => x.data.ink == "Amber")) { deck.colors.push("Amber"); }
+        if (deck.cards.some(x => x.data.ink == "Amethyst")) { deck.colors.push("Amethyst"); }
+        if (deck.cards.some(x => x.data.ink == "Emerald")) { deck.colors.push("Emerald"); }
+        if (deck.cards.some(x => x.data.ink == "Ruby")) { deck.colors.push("Ruby"); }
+        if (deck.cards.some(x => x.data.ink == "Sapphire")) { deck.colors.push("Sapphire"); }
+        if (deck.cards.some(x => x.data.ink == "Steel")) { deck.colors.push("Steel"); }
 
         // Force color filters if deck now contains 2 colors
         if (deck.colors.length == 2 && !colorLock) {
@@ -328,7 +335,7 @@
     const updateURLParams = async () => {
         if (deck.cards.length > 0) {
             let string = deck.cards.map(function({id, number}) {
-                return String(number)+String(id).padStart(4,'0')
+                return String(number)+String(smallID(id));
             }).join('');
             goto('?d='+string);
         } else {
@@ -336,64 +343,38 @@
         }
     }
 
+    // Small ID creation for URL params
+    const smallID = (cardID) => {
+        let card = cards.filter(x => x.id == cardID)[0];
+        let set = card.set.code.padStart(2,'0');
+        let id = card.collector_number.padStart(3,'0');
+
+        return set+id;
+    }
+
     // Sort cards in deck by type
-    $: characters = deck.cards.filter(x => x.data.type == 'Character').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
-    $: actions = deck.cards.filter(x => x.data.type == 'Action').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
-    $: items = deck.cards.filter(x => x.data.type == 'Item').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
-    $: locations = deck.cards.filter(x => x.data.type == 'Location').sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.baseName.localeCompare(b.data.baseName)); });
+    $: characters = deck.cards.filter(x => x.data.type.includes('Character')).sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.name.localeCompare(b.data.name)); });
+    $: actions = deck.cards.filter(x => x.data.type.includes('Action')).sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.name.localeCompare(b.data.name)); });
+    $: items = deck.cards.filter(x => x.data.type.includes('Item')).sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.name.localeCompare(b.data.name)); });
+    $: locations = deck.cards.filter(x => x.data.type.includes('Location')).sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.name.localeCompare(b.data.name)); });
 
     // Sort cards in deck by color
-    $: amber = deck.cards.filter(x => x.data.color == 'Amber');
-    $: amethyst = deck.cards.filter(x => x.data.color == 'Amethyst');
-    $: emerald = deck.cards.filter(x => x.data.color == 'Emerald');
-    $: ruby = deck.cards.filter(x => x.data.color == 'Ruby');
-    $: sapphire = deck.cards.filter(x => x.data.color == 'Sapphire');
-    $: steel = deck.cards.filter(x => x.data.color == 'Steel');
+    $: amber = deck.cards.filter(x => x.data.ink == 'Amber');
+    $: amethyst = deck.cards.filter(x => x.data.ink == 'Amethyst');
+    $: emerald = deck.cards.filter(x => x.data.ink == 'Emerald');
+    $: ruby = deck.cards.filter(x => x.data.ink == 'Ruby');
+    $: sapphire = deck.cards.filter(x => x.data.ink == 'Sapphire');
+    $: steel = deck.cards.filter(x => x.data.ink == 'Steel');
     $: unink = deck.cards.filter(x => !x.data.inkwell);
 
     // Count costs for each color
-    $: costs = [
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '1').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '1').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '2').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '2').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '3').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '3').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '4').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '4').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '5').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '5').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '6').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '6').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '7').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '7').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '8').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '8').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '9').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '9').reduce((a,b) => a + b.number, 0)
-        },
-        {
-            a: deck.cards.filter(x => x.data.color == deck.colors[0]).filter(x => x.data.cost == '10').reduce((a,b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.color == deck.colors[1]).filter(x => x.data.cost == '10').reduce((a,b) => a + b.number, 0)
-        }
-    ]
+    $: costs = Array.from({ length: 10 }, (_, i) => {
+        const cost = (i + 1).toString();
+        return {
+            a: deck.cards.filter(x => x.data.ink == deck.colors[0] && x.data.cost == cost).reduce((a, b) => a + b.number, 0),
+            b: deck.cards.filter(x => x.data.ink == deck.colors[1] && x.data.cost == cost).reduce((a, b) => a + b.number, 0)
+        };
+    });
 
     // OTHER THINGS
 
@@ -463,7 +444,7 @@
         </div>
         <div class="col__divider"></div>
         <div class="col__section">
-            <p>Lorebox is built and maintained by <a href="http://thomasrm.com">ThomRM</a>.<br /> Data is provided by <a href="https://lorcanajson.org/">LorcanaJSON</a>.</p>
+            <p>Lorebox is built and maintained by <a href="http://thomasrm.com">ThomRM</a>.<br /> Data is provided by <a href="https://lorcast.com/docs/api">Lorcast</a>.</p>
         </div>
         <div class="col__divider"></div>
     </div>
@@ -668,15 +649,15 @@
                                 {@const added = deck.cards.find(x => x.id === card.id) ? deck.cards.find(x => x.id === card.id).number : 0}
                                 <div class="card">
                                     <div class="card__image-contain card__image-contain--interactive">
-                                        {#await preload(card.images.thumbnail)}
+                                        {#await preload(card.image_uris.digital.normal ? card.image_uris.digital.normal : card.image_uris.digital.large)}
                                             <!--Loading-->
                                         {:then}
                                             <div in:fade={{duration: 200}}>
-                                                <button class="card__view" on:click={showHover(card.images.full, (card.type == 'Location' ? true : false))}>
+                                                <button class="card__view" on:click={showHover(card.image_uris.digital.large, (card.type == 'Location' ? true : false))}>
                                                     <img src="/images/icon-view.svg" alt="View Card" />
                                                 </button>
                                                 <button class="card__image" on:click={addCard(card.id, 1)}>
-                                                    <img src="{card.images.thumbnail}" alt="{card.fullName}" />
+                                                    <img src="{card.image_uris.digital.normal ? card.image_uris.digital.normal : card.image_uris.digital.large}" alt="{card.name}" />
                                                 </button>
                                             </div>
                                         {/await}
@@ -911,7 +892,7 @@
                             </div>
                         {/if}
                         {#each characters as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -921,7 +902,7 @@
                             </div>
                         {/if}
                         {#each actions as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -931,7 +912,7 @@
                             </div>
                         {/if}
                         {#each items as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -941,7 +922,7 @@
                             </div>
                         {/if}
                         {#each locations as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.images.full, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.type == 'Location' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                 </div>
@@ -1278,6 +1259,7 @@
         align-items: center;
         height: 30px;
         width: 30px;
+        cursor: pointer;
 
         --Filter-Base: var(--Black);
         --Filter-Icon: currentColor;
