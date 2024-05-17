@@ -63,6 +63,12 @@
             ink: false,
             unink: false
         },
+        showSet: {
+            set1: false,
+            set2: false,
+            set3: false,
+            set4: false
+        },
         sortType: "cost",
         sortAsc: true,
         pageSize: 60
@@ -108,6 +114,15 @@
             filteredCards = filteredCards
                 .filter(x => !filters.showInk.ink ? !x.inkwell : true)
                 .filter(x => !filters.showInk.unink ? x.inkwell : true)
+        }
+
+        // Filter set
+        if (filters.showSet.set1 == true || filters.showSet.set2 == true || filters.showSet.set3 == true || filters.showSet.set4 == true) {
+            filteredCards = filteredCards
+                .filter(x => !filters.showSet.set1 ? !x.set.code.includes("1") : true)
+                .filter(x => !filters.showSet.set2 ? !x.set.code.includes("2") : true)
+                .filter(x => !filters.showSet.set3 ? !x.set.code.includes("3") : true)
+                .filter(x => !filters.showSet.set4 ? !x.set.code.includes("4") : true);
         }
 
         // Filter color
@@ -163,6 +178,10 @@
         filters.showType.location = false;
         filters.showInk.ink = false;
         filters.showInk.unink = false;
+        filters.showSet.set1 = false;
+        filters.showSet.set2 = false;
+        filters.showSet.set3 = false;
+        filters.showSet.set4 = false;
 
         // Reset displayed cards
         filterCards(true);
@@ -534,6 +553,22 @@
                 <label class="checkbox-item" for="filter-ink">Inkable</label>
                 <input type="checkbox" class="checkbox" id="filter-unink" name="Uninkable" bind:checked={filters.showInk.unink} on:change={filterCards} />
                 <label class="checkbox-item" for="filter-unink">Uninkable</label>
+            </div>
+        </div>
+    </div>
+    <div class="col__divider"></div>
+    <div class="col__section">
+        <div class="filters filters--modal">
+            <div class="filters__header">Set</div>
+            <div class="filters__group filters__group--wrap">
+                <input type="checkbox" class="checkbox" id="filter-set1" name="Set 1" bind:checked={filters.showSet.set1} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-set1">The First Chapter (Set 1)</label>
+                <input type="checkbox" class="checkbox" id="filter-set2" name="Set 2" bind:checked={filters.showSet.set2} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-set2">Rise of the Floodborn (Set 2)</label>
+                <input type="checkbox" class="checkbox" id="filter-set3" name="Set 3" bind:checked={filters.showSet.set3} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-set3">Into the Inklands (Set 3)</label>
+                <input type="checkbox" class="checkbox" id="filter-set4" name="Set 4" bind:checked={filters.showSet.set4} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-set4">Ursula's Return (Set 4) <span class="new-pill">New!</span></label>
             </div>
         </div>
     </div>
@@ -938,6 +973,19 @@
 </div>
 
 <style>
+    .new-pill {
+        display: flex;
+        height: 18px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 999px;
+        background: var(--Background-Color);
+        color: var(--White);
+        padding: 0 8px;
+        font-size: 9px;
+        font-weight: bold;
+    }
+
     .about-contain {
         & h1 {
             font-size: 30px;
