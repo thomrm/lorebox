@@ -153,7 +153,7 @@
         colorCount = Object.values(filters.color).filter(x => x === true).length;
 
         // Update number of filters selected
-        filterCount = Object.values(filters.showType).filter(x => x === true).length + Object.values(filters.showInk).filter(x => x === true).length;
+        filterCount = Object.values(filters.showType).filter(x => x === true).length + Object.values(filters.showInk).filter(x => x === true).length + Object.values(filters.showSet).filter(x => x === true).length;
 
         // Set card and page totals
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
