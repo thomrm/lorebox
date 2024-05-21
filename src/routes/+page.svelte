@@ -128,12 +128,19 @@
         // Filter color
         filteredCards = filteredCards.filter(function(x) {
             if (filters.color.amber || filters.color.amethyst || filters.color.emerald || filters.color.ruby || filters.color.sapphire || filters.color.steel) {
-                return  (filters.color.amber ? x.ink.includes("Amber") : '') ||
+                return (filters.color.amber ? x.ink.includes("Amber") : '') ||
                     (filters.color.amethyst ? x.ink.includes("Amethyst") : '') ||
                     (filters.color.emerald ? x.ink.includes("Emerald") : '') ||
                     (filters.color.ruby ? x.ink.includes("Ruby") : '') ||
                     (filters.color.sapphire ? x.ink.includes("Sapphire") : '') ||
                     (filters.color.steel ? x.ink.includes("Steel") : '');
+            } else if (colorLock && deck.colors) {
+                return (deck.colors.includes("Amber") ? x.ink.includes("Amber") : '') ||
+                    (deck.colors.includes("Amethyst") ? x.ink.includes("Amethyst") : '') ||
+                    (deck.colors.includes("Emerald") ? x.ink.includes("Emerald") : '') ||
+                    (deck.colors.includes("Ruby") ? x.ink.includes("Ruby") : '') ||
+                    (deck.colors.includes("Sapphire") ? x.ink.includes("Sapphire") : '') ||
+                    (deck.colors.includes("Steel") ? x.ink.includes("Steel") : '');
             } else {
                 return x;
             }
@@ -146,7 +153,7 @@
             let text = x.text ? x.text.toLowerCase().includes(searchTerm.toLowerCase()) : false;
             let classifications = x.classifications ? x.classifications.find((y) => y.toLowerCase().includes(searchTerm.toLowerCase())) : false;
 
-            return  name || version || text || classifications;
+            return name || version || text || classifications;
         }) : filteredCards;
 
         // Update number of colors selected
@@ -159,7 +166,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        //console.log(filteredCards);
+        console.log(filteredCards);
     }
 
     const clearSearch = () => {
@@ -587,28 +594,28 @@
         <div class="col__section">
             <div class="filters">
                 {#if innerWidth > 560}
-                    <fieldset class="filters__group" disabled={colorLock}>
-                        <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
+                    <fieldset class="filters__group">
+                        <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(deck.colors.length == 2 && !deck.colors.includes("Amber")) ? true : false} on:change={filterCards} />
                         <label class="filter-ink ink-amber" for="filter-amber">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-amethyst" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(colorCount == 2 && !filters.color.amethyst) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-amethyst" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(deck.colors.length == 2 && !deck.colors.includes("Amethyst")) ? true : false} on:change={filterCards} />
                         <label class="filter-ink ink-amethyst" for="filter-amethyst">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-emerald" name="Emerald" bind:checked={filters.color.emerald} disabled={(colorCount == 2 && !filters.color.emerald) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-emerald" name="Emerald" bind:checked={filters.color.emerald} disabled={(deck.colors.length == 2 && !deck.colors.includes("Emerald")) ? true : false} on:change={filterCards} />
                         <label class="filter-ink ink-emerald" for="filter-emerald">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-ruby" name="Ruby" bind:checked={filters.color.ruby} disabled={(colorCount == 2 && !filters.color.ruby) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-ruby" name="Ruby" bind:checked={filters.color.ruby} disabled={(deck.colors.length == 2 && !deck.colors.includes("Ruby")) ? true : false} on:change={filterCards} />
                         <label class="filter-ink ink-ruby" for="filter-ruby">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-sapphire" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(colorCount == 2 && !filters.color.sapphire) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-sapphire" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(deck.colors.length == 2 && !deck.colors.includes("Sapphire")) ? true : false} on:change={filterCards} />
                         <label class="filter-ink ink-sapphire" for="filter-sapphire">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-steel" name="Steel" bind:checked={filters.color.steel} disabled={(colorCount == 2 && !filters.color.steel) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-steel" name="Steel" bind:checked={filters.color.steel} disabled={(deck.colors.length == 2 && !deck.colors.includes("Steel")) ? true : false} on:change={filterCards} />
                         <label class="filter-ink ink-steel" for="filter-steel">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
                         </label>
