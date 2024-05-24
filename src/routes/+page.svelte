@@ -172,7 +172,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        //console.log(filteredCards);
+        console.log(filteredCards);
     }
 
     const clearSearch = () => {
@@ -537,14 +537,9 @@
                         {/if}
                     </div>
                     <input type="checkbox" id="sort-direction--modal" bind:checked={filters.sortAsc} on:change={filterCards} />
-                    <label class="button" for="sort-direction--modal">
-                        {#if filters.sortAsc}
-                            <img src="/images/icon-sortAsc.svg" alt="Ascending" />
-                            Asc
-                        {:else}
-                            <img src="/images/icon-sortDesc.svg" alt="Descending" />
-                            Desc
-                        {/if}
+                    <label class="button button--2state" class:show-state2={!filters.sortAsc} for="sort-direction--modal">
+                        <span class="state1"><img src="/images/icon-sortAsc.svg" alt="Ascending" />Asc</span>
+                        <span class="state2"><img src="/images/icon-sortDesc.svg" alt="Descending" />Desc</span>
                     </label>
                 </div>
             </div>
@@ -656,14 +651,9 @@
                                 {/if}
                             </div>
                             <input type="checkbox" id="sort-direction" bind:checked={filters.sortAsc} on:change={filterCards} />
-                            <label class="button" for="sort-direction">
-                                {#if filters.sortAsc}
-                                    <img src="/images/icon-sortAsc.svg" alt="Ascending" />
-                                    Asc
-                                {:else}
-                                    <img src="/images/icon-sortDesc.svg" alt="Descending" />
-                                    Desc
-                                {/if}
+                            <label class="button button--2state" class:show-state2={!filters.sortAsc} for="sort-direction">
+                                <span class="state1"><img src="/images/icon-sortAsc.svg" alt="Ascending" />Asc</span>
+                                <span class="state2"><img src="/images/icon-sortDesc.svg" alt="Descending" />Desc</span>
                             </label>
                         {/if}
                     </div>
