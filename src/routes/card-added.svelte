@@ -11,6 +11,7 @@
     const hoverLeave = () => dispatch('hoverLeave');
 
     export let card;
+    export let prices;
 </script>
 
 
@@ -35,7 +36,7 @@
                 {/if}
             </div>
         </div>
-        {#if card.data.prices.usd}
+        {#if card.data.prices.usd && prices}
             <div class="price">
                 <span class="text-emerald">&#36;</span>
                 {card.data.prices.usd.toFixed(2)}

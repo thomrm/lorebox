@@ -73,6 +73,7 @@
         sortAsc: true,
         pageSize: 60
     }
+    let showPrices = true;
     let searchTerm = null;
     let currentPage = 0;
     let colorCount;
@@ -531,7 +532,7 @@
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "ink cost"; filterCards(); showFilterDropdown = false; }}>Ink Cost</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
-                                <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "price"; filterCards(); showFilterDropdown = false; }}>Price</button></li>
+                                {#if showPrices}<li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "price"; filterCards(); showFilterDropdown = false; }}>Price</button></li>{/if}
                             </ul>
                         {/if}
                     </div>
@@ -650,7 +651,7 @@
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "ink cost"; filterCards(); showFilterDropdown = false; }}>Ink Cost</button></li>
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
-                                        <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "price"; filterCards(); showFilterDropdown = false; }}>Price</button></li>
+                                        {#if showPrices}<li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "price"; filterCards(); showFilterDropdown = false; }}>Price</button></li>{/if}
                                     </ul>
                                 {/if}
                             </div>
@@ -722,18 +723,20 @@
                                                 <button class="card__image" on:click={addCard(card.id, 1)}>
                                                     <img src="{card.image_uris.digital.normal ? card.image_uris.digital.normal : card.image_uris.digital.large}" alt="{card.name}" />
                                                 </button>
-                                                <div class="card__price">
-                                                    <div class="price">
-                                                        <span class="text-emerald">&#36;</span>
-                                                        <span>
-                                                            {#if card.prices.usd}
-                                                                {card.prices.usd.toFixed(2)}
-                                                            {:else}
-                                                                --
-                                                            {/if}
-                                                        </span>
+                                                {#if showPrices}
+                                                    <div class="card__price">
+                                                        <div class="price">
+                                                            <span class="text-emerald">&#36;</span>
+                                                            <span>
+                                                                {#if card.prices.usd}
+                                                                    {card.prices.usd.toFixed(2)}
+                                                                {:else}
+                                                                    --
+                                                                {/if}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                {/if}
                                             </div>
                                         {/await}
                                     </div>
@@ -869,6 +872,7 @@
                             <ul class="dropdown-menu dropdown-menu--right" transition:fly={{duration: 200, y: -5}}>
                                 <li><a href="/view/{$page.url.searchParams.get('d')}" class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0}>View Deck</a></li>
                                 <li><button class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0} on:click={resetDeck}>Clear Deck</button></li>
+                                <li><button class="dropdown-menu__item" on:click={() => (showPrices = !showPrices)}>{#if showPrices}Hide{:else}Show{/if} Prices</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => (showAboutModal = true)}>About Lorebox</button></li>
                             </ul>
                         {/if}
@@ -948,9 +952,11 @@
                             {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
                             <div class="deck-stats__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
                         </div>
-                        <div class="deck-stats__counts">
-                            <div class="price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
-                        </div>
+                        {#if showPrices}
+                            <div class="deck-stats__counts">
+                                <div class="price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
+                            </div>
+                        {/if}
                     {/if}
                 </div>
             </div>
@@ -969,7 +975,7 @@
                             </div>
                         {/if}
                         {#each characters as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} prices={showPrices} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -979,7 +985,7 @@
                             </div>
                         {/if}
                         {#each actions as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} prices={showPrices} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -989,7 +995,7 @@
                             </div>
                         {/if}
                         {#each items as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} prices={showPrices} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                     <div class="deck__section">
@@ -999,7 +1005,7 @@
                             </div>
                         {/if}
                         {#each locations as card (card.id)}
-                            <CardAdded card={card} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
+                            <CardAdded card={card} prices={showPrices} on:add={addCard(card.id), 1} on:remove={removeCard(card.id)} on:hoverEnter={showHover(card.data.image_uris.digital.large, (card.data.layout == 'landscape' ? true : false))} on:hoverLeave={hideHover} />
                         {/each}
                     </div>
                 </div>
