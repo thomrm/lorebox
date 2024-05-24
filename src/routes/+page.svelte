@@ -166,7 +166,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        console.log(filteredCards);
+        //console.log(filteredCards);
     }
 
     const clearSearch = () => {
@@ -223,7 +223,8 @@
     let deck = {
         colors: [],
         cardsCount: 0,
-        cards: []
+        cards: [],
+        price: 0
     };
     let colorLock = false;
 
@@ -327,10 +328,16 @@
         // Update total cards added to deck
         deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
 
+        // Update price of deck
+        deck.price = 0;
+        deck.cards.forEach(function(x) {
+            deck.price = deck.price + (x.number * (x.data.prices.usd ? x.data.prices.usd : 0));
+        });
+
         // Update URL
         updateURLParams();
 
-        //console.log(deck);
+        console.log(deck);
     }
 
     // Clear added cards and deck colors
@@ -916,6 +923,7 @@
                         <div class="deck-stats__counts">
                             <span>--</span>
                             <span>--</span>
+                            <span>--</span>
                         </div>
                         <div class="deck-stats__counts">
                             <span>--</span>
@@ -928,9 +936,10 @@
                             {#if ruby.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-ruby"><span>{ruby.reduce((a,b) => a + b.number, 0)}</span> Ruby</div>{/if}
                             {#if sapphire.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-sapphire"><span>{sapphire.reduce((a,b) => a + b.number, 0)}</span> Sapphire</div>{/if}
                             {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
+                            <div class="deck-stats__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
                         </div>
                         <div class="deck-stats__counts">
-                            <div class="deck-stats__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
+                            <div class="deck-stats__price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
                         </div>
                     {/if}
                 </div>
@@ -1131,9 +1140,23 @@
     .deck-stats__counts {
         display: flex;
         gap: 10px;
+    }
 
-        & span {
+    .deck-stats__color {
+        & span:first-child {
             color: var(--White);
+            font-weight: bold;
+        }
+    }
+
+    .deck-stats__price {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+
+        & span:first-child {
+            font-size: .7em;
             font-weight: bold;
         }
     }
