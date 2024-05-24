@@ -99,6 +99,11 @@
         if (filters.sortType === 'rarity') {
             filteredCards = cards.sort(rarityCompare);
         }
+        if (filters.sortType === 'price') {
+            filteredCards = cards.sort((a, b) => {
+                return (filters.sortAsc ? a.prices.usd - b.prices.usd : b.prices.usd - a.prices.usd) || (a.name.localeCompare(b.name));
+            });
+        }
 
         // Filter type
         if (filters.showType.action == true || filters.showType.character == true || filters.showType.item == true || filters.showType.location == true) {
@@ -526,6 +531,7 @@
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "ink cost"; filterCards(); showFilterDropdown = false; }}>Ink Cost</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                                <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "price"; filterCards(); showFilterDropdown = false; }}>Price</button></li>
                             </ul>
                         {/if}
                     </div>
@@ -644,6 +650,7 @@
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "ink cost"; filterCards(); showFilterDropdown = false; }}>Ink Cost</button></li>
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
+                                        <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "price"; filterCards(); showFilterDropdown = false; }}>Price</button></li>
                                     </ul>
                                 {/if}
                             </div>
