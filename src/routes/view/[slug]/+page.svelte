@@ -226,6 +226,26 @@
                 {#if deckCards}
                     {#each deckCards as card (card.id)}
                         <div class="card card--view">
+                            <div class="card__view-price">
+                                <div>
+                                    <span>&#36;</span>
+                                    {#if card.data.prices.usd}
+                                        {(card.data.prices.usd * card.number).toFixed(2)}
+                                    {:else}
+                                        --
+                                    {/if}
+                                </div>
+                                <div>
+                                    (
+                                    <span>&#36;</span>
+                                    {#if card.data.prices.usd}
+                                        {card.data.prices.usd.toFixed(2)}
+                                    {:else}
+                                        --
+                                    {/if}
+                                    <span>&nbsp;each)</span>
+                                </div>
+                            </div>
                             {#if card.number > 1}<div class="card__copy-card"></div>{/if}
                             {#if card.number > 2}<div class="card__copy-card"></div>{/if}
                             {#if card.number > 3}<div class="card__copy-card"></div>{/if}
