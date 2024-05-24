@@ -29,9 +29,14 @@
                 class:text-sapphire={card.data.ink == "Sapphire"}
                 class:text-steel={card.data.ink == "Steel"}
             >{card.data.name}</div>
-            {#if card.data.version}
-                <div class="card-added__subtitle">{card.data.version}</div>
-            {/if}
+            <div class="card-added__subtitle">
+                {#if card.data.version}
+                    {card.data.version}
+                {/if}
+                {#if card.data.prices.usd}
+                    <span class="text-grey">${card.data.prices.usd.toFixed(2)}</span>
+                {/if}
+            </div>
         </div>
         <div class="card-added__add-remove">
             <button on:click={remove}>
@@ -105,6 +110,8 @@
     }
 
     .card-added__subtitle {
+        display: flex;
+        gap: 5px;
         font-size: 10px;
         text-overflow: ellipsis;
         overflow: hidden;

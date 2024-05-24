@@ -69,7 +69,7 @@
             set3: false,
             set4: false
         },
-        sortType: "cost",
+        sortType: "ink cost",
         sortAsc: true,
         pageSize: 60
     }
@@ -86,7 +86,7 @@
         totalCards = reset ? null : totalCards;
 
         // Sort cards
-        if (filters.sortType === 'cost') {
+        if (filters.sortType === 'ink cost') {
             filteredCards = cards.sort((a, b) => {
                 return (filters.sortAsc ? a.cost - b.cost : b.cost - a.cost) || (a.name.localeCompare(b.name));
             });
@@ -516,7 +516,7 @@
                         {#if showFilterDropdown}
                             <ul class="dropdown-menu dropdown-menu--left" transition:fly={{duration: 200, y: -5}}>
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
-                                <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                                <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "ink cost"; filterCards(); showFilterDropdown = false; }}>Ink Cost</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
                             </ul>
                         {/if}
@@ -634,7 +634,7 @@
                                 {#if showFilterDropdown}
                                     <ul class="dropdown-menu dropdown-menu--left" transition:fly={{duration: 200, y: -5}}>
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "name"; filterCards(); showFilterDropdown = false; }}>Name</button></li>
-                                        <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "cost"; filterCards(); showFilterDropdown = false; }}>Cost</button></li>
+                                        <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "ink cost"; filterCards(); showFilterDropdown = false; }}>Ink Cost</button></li>
                                         <li><button class="dropdown-menu__item" on:click={() => {filters.sortType = "rarity"; filterCards(); showFilterDropdown = false; }}>Rarity</button></li>
                                     </ul>
                                 {/if}
@@ -707,6 +707,16 @@
                                                 <button class="card__image" on:click={addCard(card.id, 1)}>
                                                     <img src="{card.image_uris.digital.normal ? card.image_uris.digital.normal : card.image_uris.digital.large}" alt="{card.name}" />
                                                 </button>
+                                                <div class="card__price">
+                                                    <span class="text-emerald">&#36;</span>
+                                                    <span>
+                                                        {#if card.prices.usd}
+                                                            {card.prices.usd.toFixed(2)}
+                                                        {:else}
+                                                            --
+                                                        {/if}
+                                                    </span>
+                                                </div>
                                             </div>
                                         {/await}
                                     </div>

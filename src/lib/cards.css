@@ -3,6 +3,7 @@
     flex-direction: column;
     gap: 2px;
     position: relative;
+    font-size: 10px;
 }
 
 .card--view {
@@ -63,12 +64,17 @@
     right: 0;
     justify-content: center;
     align-items: center;
-    width: 40px;
-    height: 40px;
+    width: 4em;
+    height: 4em;
     background: var(--Black);
-    border-bottom-left-radius: 18px;
+    border-bottom-left-radius: 1.4em;
     z-index: 2;
     cursor: zoom-in;
+
+    & img {
+        width: 1.8em;
+        height: 1.8em;
+    }
 }
 
 .card__count {
@@ -76,15 +82,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 4em;
-    height: 4em;
+    padding: .8em 1.4em;
     bottom: 0;
     right: 0;
     background: var(--Black);
-    border-top-left-radius: 1.8em;
+    border-top-left-radius: 1.4em;
     z-index: 2;
     gap: 2px;
-    font-size: 10px;
+    font-size: 1em;
+}
+
+.card__price {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 1.2em;
+    color: var(--White);
+    background: var(--Black);
+    padding: .6em .9em;
+    border-top-left-radius: .8em;
+    z-index: 2;
+
+    & span:first-child {
+        font-size: .7em;
+        font-weight: bold;
+    }
 }
 
 .card__num {
