@@ -33,15 +33,14 @@
                 {#if card.data.version}
                     {card.data.version}
                 {/if}
-                {#if card.data.version && card.data.prices.usd}<span class="card-added__bullet">&#10022;</span>{/if}
-                {#if card.data.prices.usd}
-                    <div class="price">
-                        <span class="text-emerald">&#36;</span>
-                        {card.data.prices.usd.toFixed(2)}
-                    </div>
-                {/if}
             </div>
         </div>
+        {#if card.data.prices.usd}
+            <div class="price">
+                <span class="text-emerald">&#36;</span>
+                {card.data.prices.usd.toFixed(2)}
+            </div>
+        {/if}
         <div class="card-added__add-remove">
             <button on:click={remove}>
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,14 +121,6 @@
         white-space: nowrap;
     }
 
-    .card-added__bullet {
-        font-size: 0.5em;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: var(--Text-Grey);
-    }
-
     .card-added__count {
         color: var(--White);
         display: flex;
@@ -152,7 +143,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 8px;
+        padding: 8px 8px 8px 0;
         gap: 2px;
 
         & button {
