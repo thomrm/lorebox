@@ -337,7 +337,7 @@
         // Update URL
         updateURLParams();
 
-        console.log(deck);
+        //console.log(deck);
     }
 
     // Clear added cards and deck colors
@@ -345,7 +345,8 @@
         deck = {
             colors: [],
             cardsCount: 0,
-            cards: []
+            cards: [],
+            price: 0
         };
         colorCount = 0;
         colorLock = false;

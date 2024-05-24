@@ -10,7 +10,8 @@
     let deck = {
         colors: [],
         cardsCount: 0,
-        cards: []
+        cards: [],
+        price: 0
     };
     
     onMount(async () => {
@@ -42,6 +43,11 @@
 
             // Set total cards in deck
             deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
+
+            // Update price of deck
+            deck.cards.forEach(function(x) {
+                deck.price = deck.price + (x.number * (x.data.prices.usd ? x.data.prices.usd : 0));
+            });
 
             //console.log(deck);
         }
@@ -170,6 +176,9 @@
                                 <span>--</span>
                                 <span>--</span>
                             </div>
+                            <div class="deck-info__counts">
+                                <span>--</span>
+                            </div>
                         {:else}
                             <div class="deck-info__counts">
                                 {#if amber.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-amber"><span>{amber.reduce((a,b) => a + b.number, 0)}</span> Amber</div>{/if}
@@ -179,6 +188,9 @@
                                 {#if sapphire.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-sapphire"><span>{sapphire.reduce((a,b) => a + b.number, 0)}</span> Sapphire</div>{/if}
                                 {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
                                 <div class="deck-info__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
+                            </div>
+                            <div class="deck-info__counts">
+                                <div class="deck-info__price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
                             </div>
                         {/if}
                     </div>
@@ -263,19 +275,15 @@
         gap: 10px;
     }
 
-    /* .deck-info__total {
-        font-size: 20px;
-        font-weight: bold;
-        height: 30px;
-        display: flex;
-        flex: 1 0 0;
-        align-items: center;
-        justify-content: center;
-    } */
-
     .deck-info__totals {
+        display: flex;
+        gap: 10px;
+    }
+
+    .deck-info__counts {
         font-size: 14px;
         display: flex;
+        gap: 10px;
         justify-content: space-between;
         align-items: center;
         line-height: 1;
@@ -283,14 +291,24 @@
         height: 30px;
         background: var(--Background-Dark);
         border-radius: 6px;
+        color: var(--White);
     }
 
-    .deck-info__counts {
-        display: flex;
-        gap: 10px;
-
-        & span {
+    .deck-info__color {
+        & span:first-child {
             color: var(--White);
+            font-weight: bold;
+        }
+    }
+
+    .deck-info__price {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+
+        & span:first-child {
+            font-size: .7em;
             font-weight: bold;
         }
     }
