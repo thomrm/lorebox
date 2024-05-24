@@ -128,6 +128,20 @@ button {
     }
 }
 
+.price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--White);
+    font-size: 12px;
+    gap: 2px;
+
+    & span:first-child {
+        font-weight: bold;
+        font-size: .7em;
+    }
+}
+
 .dropdown-contain {
     position: relative;
     flex-shrink: 0;

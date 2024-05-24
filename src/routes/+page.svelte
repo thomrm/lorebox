@@ -716,14 +716,16 @@
                                                     <img src="{card.image_uris.digital.normal ? card.image_uris.digital.normal : card.image_uris.digital.large}" alt="{card.name}" />
                                                 </button>
                                                 <div class="card__price">
-                                                    <span class="text-emerald">&#36;</span>
-                                                    <span>
-                                                        {#if card.prices.usd}
-                                                            {card.prices.usd.toFixed(2)}
-                                                        {:else}
-                                                            --
-                                                        {/if}
-                                                    </span>
+                                                    <div class="price">
+                                                        <span class="text-emerald">&#36;</span>
+                                                        <span>
+                                                            {#if card.prices.usd}
+                                                                {card.prices.usd.toFixed(2)}
+                                                            {:else}
+                                                                --
+                                                            {/if}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         {/await}
@@ -940,7 +942,7 @@
                             <div class="deck-stats__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
                         </div>
                         <div class="deck-stats__counts">
-                            <div class="deck-stats__price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
+                            <div class="price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
                         </div>
                     {/if}
                 </div>
@@ -1146,18 +1148,6 @@
     .deck-stats__color {
         & span:first-child {
             color: var(--White);
-            font-weight: bold;
-        }
-    }
-
-    .deck-stats__price {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 2px;
-
-        & span:first-child {
-            font-size: .7em;
             font-weight: bold;
         }
     }

@@ -33,8 +33,12 @@
                 {#if card.data.version}
                     {card.data.version}
                 {/if}
+                {#if card.data.version && card.data.prices.usd}<span class="card-added__bullet">&#10022;</span>{/if}
                 {#if card.data.prices.usd}
-                    <span class="text-grey">${card.data.prices.usd.toFixed(2)}</span>
+                    <div class="price">
+                        <span class="text-emerald">&#36;</span>
+                        {card.data.prices.usd.toFixed(2)}
+                    </div>
                 {/if}
             </div>
         </div>
@@ -97,7 +101,6 @@
         flex-direction: column;
         justify-content: center;
         line-height: 1;
-        gap: 2px;
     }
 
     .card-added__base-name {
@@ -107,15 +110,24 @@
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+        letter-spacing: 0.02em;
     }
 
     .card-added__subtitle {
         display: flex;
-        gap: 5px;
-        font-size: 10px;
+        gap: 3px;
+        font-size: 12px;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+    }
+
+    .card-added__bullet {
+        font-size: 0.5em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--Text-Grey);
     }
 
     .card-added__count {

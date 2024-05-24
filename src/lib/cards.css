@@ -95,23 +95,15 @@
 
 .card__price {
     display: flex;
-    gap: 2px;
     align-items: center;
     justify-content: center;
     position: absolute;
     bottom: 0;
     right: 0;
-    font-size: 1.2em;
-    color: var(--White);
     background: var(--Black);
     padding: .6em .9em;
     border-top-left-radius: .8em;
     z-index: 2;
-
-    & span:first-child {
-        font-size: .7em;
-        font-weight: bold;
-    }
 }
 
 .card__num {
