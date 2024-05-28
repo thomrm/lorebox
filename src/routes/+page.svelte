@@ -172,7 +172,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        console.log(filteredCards);
+        //console.log(filteredCards);
     }
 
     const clearSearch = () => {
