@@ -14,6 +14,7 @@ let width = 1070;
 
 let gap = 10;
 let gutter = 20;
+let infoHeight = 60;
 let cardHeight = 350;
 
 let cards;
@@ -55,7 +56,23 @@ export const GET = async ({params}) => {
         });
     });
 
-    height = (Math.ceil(deck.cards.length / 4) * cardHeight) + ((Math.ceil(deck.cards.length / 4) - 1) * gap) + (gutter * 2);
+    // Set deck colors
+    if (deck.cards.some(x => x.data.ink == "Amber")) { deck.colors.push("Amber"); }
+    if (deck.cards.some(x => x.data.ink == "Amethyst")) { deck.colors.push("Amethyst"); }
+    if (deck.cards.some(x => x.data.ink == "Emerald")) { deck.colors.push("Emerald"); }
+    if (deck.cards.some(x => x.data.ink == "Ruby")) { deck.colors.push("Ruby"); }
+    if (deck.cards.some(x => x.data.ink == "Sapphire")) { deck.colors.push("Sapphire"); }
+    if (deck.cards.some(x => x.data.ink == "Steel")) { deck.colors.push("Steel"); }
+
+    // Set total cards in deck
+    deck.cardsCount = deck.cards.reduce((a,b) => a + b.number, 0);
+
+    // Update price of deck
+    deck.cards.forEach(function(x) {
+        deck.price = deck.price + (x.number * (x.data.prices.usd ? x.data.prices.usd : 0));
+    });
+
+    height = (Math.ceil(deck.cards.length / 4) * cardHeight) + (Math.ceil(deck.cards.length / 4) * gap) + infoHeight + (gutter * 2);
 
     const result = deckImage.render({deck});
     
