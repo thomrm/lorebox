@@ -1,5 +1,7 @@
 name: Refresh API Data
-on: workflow_dispatch
+on:
+  schedule:
+    - cron: "0 2 * * *"
 permissions:
   contents: write
 jobs:
