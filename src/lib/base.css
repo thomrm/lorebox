@@ -192,7 +192,7 @@ button {
     padding: 5px 15px;
     height: 30px;
     color: var(--Gold);
-    background: var(--Background-Dark);
+    background-color: var(--Background-Dark);
     border: none;
     width: 100%;
     cursor: pointer;
@@ -201,9 +201,10 @@ button {
     font-weight: bold;
     font-size: 13px;
     text-decoration: none;
+    letter-spacing: 0.02em;
 
     &:hover {
-        background: var(--Black);
+        background-color: var(--Black);
     }
 }
 
@@ -211,6 +212,13 @@ button {
     opacity: 0.25;
     pointer-events: none;
     cursor: default;
+}
+
+.dropdown-menu__item--open {
+    background-image: url('/images/icon-new-window.svg');
+    background-repeat: no-repeat;
+    background-position: center right 10px;
+    padding-right: 30px;
 }
 
 .dropdown-menu--left {

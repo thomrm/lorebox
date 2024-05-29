@@ -198,7 +198,7 @@
                 </div>
                 <div class="deck-info__section">
                     <!-- <button class="button">Share Deck</button> -->
-                    <a class="button" href="/?d={deckString}"><img src="/images/icon-edit.svg" alt="Switch to Edit View" />Edit</a>
+                    <a class="button" href="/?d={deckString}"><img src="/images/icon-edit.svg" alt="Switch to Edit View" />Edit Deck</a>
                 </div>
             </div>
         </div>

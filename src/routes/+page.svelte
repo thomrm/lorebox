@@ -861,6 +861,7 @@
                         {#if showMoreDropdown}
                             <ul class="dropdown-menu dropdown-menu--right" transition:fly={{duration: 200, y: -5}}>
                                 <li><a href="/view/{$page.url.searchParams.get('d')}" class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0}>View Deck</a></li>
+                                <li><a href="/image/{$page.url.searchParams.get('d')}" class="dropdown-menu__item dropdown-menu__item--open" class:dropdown-menu__item--disabled={deck.cards.length === 0} target="_blank">Generate Image</a></li>
                                 <li><button class="dropdown-menu__item" class:dropdown-menu__item--disabled={deck.cards.length === 0} on:click={resetDeck}>Clear Deck</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => (showPrices = !showPrices)}>{#if showPrices}Hide{:else}Show{/if} Prices</button></li>
                                 <li><button class="dropdown-menu__item" on:click={() => (showAboutModal = true)}>About Lorebox</button></li>
