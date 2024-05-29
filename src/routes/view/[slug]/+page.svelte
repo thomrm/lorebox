@@ -105,7 +105,7 @@
 <svelte:head>
 	<title>Lorebox - {deck.colors[0]} {deck.colors[1]} Deck</title>
     <meta name="description" content="View Deck.">
-    <meta content="https://lorebox.ink/image?d={deckString}" property="og:image">
+    <meta content="https://lorebox.ink/image/{deckString}" property="og:image">
 </svelte:head>
 
 <div class="view-contain">

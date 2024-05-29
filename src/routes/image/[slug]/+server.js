@@ -36,14 +36,14 @@ const bigID = (cardID) => {
 }
 
 /** @type {import('./$types').RequestHandler} */
-export const GET = async ({url}) => {
+export const GET = async ({params}) => {
     const response = await fetch('http://lorebox.ink/data/allCards.json');
     const data = await response.json();
     cards = data.results;
 
     deck.cards = [];
 
-    const deckString = url.searchParams.get('d') ?? undefined;
+    const deckString = params.slug ?? undefined;
     deckString.match(/.{6}/g).forEach(function(x) {
         let cardID = bigID(x.slice(1, 6));
         let num = parseInt(x[0])

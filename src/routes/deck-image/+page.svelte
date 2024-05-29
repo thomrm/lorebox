@@ -52,8 +52,6 @@
             });
 
             //console.log(deck);
-
-            console.log(height);
         }
     });
 
@@ -79,7 +77,7 @@
 <style>
     :root {
         background: var(--White);
-        
+
         & body {
             overflow: scroll;
         }
