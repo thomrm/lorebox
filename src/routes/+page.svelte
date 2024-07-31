@@ -487,7 +487,7 @@
         </div>
         <div class="col__divider"></div>
         <div class="col__section">
-            <p>Lorebox is built and maintained by <a href="http://thomasrm.com">ThomRM</a>.<br /> Data is provided by <a href="https://lorcast.com/docs/api">Lorcast</a>.</p>
+            <p>Lorebox is built and maintained by <a href="http://thomrm.com">ThomRM</a>.<br /> Data is provided by <a href="https://lorcast.com/docs/api">Lorcast</a>.</p>
         </div>
         <div class="col__divider"></div>
     </div>
