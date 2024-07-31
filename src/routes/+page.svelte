@@ -67,7 +67,8 @@
             set1: false,
             set2: false,
             set3: false,
-            set4: false
+            set4: false,
+            set5: false
         },
         sortType: "ink cost",
         sortAsc: true,
@@ -123,12 +124,13 @@
         }
 
         // Filter set
-        if (filters.showSet.set1 == true || filters.showSet.set2 == true || filters.showSet.set3 == true || filters.showSet.set4 == true) {
+        if (filters.showSet.set1 == true || filters.showSet.set2 == true || filters.showSet.set3 == true || filters.showSet.set4 == true || filters.showSet.set5 == true) {
             filteredCards = filteredCards
                 .filter(x => !filters.showSet.set1 ? !x.set.code.includes("1") : true)
                 .filter(x => !filters.showSet.set2 ? !x.set.code.includes("2") : true)
                 .filter(x => !filters.showSet.set3 ? !x.set.code.includes("3") : true)
-                .filter(x => !filters.showSet.set4 ? !x.set.code.includes("4") : true);
+                .filter(x => !filters.showSet.set4 ? !x.set.code.includes("4") : true)
+                .filter(x => !filters.showSet.set5 ? !x.set.code.includes("5") : true);
         }
 
         // Filter color
@@ -195,6 +197,7 @@
         filters.showSet.set2 = false;
         filters.showSet.set3 = false;
         filters.showSet.set4 = false;
+        filters.showSet.set5 = false;
 
         // Reset displayed cards
         filterCards(true);
@@ -585,7 +588,9 @@
                 <input type="checkbox" class="checkbox" id="filter-set3" name="Set 3" bind:checked={filters.showSet.set3} on:change={filterCards} />
                 <label class="checkbox-item" for="filter-set3">Into the Inklands (Set 3)</label>
                 <input type="checkbox" class="checkbox" id="filter-set4" name="Set 4" bind:checked={filters.showSet.set4} on:change={filterCards} />
-                <label class="checkbox-item" for="filter-set4">Ursula's Return (Set 4) <span class="new-pill">New!</span></label>
+                <label class="checkbox-item" for="filter-set4">Ursula's Return (Set 4)</label>
+                <input type="checkbox" class="checkbox" id="filter-set5" name="Set 5" bind:checked={filters.showSet.set5} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-set5">Shimmering Skies (Set 5) <span class="new-pill">New!</span></label>
             </div>
         </div>
     </div>
