@@ -104,7 +104,13 @@
         }
         if (filters.sortType === 'price') {
             filteredCards = cards.sort((a, b) => {
-                return (filters.sortAsc ? a.prices.usd - b.prices.usd : b.prices.usd - a.prices.usd) || (a.name.localeCompare(b.name));
+                // Push cards without prices to the end.
+                if (a.prices.usd === undefined) return 1;
+                if (b.prices.usd === undefined) return -1;
+
+                return (
+                    filters.sortAsc ? a.prices.usd - b.prices.usd : b.prices.usd - a.prices.usd) || (a.name.localeCompare(b.name)
+                );
             });
         }
 
