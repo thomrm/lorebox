@@ -152,19 +152,19 @@
         // Filter color
         filteredCards = filteredCards.filter(function(x) {
             if (filters.color.amber || filters.color.amethyst || filters.color.emerald || filters.color.ruby || filters.color.sapphire || filters.color.steel) {
-                return (filters.color.amber ? x.ink.includes("Amber") : '') ||
-                    (filters.color.amethyst ? x.ink.includes("Amethyst") : '') ||
-                    (filters.color.emerald ? x.ink.includes("Emerald") : '') ||
-                    (filters.color.ruby ? x.ink.includes("Ruby") : '') ||
-                    (filters.color.sapphire ? x.ink.includes("Sapphire") : '') ||
-                    (filters.color.steel ? x.ink.includes("Steel") : '');
+                return (filters.color.amber ? (x.inks ? x.inks.includes("Amber") : x.ink.includes("Amber")) : '') ||
+                    (filters.color.amethyst ? (x.inks ? x.inks.includes("Amethyst") : x.ink.includes("Amethyst")) : '') ||
+                    (filters.color.emerald ? (x.inks ? x.inks.includes("Emerald") : x.ink.includes("Emerald")) : '') ||
+                    (filters.color.ruby ? (x.inks ? x.inks.includes("Ruby") : x.ink.includes("Ruby")) : '') ||
+                    (filters.color.sapphire ? (x.inks ? x.inks.includes("Sapphire") : x.ink.includes("Sapphire")) : '') ||
+                    (filters.color.steel ? (x.inks ? x.inks.includes("Steel") : x.ink.includes("Steel")) : '');
             } else if (colorLock && deck.colors) {
-                return (deck.colors.includes("Amber") ? x.ink.includes("Amber") : '') ||
-                    (deck.colors.includes("Amethyst") ? x.ink.includes("Amethyst") : '') ||
-                    (deck.colors.includes("Emerald") ? x.ink.includes("Emerald") : '') ||
-                    (deck.colors.includes("Ruby") ? x.ink.includes("Ruby") : '') ||
-                    (deck.colors.includes("Sapphire") ? x.ink.includes("Sapphire") : '') ||
-                    (deck.colors.includes("Steel") ? x.ink.includes("Steel") : '');
+                return (deck.colors.includes("Amber") ? x.inks.includes("Amber") : '') ||
+                    (deck.colors.includes("Amethyst") ? x.inks.includes("Amethyst") : '') ||
+                    (deck.colors.includes("Emerald") ? x.inks.includes("Emerald") : '') ||
+                    (deck.colors.includes("Ruby") ? x.inks.includes("Ruby") : '') ||
+                    (deck.colors.includes("Sapphire") ? x.inks.includes("Sapphire") : '') ||
+                    (deck.colors.includes("Steel") ? x.inks.includes("Steel") : '');
             } else {
                 return x;
             }
