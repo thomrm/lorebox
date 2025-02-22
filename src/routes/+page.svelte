@@ -332,12 +332,12 @@
     const updateDeck = () => {
         // Update deck colors
         deck.colors = [];
-        if (deck.cards.some(x => x.data.ink == "Amber")) { deck.colors.push("Amber"); }
-        if (deck.cards.some(x => x.data.ink == "Amethyst")) { deck.colors.push("Amethyst"); }
-        if (deck.cards.some(x => x.data.ink == "Emerald")) { deck.colors.push("Emerald"); }
-        if (deck.cards.some(x => x.data.ink == "Ruby")) { deck.colors.push("Ruby"); }
-        if (deck.cards.some(x => x.data.ink == "Sapphire")) { deck.colors.push("Sapphire"); }
-        if (deck.cards.some(x => x.data.ink == "Steel")) { deck.colors.push("Steel"); }
+        if (deck.cards.some(x => (x.data.inks ? x.data.inks.includes("Amber") : x.data.ink == "Amber"))) { deck.colors.push("Amber"); }
+        if (deck.cards.some(x => (x.data.inks ? x.data.inks.includes("Amethyst") : x.data.ink == "Amethyst"))) { deck.colors.push("Amethyst"); }
+        if (deck.cards.some(x => (x.data.inks ? x.data.inks.includes("Emerald") : x.data.ink == "Emerald"))) { deck.colors.push("Emerald"); }
+        if (deck.cards.some(x => (x.data.inks ? x.data.inks.includes("Ruby") : x.data.ink == "Ruby"))) { deck.colors.push("Ruby"); }
+        if (deck.cards.some(x => (x.data.inks ? x.data.inks.includes("Sapphire") : x.data.ink == "Sapphire"))) { deck.colors.push("Sapphire"); }
+        if (deck.cards.some(x => (x.data.inks ? x.data.inks.includes("Steel") : x.data.ink == "Steel"))) { deck.colors.push("Steel"); }
 
         // Force color filters if deck now contains 2 colors
         if (deck.colors.length == 2 && !colorLock) {
@@ -376,7 +376,7 @@
         // Update URL
         updateURLParams();
 
-        //console.log(deck);
+        console.log(deck);
     }
 
     // Clear added cards and deck colors
