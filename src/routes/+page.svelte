@@ -151,18 +151,32 @@
 
         // Filter color
         filteredCards = filteredCards.filter(function(x) {
+            const allowedColors = [];
             const cardColors = x.inks ? x.inks : [x.ink];
 
-            if (colorLock && deck.colors) {
+            if (filters.color.amber) allowedColors.push("Amber");
+            if (filters.color.amethyst) allowedColors.push("Amethyst");
+            if (filters.color.emerald) allowedColors.push("Emerald");
+            if (filters.color.ruby) allowedColors.push("Ruby");
+            if (filters.color.sapphire) allowedColors.push("Sapphire");
+            if (filters.color.steel) allowedColors.push("Steel");
+
+            if (colorLock && deck.colors) { // Two colors are in the deck
                 // Return true only if every color on the card is in the allowed list
                 return cardColors.every(color => deck.colors.includes(color));
-            } else if (filters.color.amber || filters.color.amethyst || filters.color.emerald || filters.color.ruby || filters.color.sapphire || filters.color.steel) {
-                return (filters.color.amber ? (x.inks ? x.inks.includes("Amber") : x.ink.includes("Amber")) : '') ||
-                    (filters.color.amethyst ? (x.inks ? x.inks.includes("Amethyst") : x.ink.includes("Amethyst")) : '') ||
-                    (filters.color.emerald ? (x.inks ? x.inks.includes("Emerald") : x.ink.includes("Emerald")) : '') ||
-                    (filters.color.ruby ? (x.inks ? x.inks.includes("Ruby") : x.ink.includes("Ruby")) : '') ||
-                    (filters.color.sapphire ? (x.inks ? x.inks.includes("Sapphire") : x.ink.includes("Sapphire")) : '') ||
-                    (filters.color.steel ? (x.inks ? x.inks.includes("Steel") : x.ink.includes("Steel")) : '');
+            } else if (deck.colors) { // One color is in the deck
+                if (cardColors.length === 1) {
+                    if (allowedColors.length) {
+                        return cardColors.every(color => allowedColors.includes(color)) ||
+                            cardColors.every(color => deck.colors.includes(color));
+                    } else {
+                        return x;
+                    }
+                } else {
+                    return cardColors.includes(deck.colors[0]);
+                }
+            } else if (allowedColors.length) { // Zero colors are in the deck
+                return cardColors.every(color => allowedColors.includes(color));
             } else {
                 return x;
             }
