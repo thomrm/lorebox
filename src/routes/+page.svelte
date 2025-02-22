@@ -69,7 +69,8 @@
             set3: false,
             set4: false,
             set5: false,
-            set6: false
+            set6: false,
+            set7: false
         },
         sortType: "ink cost",
         sortAsc: true,
@@ -131,14 +132,21 @@
         }
 
         // Filter set
-        if (filters.showSet.set1 == true || filters.showSet.set2 == true || filters.showSet.set3 == true || filters.showSet.set4 == true || filters.showSet.set5 == true || filters.showSet.set6 == true) {
+        if (filters.showSet.set1 == true || 
+            filters.showSet.set2 == true || 
+            filters.showSet.set3 == true || 
+            filters.showSet.set4 == true || 
+            filters.showSet.set5 == true || 
+            filters.showSet.set6 == true || 
+            filters.showSet.set7 == true) {
             filteredCards = filteredCards
                 .filter(x => !filters.showSet.set1 ? !x.set.code.includes("1") : true)
                 .filter(x => !filters.showSet.set2 ? !x.set.code.includes("2") : true)
                 .filter(x => !filters.showSet.set3 ? !x.set.code.includes("3") : true)
                 .filter(x => !filters.showSet.set4 ? !x.set.code.includes("4") : true)
                 .filter(x => !filters.showSet.set5 ? !x.set.code.includes("5") : true)
-                .filter(x => !filters.showSet.set6 ? !x.set.code.includes("6") : true);
+                .filter(x => !filters.showSet.set6 ? !x.set.code.includes("6") : true)
+                .filter(x => !filters.showSet.set7 ? !x.set.code.includes("7") : true);
         }
 
         // Filter color
@@ -182,7 +190,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        //console.log(filteredCards);
+        console.log(filteredCards);
     }
 
     const clearSearch = () => {
@@ -207,6 +215,7 @@
         filters.showSet.set4 = false;
         filters.showSet.set5 = false;
         filters.showSet.set6 = false;
+        filters.showSet.set7 = false;
 
         // Reset displayed cards
         filterCards(true);
@@ -601,7 +610,9 @@
                 <input type="checkbox" class="checkbox" id="filter-set5" name="Set 5" bind:checked={filters.showSet.set5} on:change={filterCards} />
                 <label class="checkbox-item" for="filter-set5">Shimmering Skies (Set 5)</label>
                 <input type="checkbox" class="checkbox" id="filter-set6" name="Set 6" bind:checked={filters.showSet.set6} on:change={filterCards} />
-                <label class="checkbox-item" for="filter-set6">Azurite Sea (Set 6) <span class="new-pill">New!</span></label>
+                <label class="checkbox-item" for="filter-set6">Azurite Sea (Set 6)</label>
+                <input type="checkbox" class="checkbox" id="filter-set7" name="Set 7" bind:checked={filters.showSet.set7} on:change={filterCards} />
+                <label class="checkbox-item" for="filter-set7">Archazia's Island (Set 7) <span class="new-pill">New!</span></label>
             </div>
         </div>
     </div>
