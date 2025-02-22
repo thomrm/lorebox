@@ -151,20 +151,18 @@
 
         // Filter color
         filteredCards = filteredCards.filter(function(x) {
-            if (filters.color.amber || filters.color.amethyst || filters.color.emerald || filters.color.ruby || filters.color.sapphire || filters.color.steel) {
+            const cardColors = x.inks ? x.inks : [x.ink];
+
+            if (colorLock && deck.colors) {
+                // Return true only if every color on the card is in the allowed list
+                return cardColors.every(color => deck.colors.includes(color));
+            } else if (filters.color.amber || filters.color.amethyst || filters.color.emerald || filters.color.ruby || filters.color.sapphire || filters.color.steel) {
                 return (filters.color.amber ? (x.inks ? x.inks.includes("Amber") : x.ink.includes("Amber")) : '') ||
                     (filters.color.amethyst ? (x.inks ? x.inks.includes("Amethyst") : x.ink.includes("Amethyst")) : '') ||
                     (filters.color.emerald ? (x.inks ? x.inks.includes("Emerald") : x.ink.includes("Emerald")) : '') ||
                     (filters.color.ruby ? (x.inks ? x.inks.includes("Ruby") : x.ink.includes("Ruby")) : '') ||
                     (filters.color.sapphire ? (x.inks ? x.inks.includes("Sapphire") : x.ink.includes("Sapphire")) : '') ||
                     (filters.color.steel ? (x.inks ? x.inks.includes("Steel") : x.ink.includes("Steel")) : '');
-            } else if (colorLock && deck.colors) {
-                return (deck.colors.includes("Amber") ? x.inks.includes("Amber") : '') ||
-                    (deck.colors.includes("Amethyst") ? x.inks.includes("Amethyst") : '') ||
-                    (deck.colors.includes("Emerald") ? x.inks.includes("Emerald") : '') ||
-                    (deck.colors.includes("Ruby") ? x.inks.includes("Ruby") : '') ||
-                    (deck.colors.includes("Sapphire") ? x.inks.includes("Sapphire") : '') ||
-                    (deck.colors.includes("Steel") ? x.inks.includes("Steel") : '');
             } else {
                 return x;
             }
@@ -517,27 +515,27 @@
             <div class="filters">
                 {#if innerWidth <= 560}
                     <fieldset class="filters__group" disabled={colorLock}>
-                        <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={(colorCount == 2 && !filters.color.amber) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={colorLock} on:change={filterCards} />
                         <label class="filter-ink ink-amber" for="filter-amber--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(colorCount == 2 && !filters.color.amethyst) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={colorLock} on:change={filterCards} />
                         <label class="filter-ink ink-amethyst" for="filter-amethyst--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={(colorCount == 2 && !filters.color.emerald) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={colorLock} on:change={filterCards} />
                         <label class="filter-ink ink-emerald" for="filter-emerald--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={(colorCount == 2 && !filters.color.ruby) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={colorLock} on:change={filterCards} />
                         <label class="filter-ink ink-ruby" for="filter-ruby--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(colorCount == 2 && !filters.color.sapphire) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={colorLock} on:change={filterCards} />
                         <label class="filter-ink ink-sapphire" for="filter-sapphire--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={(colorCount == 2 && !filters.color.steel) ? true : false} on:change={filterCards} />
+                        <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={colorLock} on:change={filterCards} />
                         <label class="filter-ink ink-steel" for="filter-steel--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
                         </label>
@@ -631,29 +629,29 @@
         <div class="col__section">
             <div class="filters">
                 {#if innerWidth > 560}
-                    <fieldset class="filters__group">
-                        <input type="checkbox" id="filter-amber" name="Amber" bind:checked={filters.color.amber} disabled={(deck.colors.length == 2 && !deck.colors.includes("Amber")) ? true : false} on:change={filterCards} />
-                        <label class="filter-ink ink-amber" for="filter-amber">
+                    <fieldset class="filters__group" disabled={colorLock}>
+                        <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={colorLock} on:change={filterCards} />
+                        <label class="filter-ink ink-amber" for="filter-amber--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-amethyst" name="Amethyst" bind:checked={filters.color.amethyst} disabled={(deck.colors.length == 2 && !deck.colors.includes("Amethyst")) ? true : false} on:change={filterCards} />
-                        <label class="filter-ink ink-amethyst" for="filter-amethyst">
+                        <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={colorLock} on:change={filterCards} />
+                        <label class="filter-ink ink-amethyst" for="filter-amethyst--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-emerald" name="Emerald" bind:checked={filters.color.emerald} disabled={(deck.colors.length == 2 && !deck.colors.includes("Emerald")) ? true : false} on:change={filterCards} />
-                        <label class="filter-ink ink-emerald" for="filter-emerald">
+                        <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={colorLock} on:change={filterCards} />
+                        <label class="filter-ink ink-emerald" for="filter-emerald--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-ruby" name="Ruby" bind:checked={filters.color.ruby} disabled={(deck.colors.length == 2 && !deck.colors.includes("Ruby")) ? true : false} on:change={filterCards} />
-                        <label class="filter-ink ink-ruby" for="filter-ruby">
+                        <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={colorLock} on:change={filterCards} />
+                        <label class="filter-ink ink-ruby" for="filter-ruby--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-sapphire" name="Sapphire" bind:checked={filters.color.sapphire} disabled={(deck.colors.length == 2 && !deck.colors.includes("Sapphire")) ? true : false} on:change={filterCards} />
-                        <label class="filter-ink ink-sapphire" for="filter-sapphire">
+                        <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={colorLock} on:change={filterCards} />
+                        <label class="filter-ink ink-sapphire" for="filter-sapphire--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
                         </label>
-                        <input type="checkbox" id="filter-steel" name="Steel" bind:checked={filters.color.steel} disabled={(deck.colors.length == 2 && !deck.colors.includes("Steel")) ? true : false} on:change={filterCards} />
-                        <label class="filter-ink ink-steel" for="filter-steel">
+                        <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={colorLock} on:change={filterCards} />
+                        <label class="filter-ink ink-steel" for="filter-steel--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
                         </label>
                     </fieldset>
