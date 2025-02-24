@@ -182,16 +182,16 @@
                             </div>
                         {:else}
                             <div class="deck-info__counts">
-                                {#if amber.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-amber"><span>{amber.reduce((a,b) => a + b.number, 0)}</span> Amber</div>{/if}
-                                {#if amethyst.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-amethyst"><span>{amethyst.reduce((a,b) => a + b.number, 0)}</span> Amethyst</div>{/if}
-                                {#if emerald.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-emerald"><span>{emerald.reduce((a,b) => a + b.number, 0)}</span> Emerald</div>{/if}
-                                {#if ruby.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-ruby"><span>{ruby.reduce((a,b) => a + b.number, 0)}</span> Ruby</div>{/if}
-                                {#if sapphire.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-sapphire"><span>{sapphire.reduce((a,b) => a + b.number, 0)}</span> Sapphire</div>{/if}
-                                {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
+                                {#if amber.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-Amber"><span>{amber.reduce((a,b) => a + b.number, 0)}</span> Amber</div>{/if}
+                                {#if amethyst.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-Amethyst"><span>{amethyst.reduce((a,b) => a + b.number, 0)}</span> Amethyst</div>{/if}
+                                {#if emerald.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-Emerald"><span>{emerald.reduce((a,b) => a + b.number, 0)}</span> Emerald</div>{/if}
+                                {#if ruby.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-Ruby"><span>{ruby.reduce((a,b) => a + b.number, 0)}</span> Ruby</div>{/if}
+                                {#if sapphire.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-Sapphire"><span>{sapphire.reduce((a,b) => a + b.number, 0)}</span> Sapphire</div>{/if}
+                                {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-info__color text-Steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
                                 <div class="deck-info__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
                             </div>
                             <div class="deck-info__counts">
-                                <div class="deck-info__price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
+                                <div class="deck-info__price"><span class="text-Emerald">&#36;</span>{deck.price.toFixed(2)}</div>
                             </div>
                         {/if}
                     </div>

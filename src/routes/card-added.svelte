@@ -12,6 +12,16 @@
 
     export let card;
     export let prices;
+
+    const cardColors = (card.data.inks ? card.data.inks : [card.data.ink]).sort();
+    
+    let colorClass;
+
+    if (cardColors.length > 1) {
+        colorClass = 'text-'+cardColors.join('-');
+    } else {
+        colorClass = 'text-'+cardColors[0];
+    }
 </script>
 
 
@@ -22,14 +32,7 @@
             {card.data.cost}
         </div>
         <div class="card-added__name">
-            <div class="card-added__base-name"
-                class:text-amber={card.data.ink == "Amber"}
-                class:text-amethyst={card.data.ink == "Amethyst"}
-                class:text-emerald={card.data.ink == "Emerald"}
-                class:text-ruby={card.data.ink == "Ruby"}
-                class:text-sapphire={card.data.ink == "Sapphire"}
-                class:text-steel={card.data.ink == "Steel"}
-            >{card.data.name}</div>
+            <div class="card-added__base-name"><span class={colorClass}>{card.data.name}</span></div>
             <div class="card-added__subtitle">
                 {#if card.data.version}
                     {card.data.version}
@@ -38,7 +41,7 @@
         </div>
         {#if card.data.prices.usd && prices}
             <div class="price">
-                <span class="text-emerald">&#36;</span>
+                <span class="text-Emerald">&#36;</span>
                 {card.data.prices.usd.toFixed(2)}
             </div>
         {/if}

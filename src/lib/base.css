@@ -26,12 +26,88 @@ button {
 .ink-sapphire { color: var(--Ink-Sapphire); }
 .ink-steel { color: var(--Ink-Steel); }
 
-.text-amber { color: var(--Text-Amber); }
-.text-amethyst { color: var(--Text-Amethyst); }
-.text-emerald { color: var(--Text-Emerald); }
-.text-ruby { color: var(--Text-Ruby); }
-.text-sapphire { color: var(--Text-Sapphire); }
-.text-steel { color: var(--Text-Steel); }
+.text-Amber { color: var(--Text-Amber); }
+.text-Amethyst { color: var(--Text-Amethyst); }
+.text-Emerald { color: var(--Text-Emerald); }
+.text-Ruby { color: var(--Text-Ruby); }
+.text-Sapphire { color: var(--Text-Sapphire); }
+.text-Steel { color: var(--Text-Steel); }
+
+.text-Amber-Amethyst { 
+    background-image: linear-gradient(90deg, var(--Text-Amber) 25%, var(--Text-Amethyst) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amber-Emerald { 
+    background-image: linear-gradient(90deg, var(--Text-Amber) 25%, var(--Text-Emerald) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amber-Ruby { 
+    background-image: linear-gradient(90deg, var(--Text-Amber) 25%, var(--Text-Ruby) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amber-Sapphire { 
+    background-image: linear-gradient(90deg, var(--Text-Amber) 25%, var(--Text-Sapphire) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amber-Steel { 
+    background-image: linear-gradient(90deg, var(--Text-Amber) 25%, var(--Text-Steel) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amethyst-Emerald { 
+    background-image: linear-gradient(90deg, var(--Text-Amethyst) 25%, var(--Text-Emerald) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amethyst-Ruby { 
+    background-image: linear-gradient(90deg, var(--Text-Amethyst) 25%, var(--Text-Ruby) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amethyst-Sapphire { 
+    background-image: linear-gradient(90deg, var(--Text-Amethyst) 25%, var(--Text-Sapphire) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Amethyst-Steel { 
+    background-image: linear-gradient(90deg, var(--Text-Amethyst) 25%, var(--Text-Steel) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Emerald-Ruby { 
+    background-image: linear-gradient(90deg, var(--Text-Emerald) 25%, var(--Text-Ruby) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Emerald-Sapphire { 
+    background-image: linear-gradient(90deg, var(--Text-Emerald) 25%, var(--Text-Sapphire) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Emerald-Steel { 
+    background-image: linear-gradient(90deg, var(--Text-Emerald) 25%, var(--Text-Steel) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Ruby-Sapphire { 
+    background-image: linear-gradient(90deg, var(--Text-Ruby) 25%, var(--Text-Sapphire) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Ruby-Steel { 
+    background-image: linear-gradient(90deg, var(--Text-Ruby) 25%, var(--Text-Steel) 75%);
+    color: transparent;
+    background-clip: text; 
+}
+.text-Sapphire-Steel { 
+    background-image: linear-gradient(90deg, var(--Text-Sapphire) 25%, var(--Text-Steel) 75%);
+    color: transparent;
+    background-clip: text; 
+}
 
 .text-grey { color: var(--Text-Grey); }
 

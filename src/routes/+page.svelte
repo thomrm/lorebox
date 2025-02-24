@@ -202,7 +202,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        console.log(filteredCards);
+        //console.log(filteredCards);
     }
 
     const clearSearch = () => {
@@ -432,20 +432,20 @@
     $: locations = deck.cards.filter(x => x.data.type.includes('Location')).sort((a, b) => { return (a.data.cost - b.data.cost) || (a.data.name.localeCompare(b.data.name)); });
 
     // Sort cards in deck by color
-    $: amber = deck.cards.filter(x => x.data.ink == 'Amber');
-    $: amethyst = deck.cards.filter(x => x.data.ink == 'Amethyst');
-    $: emerald = deck.cards.filter(x => x.data.ink == 'Emerald');
-    $: ruby = deck.cards.filter(x => x.data.ink == 'Ruby');
-    $: sapphire = deck.cards.filter(x => x.data.ink == 'Sapphire');
-    $: steel = deck.cards.filter(x => x.data.ink == 'Steel');
+    $: amber = deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes('Amber'));
+    $: amethyst = deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes('Amethyst'));
+    $: emerald = deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes('Emerald'));
+    $: ruby = deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes('Ruby'));
+    $: sapphire = deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes('Sapphire'));
+    $: steel = deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes('Steel'));
     $: unink = deck.cards.filter(x => !x.data.inkwell);
 
     // Count costs for each color
     $: costs = Array.from({ length: 10 }, (_, i) => {
         const cost = (i + 1).toString();
         return {
-            a: deck.cards.filter(x => x.data.ink == deck.colors[0] && x.data.cost == cost).reduce((a, b) => a + b.number, 0),
-            b: deck.cards.filter(x => x.data.ink == deck.colors[1] && x.data.cost == cost).reduce((a, b) => a + b.number, 0)
+            a: deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes(deck.colors[0]) && x.data.cost == cost).reduce((a, b) => a + b.number, 0),
+            b: deck.cards.filter(x => (x.data.inks ? x.data.inks : [x.data.ink]).includes(deck.colors[1]) && x.data.cost == cost).reduce((a, b) => a + b.number, 0)
         };
     });
 
@@ -755,7 +755,7 @@
                                                 {#if showPrices}
                                                     <div class="card__price">
                                                         <div class="price">
-                                                            <span class="text-emerald">&#36;</span>
+                                                            <span class="text-Emerald">&#36;</span>
                                                             <span>
                                                                 {#if card.prices.usd}
                                                                     {card.prices.usd.toFixed(2)}
@@ -974,17 +974,17 @@
                         </div>
                     {:else}
                         <div class="deck-stats__counts">
-                            {#if amber.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-amber"><span>{amber.reduce((a,b) => a + b.number, 0)}</span> Amber</div>{/if}
-                            {#if amethyst.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-amethyst"><span>{amethyst.reduce((a,b) => a + b.number, 0)}</span> Amethyst</div>{/if}
-                            {#if emerald.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-emerald"><span>{emerald.reduce((a,b) => a + b.number, 0)}</span> Emerald</div>{/if}
-                            {#if ruby.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-ruby"><span>{ruby.reduce((a,b) => a + b.number, 0)}</span> Ruby</div>{/if}
-                            {#if sapphire.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-sapphire"><span>{sapphire.reduce((a,b) => a + b.number, 0)}</span> Sapphire</div>{/if}
-                            {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
+                            {#if amber.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-Amber"><span>{amber.reduce((a,b) => a + b.number, 0)}</span> Amber</div>{/if}
+                            {#if amethyst.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-Amethyst"><span>{amethyst.reduce((a,b) => a + b.number, 0)}</span> Amethyst</div>{/if}
+                            {#if emerald.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-Emerald"><span>{emerald.reduce((a,b) => a + b.number, 0)}</span> Emerald</div>{/if}
+                            {#if ruby.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-Ruby"><span>{ruby.reduce((a,b) => a + b.number, 0)}</span> Ruby</div>{/if}
+                            {#if sapphire.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-Sapphire"><span>{sapphire.reduce((a,b) => a + b.number, 0)}</span> Sapphire</div>{/if}
+                            {#if steel.reduce((a,b) => a + b.number, 0)}<div class="deck-stats__color text-Steel"><span>{steel.reduce((a,b) => a + b.number, 0)}</span> Steel</div>{/if}
                             <div class="deck-stats__color text-grey"><span>{unink.reduce((a,b) => a + b.number, 0)}</span> Uninkable</div>
                         </div>
                         {#if showPrices}
                             <div class="deck-stats__counts">
-                                <div class="price"><span class="text-emerald">&#36;</span>{deck.price.toFixed(2)}</div>
+                                <div class="price"><span class="text-Emerald">&#36;</span>{deck.price.toFixed(2)}</div>
                             </div>
                         {/if}
                     {/if}
