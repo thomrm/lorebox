@@ -202,7 +202,7 @@
         totalPages = Math.ceil(filteredCards.length / filters.pageSize);
         totalCards = totalCards ? totalCards : filteredCards.length;
 
-        //console.log(filteredCards);
+        console.log(colorCount);
     }
 
     const clearSearch = () => {
@@ -351,15 +351,23 @@
             filterCards(true);
         }
 
-        // Reset color filters if deck no longer contains 2 colors
+        if (deck.colors.length < 2 && !colorLock) {
+            filters.color.amber = deck.colors.includes("Amber") || filters.color.amber ? true : false;
+            filters.color.amethyst = deck.colors.includes("Amethyst") || filters.color.amethyst ? true : false;
+            filters.color.emerald = deck.colors.includes("Emerald") || filters.color.emerald ? true : false;
+            filters.color.ruby = deck.colors.includes("Ruby") || filters.color.ruby ? true : false;
+            filters.color.sapphire = deck.colors.includes("Sapphire") || filters.color.sapphire ? true : false;
+            filters.color.steel = deck.colors.includes("Steel") || filters.color.steel ? true : false;
+        }
+
+        // Force color filter if deck contains 1 color
         if (deck.colors.length < 2 && colorLock) {
-            filters.color.amber = false;
-            filters.color.amethyst = false;
-            filters.color.emerald = false;
-            filters.color.ruby = false;
-            filters.color.sapphire = false;
-            filters.color.steel = false;
-            colorCount == 0;
+            filters.color.amber = deck.colors.includes("Amber") || filters.color.amber ? true : false;
+            filters.color.amethyst = deck.colors.includes("Amethyst") || filters.color.amethyst ? true : false;
+            filters.color.emerald = deck.colors.includes("Emerald") || filters.color.emerald ? true : false;
+            filters.color.ruby = deck.colors.includes("Ruby") || filters.color.ruby ? true : false;
+            filters.color.sapphire = deck.colors.includes("Sapphire") || filters.color.sapphire ? true : false;
+            filters.color.steel = deck.colors.includes("Steel") || filters.color.steel ? true : false;
             colorLock = false;
             filterCards(true);
         }
@@ -376,7 +384,7 @@
         // Update URL
         updateURLParams();
 
-        console.log(deck);
+        //console.log(filters);
     }
 
     // Clear added cards and deck colors
@@ -644,29 +652,35 @@
             <div class="filters">
                 {#if innerWidth > 560}
                     <fieldset class="filters__group" disabled={colorLock}>
-                        <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={colorLock} on:change={filterCards} />
+                        <input type="checkbox" id="filter-amber--modal" name="Amber" bind:checked={filters.color.amber} disabled={colorLock || deck.colors.includes("Amber") || (colorCount == 2 && !filters.color.amber)} on:change={filterCards} />
                         <label class="filter-ink ink-amber" for="filter-amber--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amber" /></svg>
+                            <img class="ink-lock" src="/images/icon-locked.svg" alt="Color Locked" />
                         </label>
-                        <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={colorLock} on:change={filterCards} />
+                        <input type="checkbox" id="filter-amethyst--modal" name="Amethyst" bind:checked={filters.color.amethyst} disabled={colorLock || deck.colors.includes("Amethyst") || (colorCount == 2 && !filters.color.amethyst)} on:change={filterCards} />
                         <label class="filter-ink ink-amethyst" for="filter-amethyst--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#amethyst" /></svg>
+                            <img class="ink-lock" src="/images/icon-locked.svg" alt="Color Locked" />
                         </label>
-                        <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={colorLock} on:change={filterCards} />
+                        <input type="checkbox" id="filter-emerald--modal" name="Emerald" bind:checked={filters.color.emerald} disabled={colorLock || deck.colors.includes("Emerald") || (colorCount == 2 && !filters.color.emerald)} on:change={filterCards} />
                         <label class="filter-ink ink-emerald" for="filter-emerald--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#emerald" /></svg>
+                            <img class="ink-lock" src="/images/icon-locked.svg" alt="Color Locked" />
                         </label>
-                        <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={colorLock} on:change={filterCards} />
+                        <input type="checkbox" id="filter-ruby--modal" name="Ruby" bind:checked={filters.color.ruby} disabled={colorLock || deck.colors.includes("Ruby") || (colorCount == 2 && !filters.color.ruby)} on:change={filterCards} />
                         <label class="filter-ink ink-ruby" for="filter-ruby--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#ruby" /></svg>
+                            <img class="ink-lock" src="/images/icon-locked.svg" alt="Color Locked" />
                         </label>
-                        <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={colorLock} on:change={filterCards} />
+                        <input type="checkbox" id="filter-sapphire--modal" name="Sapphire" bind:checked={filters.color.sapphire} disabled={colorLock || deck.colors.includes("Sapphire") || (colorCount == 2 && !filters.color.sapphire)} on:change={filterCards} />
                         <label class="filter-ink ink-sapphire" for="filter-sapphire--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#sapphire" /></svg>
+                            <img class="ink-lock" src="/images/icon-locked.svg" alt="Color Locked" />
                         </label>
-                        <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={colorLock} on:change={filterCards} />
+                        <input type="checkbox" id="filter-steel--modal" name="Steel" bind:checked={filters.color.steel} disabled={colorLock || deck.colors.includes("Steel") || (colorCount == 2 && !filters.color.steel)} on:change={filterCards} />
                         <label class="filter-ink ink-steel" for="filter-steel--modal">
                             <svg width="30px" height="34px"><use href="images/filter-color-icons.svg#steel" /></svg>
+                            <img class="ink-lock" src="/images/icon-locked.svg" alt="Color Locked" />
                         </label>
                     </fieldset>
                 {/if}
@@ -1310,11 +1324,16 @@
                 cursor: default;
             }
 
-            &:not(:disabled):hover + label {
+            &:checked&:disabled + label {
+                --Filter-Base: var(--Black);
                 --Filter-Icon: currentColor;
+
+                & .ink-lock {
+                    opacity: 1;
+                }
             }
 
-            &:active + label {
+            &:active&:not(:disabled) + label {
                 transform: scale(0.95);
             }
         }
@@ -1330,9 +1349,18 @@
         height: 30px;
         width: 30px;
         cursor: pointer;
+        position: relative;
 
         --Filter-Base: var(--Black);
         --Filter-Icon: currentColor;
+    }
+
+    .ink-lock {
+        opacity: 0;
+        position: absolute;
+        bottom: -6px;
+        left: 7px;
+        transition: opacity 200ms;
     }
 
     .filters__group--fill {
